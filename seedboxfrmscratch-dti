@@ -705,7 +705,6 @@ chown $NEWUSER1: -R bin
 
 
 
-
 set +x verbose
 
 
