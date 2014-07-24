@@ -695,7 +695,11 @@ chmod -R 755 /var/www/rutorrent
 #99
 mkdir /home/$NEWUSER1/bin
 cd /home/$NEWUSER1/bin
-wget 
+wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/rtcheck
+chmod +x rtcheck
+cd ..
+chown $NEWUSER1: -R bin
+
 
 
 
