@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ### Updated for $.broswer error and will populate tracker list propeerly. Rest is all perfect from Notos. Thanks.
+# ### Updated for $.broswer-msie error; will populate tracker list properly ; create check/start scripts. Rest is all perfect from Notos. Thanks.
 #
 # The Seedbox From Scratch Script
 #   By Notos ---> https://github.com/Notos/
@@ -696,9 +696,12 @@ chmod -R 755 /var/www/rutorrent
 mkdir /home/$NEWUSER1/bin
 cd /home/$NEWUSER1/bin
 wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/rtcheck
+echo "After reboot, Pls edit restart command path in rtcheck at /home/YOUR-USERNAME/bin/rtcheck as per your username"
 chmod +x rtcheck
 cd ..
 chown $NEWUSER1: -R bin
+
+
 
 
 
@@ -724,7 +727,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo ""
+echo "After reboot, Pls edit restart command path in rtcheck at /home/YOUR-USERNAME/bin/rtcheck as per your username"
 echo ""
 
 # 99.
