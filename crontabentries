@@ -1,0 +1,6 @@
+#!/bin/bash
+USER='cat /etc/seedbox-from-scratch/mainuser.info'
+line1="@reboot ~/bin/rtcheck"
+line2="*/10 * * * * ~/bin/rtcheck"
+(crontab -u $USER -l; echo "$line1" ) | crontab -u $USER -
+(crontab -u $USER -l; echo "$line2" ) | crontab -u $USER -
