@@ -727,10 +727,10 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo "After reboot, Pls edit restart command path in rtcheck at /home/YOUR-USERNAME/bin/rtcheck as per your username"
+echo ""
 echo ""
 
-# 99.
+# 101.
 
 reboot
 
