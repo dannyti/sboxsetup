@@ -705,10 +705,7 @@ wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/crontabentries
 chmod +x crontabentries
 ./crontabentries
 
-
-
-
-
+# 100
 set +x verbose
 
 
