@@ -692,14 +692,18 @@ wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownl
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
 
-#99
+# 99 Creating check - start rtorrent , irssi script && creating crontab entries to 
+# start at boot and check every 10 mins interval 
 mkdir /home/$NEWUSER1/bin
 cd /home/$NEWUSER1/bin
 wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/rtcheck
-echo "After reboot, Pls edit restart command path in rtcheck at /home/YOUR-USERNAME/bin/rtcheck as per your username"
 chmod +x rtcheck
 cd ..
 chown $NEWUSER1: -R bin
+cd
+wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/crontabentries
+chmod +x crontabentries
+./crontabentries
 
 
 
