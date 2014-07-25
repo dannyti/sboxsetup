@@ -10,5 +10,5 @@ PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
     echo "$SERVICE is running."
   else
     rm -f $FILE
-    echo "$SERVICE is not running, starting $SERVICE" && /home/USERNAME-HERE/restartSeedbox
+    echo "$SERVICE is not running, starting $SERVICE" && /home/$LOGNAME/restartSeedbox
   fi
