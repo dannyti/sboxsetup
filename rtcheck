@@ -5,7 +5,7 @@ FILE="$HOME/downloads/.session/rtorrent.lock"
 SERVICE='rtorrent'
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 
-  if ps -u $LOGNAME u | grep -v grep | grep $SERVICE > /dev/null
+  if pgrep -fx -u $LOGNAME $SERVICE > /dev/null
   then
     echo "$SERVICE is running."
   else
