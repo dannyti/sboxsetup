@@ -700,16 +700,16 @@ chmod -R 755 /var/www/rutorrent
 
 # 99 Creating check - start rtorrent , irssi script && creating crontab entries to 
 # start at boot and check every 10 mins interval 
-mkdir /home/$NEWUSER1/bin
-cd /home/$NEWUSER1/bin
-wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/rtcheck
-chmod +x rtcheck
-cd ..
-chown $NEWUSER1: -R bin
-cd
-wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/crontabentries
-chmod +x crontabentries
-./crontabentries
+# mkdir /home/$NEWUSER1/bin
+# cd /home/$NEWUSER1/bin
+# wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/rtcheck
+# chmod +x rtcheck
+# cd ..
+# chown $NEWUSER1: -R bin
+# cd
+# wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/crontabentries
+# chmod +x crontabentries
+# ./crontabentries
 
 # 100
 set +x verbose
