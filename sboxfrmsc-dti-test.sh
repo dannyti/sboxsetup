@@ -25,7 +25,7 @@
 #  sudo git stash; sudo git pull
 #
 #
-  SBFSCURRENTVERSION1=2.3.0
+  SBFSCURRENTVERSION1=2.1.9
   OS1=$(lsb_release -si)
 #
 # Changelog
