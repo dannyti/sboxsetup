@@ -266,7 +266,8 @@ if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
 fi
 
 apt-get --yes update
-apt-get --yes install whois sudo makepasswd git
+apt-get --yes install whois sudo makepasswd git nano
+export EDITOR=nano
 
 rm -f -r /etc/seedbox-from-scratch
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/Notos/seedbox-from-scratch.git /etc/seedbox-from-scratch
