@@ -685,10 +685,10 @@ fi
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES
 
 # 98. Populating trackers corrrectly
-# adding trackers && browser-msie patch
-git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
-chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
-chmod -R 755 .irssi
+# adding trackers && browser-msie patch Shifted to createSeedboxUser script
+# git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
+# chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
+# chmod -R 755 .irssi
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
