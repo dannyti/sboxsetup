@@ -266,13 +266,13 @@ if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
 fi
 
 apt-get --yes update
-apt-get --yes install whois sudo makepasswd git nano
+apt-get --yes install whois sudo makepasswd git nano 
+export EDITOR=nano
 
 rm -f -r /etc/seedbox-from-scratch
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch
 mkdir -p cd /etc/seedbox-from-scratch/source
 mkdir -p cd /etc/seedbox-from-scratch/users
-export EDITOR=nano
 
 if [ ! -f /etc/seedbox-from-scratch/seedbox-from-scratch.sh ]; then
   clear
@@ -306,7 +306,7 @@ service ssh restart
 perl -pi -e "s/deb cdrom/#deb cdrom/g" /etc/apt/sources.list
 
 #add non-free sources to Debian Squeeze# those two spaces below are on purpose
-perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
+perl -pi -e "s/squeeze main/squeeze  main contrib multiverse non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
 
 # 7.
@@ -334,7 +334,9 @@ if [ $? -gt 0 ]; then
   exit 1
 fi
 apt-get --yes install zip
-apt-get --yes install python-software-properties
+apt-get --yes install python-software-properties software-properties-common
+add-apt-repository ppa:plowsharepackagers/ppa -y
+apt-get --yes install plowshare
 
 apt-get --yes install rar
 if [ $? -gt 0 ]; then
@@ -601,8 +603,6 @@ echo "<?php \$streampath = 'http://$IPADDRESS1/stream/view.php'; ?>" | tee /var/
 cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload
 chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
-wget -O /tmp/plowshare.deb http://plowshare.googlecode.com/files/plowshare_1~git20120930-1_all.deb
-dpkg -i /tmp/plowshare.deb
 apt-get --yes -f install
 
 # 32.2
@@ -685,19 +685,23 @@ fi
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES
 
 # 98. Populating trackers corrrectly
-# adding trackers && browser-msie patch
-git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
-chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
-chmod -R 755 .irssi
+# adding trackers && browser-msie patch Shifted to createSeedboxUser script
+# git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
+# chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
+# chmod -R 755 .irssi
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
 cd /var/www/rutorrent/js
 rm webui.js
 wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
-cd ..
+cd
+git clone https://github.com/InAnimaTe/rutorrent-themes.git
+cp -R rutorrent-themes /var/www/rutorrent/plugins/theme/themes
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
+
+
 
 # 99 Creating check - start rtorrent , irssi script && creating crontab entries to 
 # start at boot and check every 10 mins interval 
