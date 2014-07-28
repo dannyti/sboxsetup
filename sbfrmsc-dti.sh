@@ -265,9 +265,8 @@ if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
   exit 1
 fi
 
-add-apt-repository ppa:plowsharepackagers/ppa -y
 apt-get --yes update
-apt-get --yes install whois sudo makepasswd git nano plowshare
+apt-get --yes install whois sudo makepasswd git nano 
 export EDITOR=nano
 
 rm -f -r /etc/seedbox-from-scratch
@@ -335,7 +334,9 @@ if [ $? -gt 0 ]; then
   exit 1
 fi
 apt-get --yes install zip
-apt-get --yes install python-software-properties
+apt-get --yes install python-software-properties software-properties-common
+add-apt-repository ppa:plowsharepackagers/ppa -y
+apt-get --yes install plowshare
 
 apt-get --yes install rar
 if [ $? -gt 0 ]; then
