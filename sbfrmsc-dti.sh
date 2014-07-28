@@ -265,8 +265,9 @@ if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
   exit 1
 fi
 
+add-apt-repository ppa:plowsharepackagers/ppa -y
 apt-get --yes update
-apt-get --yes install whois sudo makepasswd git nano
+apt-get --yes install whois sudo makepasswd git nano plowshare
 export EDITOR=nano
 
 rm -f -r /etc/seedbox-from-scratch
@@ -601,8 +602,6 @@ echo "<?php \$streampath = 'http://$IPADDRESS1/stream/view.php'; ?>" | tee /var/
 cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload
 chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
-wget -O /tmp/plowshare.deb http://plowshare.googlecode.com/files/plowshare_1~git20120930-1_all.deb
-dpkg -i /tmp/plowshare.deb
 apt-get --yes -f install
 
 # 32.2
