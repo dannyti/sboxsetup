@@ -267,7 +267,7 @@ fi
 
 apt-get --yes update
 apt-get --yes install whois sudo makepasswd git nano 
-export EDITOR=nano
+
 
 rm -f -r /etc/seedbox-from-scratch
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch
@@ -311,7 +311,6 @@ perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /e
 
 # 7.
 # update and upgrade packages
-apt-get --yes remove apache2
 apt-get --yes update
 apt-get --yes upgrade
 
@@ -698,7 +697,12 @@ wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
+perl -pi.orig -e   's/^(deb .* universe)$/$1 multiverse/'   /etc/apt/sources.list
+apt-get update
+apt-get --yes install rar plowshare
 
+
+ 
 # 99 Creating check - start rtorrent , irssi script && creating crontab entries to 
 # start at boot and check every 10 mins interval 
 # mkdir /home/$NEWUSER1/bin
@@ -711,7 +715,7 @@ chmod -R 755 /var/www/rutorrent
 # wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/crontabentries
 # chmod +x crontabentries
 # ./crontabentries
-
+export EDITOR=nano
 # 100
 set +x verbose
 
