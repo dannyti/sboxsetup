@@ -691,10 +691,10 @@ perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 apt-get update
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
-wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
+wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
 cd /var/www/rutorrent/js
 rm webui.js
-wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
+wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
