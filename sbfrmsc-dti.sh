@@ -689,7 +689,7 @@ bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YE
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
 set +x verbose
-perl -pi.orig -e   's/^(deb .* universe)$/$1 multiverse/'   /etc/apt/sources.list
+perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 apt-get update
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
