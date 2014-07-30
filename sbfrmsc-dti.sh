@@ -683,7 +683,7 @@ fi
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <?>
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES
 
-# 98. Populating trackers corrrectly
+# 98. Populating trackers corrrectly & plowshare
 # adding trackers && browser-msie patch Shifted to createSeedboxUser script
 # git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
@@ -700,8 +700,13 @@ wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
+cd
 apt-get --yes install rar 
-apt-get --yes install plowshare
+git clone https://code.google.com/p/plowshare/
+cd ~/plowshare
+make install
+cd
+rm -r plowshare
 
 
  
