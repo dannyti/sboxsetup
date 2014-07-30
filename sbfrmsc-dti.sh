@@ -688,6 +688,9 @@ bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YE
 # git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
+set +x verbose
+perl -pi.orig -e   's/^(deb .* universe)$/$1 multiverse/'   /etc/apt/sources.list
+apt-get update
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
@@ -697,9 +700,8 @@ wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
-perl -pi.orig -e   's/^(deb .* universe)$/$1 multiverse/'   /etc/apt/sources.list
-apt-get update
-apt-get --yes install rar plowshare
+apt-get --yes install rar 
+apt-get --yes install plowshare
 
 
  
