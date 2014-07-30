@@ -334,8 +334,6 @@ if [ $? -gt 0 ]; then
 fi
 apt-get --yes install zip
 apt-get --yes install python-software-properties software-properties-common
-add-apt-repository ppa:plowsharepackagers/ppa -y
-apt-get --yes install plowshare
 
 apt-get --yes install rar
 if [ $? -gt 0 ]; then
