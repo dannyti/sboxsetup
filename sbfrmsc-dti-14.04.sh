@@ -289,14 +289,14 @@ set -x verbose
 
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
-perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
+#perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
 perl -pi -e "s/#Protocol 2/Protocol 2/g" /etc/ssh/sshd_config
 perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
 echo "" | tee -a /etc/ssh/sshd_config > /dev/null
 echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
-echo "AllowGroups sshdusers" >> /etc/ssh/sshd_config
+echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 
@@ -320,6 +320,15 @@ apt-get --yes upgrade
 
 apt-get --yes build-dep znc
 apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect joe automake1.9 flex bison debhelper binutils-gold ffmpeg libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl znc tcpdump
+
+if [ "$OSV1" = "14.04"]; then
+  apt-get --yes install vsftpd
+fi
+
+if [ "$OSV1" = "13.10"]; then
+  apt-get --yes install vsftpd
+fi
+
 if [ $? -gt 0 ]; then
   set +x verbose
   echo
@@ -361,6 +370,10 @@ fi
 # this is better to be apart from the others
 apt-get --yes install php5-fpm
 apt-get --yes install php5-xcache
+
+if [ "$OSV1" = "13.10"]; then
+  apt-get install php5-json
+fi
 
 #Check if its Debian an do a sysvinit by upstart replacement:
 
@@ -464,6 +477,13 @@ if [ "$OS1" = "Debian" ]; then
   apt-get --yes install vsftpd
 else
   apt-get --yes install libcap-dev libpam0g-dev libwrap0-dev
+fi
+
+if [ "$OSV1" = "12.04" ]; then
+  dpkg -i /etc/seedbox-from-scratch/vsftpd_2.3.2-3ubuntu5.1_`uname -m`.deb
+fi
+
+if [ "$OSV1" = "12.10" ]; then
   dpkg -i /etc/seedbox-from-scratch/vsftpd_2.3.2-3ubuntu5.1_`uname -m`.deb
 fi
 
@@ -487,13 +507,48 @@ echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
 
 # 13.
-mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
-rm -f /etc/apache2/sites-available/default
+if [ "$OS1" = "Debian" ]; then
+  mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
+  rm -f /etc/apache2/sites-available/default
+  cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/default
+  perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/default
+  perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/default
+  perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
+fi
 
-cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/default
-perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/default
-perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/default
-perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
+if [ "$OSV1" = "12.04" ]; then
+  mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
+  rm -f /etc/apache2/sites-available/default
+  cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/default
+  perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/default
+  perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/default
+  perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
+fi
+
+if [ "$OSV1" = "13.10" ]; then
+  mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
+  rm -f /etc/apache2/sites-available/000-default.conf
+  cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/000-default.conf
+fi
+
+if [ "$OSV1" = "14.04" ]; then
+  mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
+  rm -f /etc/apache2/sites-available/000-default.conf
+  cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/var/www/html/rutorrent/var/www/html/rutorrent/g" /etc/apache2/sites-available/000-default.conf
+fi
+#mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
+#rm -f /etc/apache2/sites-available/default
+#cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/default
+#perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/default
+#perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/default
+#perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
 
 echo "ServerName $IPADDRESS1" | tee -a /etc/apache2/apache2.conf > /dev/null
 
@@ -522,15 +577,17 @@ make install
 
 bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1
 
+######### Below this /var/www/rutorrent/ has been replaced with /var/www/html/rutorrent for Ubuntu 14.04
+
 # 22.
-cd /var/www
+cd /var/www/html
 rm -f -r rutorrent
 svn checkout http://rutorrent.googlecode.com/svn/trunk/rutorrent
 svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
 rm -r -f rutorrent/plugins
 mv plugins rutorrent/
 
-cp /etc/seedbox-from-scratch/action.php.template /var/www/rutorrent/plugins/diskspace/action.php
+cp /etc/seedbox-from-scratch/action.php.template /var/www/html/rutorrent/plugins/diskspace/action.php
 
 groupadd admin
 
@@ -547,7 +604,7 @@ sh CLI_Compile.sh
 cd MediaInfo/Project/GNU/CLI
 make install
 
-cd /var/www/rutorrent/plugins
+cd /var/www/html/rutorrent/plugins
 svn co https://svn.code.sf.net/p/autodl-irssi/code/trunk/rutorrent/autodl-irssi/
 cd autodl-irssi
 
@@ -570,72 +627,72 @@ bash /etc/seedbox-from-scratch/updatejkinit
 
 # Installing poweroff button on ruTorrent
 
-cd /var/www/rutorrent/plugins/
+cd /var/www/html/rutorrent/plugins/
 wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz
 tar -zxf logoff-1.0.tar.gz
 rm -f logoff-1.0.tar.gz
 
 # Installing Filemanager and MediaStream
 
-rm -f -R /var/www/rutorrent/plugins/filemanager
-rm -f -R /var/www/rutorrent/plugins/fileupload
-rm -f -R /var/www/rutorrent/plugins/mediastream
-rm -f -R /var/www/stream
+rm -f -R /var/www/html/rutorrent/plugins/filemanager
+rm -f -R /var/www/html/rutorrent/plugins/fileupload
+rm -f -R /var/www/html/rutorrent/plugins/mediastream
+rm -f -R /var/www/html/stream
 
-cd /var/www/rutorrent/plugins/
+cd /var/www/html/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream
 
-cd /var/www/rutorrent/plugins/
+cd /var/www/html/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/filemanager
 
-cp /etc/seedbox-from-scratch/rutorrent.plugins.filemanager.conf.php.template /var/www/rutorrent/plugins/filemanager/conf.php
+cp /etc/seedbox-from-scratch/rutorrent.plugins.filemanager.conf.php.template /var/www/html/rutorrent/plugins/filemanager/conf.php
 
-mkdir -p /var/www/stream/
-ln -s /var/www/rutorrent/plugins/mediastream/view.php /var/www/stream/view.php
-chown www-data: /var/www/stream
-chown www-data: /var/www/stream/view.php
+mkdir -p /var/www/html/stream/
+ln -s /var/www/html/rutorrent/plugins/mediastream/view.php /var/www/html/stream/view.php
+chown www-data: /var/www/html/stream
+chown www-data: /var/www/html/stream/view.php
 
-echo "<?php \$streampath = 'http://$IPADDRESS1/stream/view.php'; ?>" | tee /var/www/rutorrent/plugins/mediastream/conf.php > /dev/null
+echo "<?php \$streampath = 'http://$IPADDRESS1/stream/view.php'; ?>" | tee /var/www/html/rutorrent/plugins/mediastream/conf.php > /dev/null
 
 # 32.2 # FILEUPLOAD
-cd /var/www/rutorrent/plugins/
+cd /var/www/html/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload
-chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
+chmod 775 /var/www/html/rutorrent/plugins/fileupload/scripts/upload
 apt-get --yes -f install
 
 # 32.2
-chown -R www-data:www-data /var/www/rutorrent
-chmod -R 755 /var/www/rutorrent
+chown -R www-data:www-data /var/www/html/rutorrent
+chmod -R 755 /var/www/html/rutorrent
 
 #32.3
 
-perl -pi -e "s/\\\$topDirectory\, \\\$fm/\\\$homeDirectory\, \\\$topDirectory\, \\\$fm/g" /var/www/rutorrent/plugins/filemanager/flm.class.php
-perl -pi -e "s/\\\$this\-\>userdir \= addslash\(\\\$topDirectory\)\;/\\\$this\-\>userdir \= \\\$homeDirectory \? addslash\(\\\$homeDirectory\) \: addslash\(\\\$topDirectory\)\;/g" /var/www/rutorrent/plugins/filemanager/flm.class.php
-perl -pi -e "s/\\\$topDirectory/\\\$homeDirectory/g" /var/www/rutorrent/plugins/filemanager/settings.js.php
+perl -pi -e "s/\\\$topDirectory\, \\\$fm/\\\$homeDirectory\, \\\$topDirectory\, \\\$fm/g" /var/www/html/rutorrent/plugins/filemanager/flm.class.php
+perl -pi -e "s/\\\$this\-\>userdir \= addslash\(\\\$topDirectory\)\;/\\\$this\-\>userdir \= \\\$homeDirectory \? addslash\(\\\$homeDirectory\) \: addslash\(\\\$topDirectory\)\;/g" /var/www/html/rutorrent/plugins/filemanager/flm.class.php
+perl -pi -e "s/\\\$topDirectory/\\\$homeDirectory/g" /var/www/html/rutorrent/plugins/filemanager/settings.js.php
 
 #32.4
-unzip /etc/seedbox-from-scratch/rutorrent-oblivion.zip -d /var/www/rutorrent/plugins/
-echo "" | tee -a /var/www/rutorrent/css/style.css > /dev/null
-echo "/* for Oblivion */" | tee -a /var/www/rutorrent/css/style.css > /dev/null
-echo ".meter-value-start-color { background-color: #E05400 }" | tee -a /var/www/rutorrent/css/style.css > /dev/null
-echo ".meter-value-end-color { background-color: #8FBC00 }" | tee -a /var/www/rutorrent/css/style.css > /dev/null
-echo "::-webkit-scrollbar {width:12px;height:12px;padding:0px;margin:0px;}" | tee -a /var/www/rutorrent/css/style.css > /dev/null
-perl -pi -e "s/\$defaultTheme \= \"\"\;/\$defaultTheme \= \"Oblivion\"\;/g" /var/www/rutorrent/plugins/theme/conf.php
+unzip /etc/seedbox-from-scratch/rutorrent-oblivion.zip -d /var/www/html/rutorrent/plugins/
+echo "" | tee -a /var/www/html/rutorrent/css/style.css > /dev/null
+echo "/* for Oblivion */" | tee -a /var/www/html/rutorrent/css/style.css > /dev/null
+echo ".meter-value-start-color { background-color: #E05400 }" | tee -a /var/www/html/rutorrent/css/style.css > /dev/null
+echo ".meter-value-end-color { background-color: #8FBC00 }" | tee -a /var/www/html/rutorrent/css/style.css > /dev/null
+echo "::-webkit-scrollbar {width:12px;height:12px;padding:0px;margin:0px;}" | tee -a /var/www/html/rutorrent/css/style.css > /dev/null
+perl -pi -e "s/\$defaultTheme \= \"\"\;/\$defaultTheme \= \"Oblivion\"\;/g" /var/www/html/rutorrent/plugins/theme/conf.php
 
-ln -s /etc/seedbox-from-scratch/seedboxInfo.php.template /var/www/seedboxInfo.php
+ln -s /etc/seedbox-from-scratch/seedboxInfo.php.template /var/www/html/seedboxInfo.php
 
 # 32.5
 
-cd /var/www/rutorrent/plugins/
-rm -r /var/www/rutorrent/plugins/fileshare
-rm -r /var/www/share
+cd /var/www/html/rutorrent/plugins/
+rm -r /var/www/html/rutorrent/plugins/fileshare
+rm -r /var/www/html/share
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileshare
-mkdir /var/www/share
-ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/share.php
-ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/index.php
-chown -R www-data:www-data /var/www/share
-cp /etc/seedbox-from-scratch/rutorrent.plugins.fileshare.conf.php.template /var/www/rutorrent/plugins/fileshare/conf.php
-perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/conf.php
+mkdir /var/www/html/share
+ln -s /var/www/html/rutorrent/plugins/fileshare/share.php /var/www/html/share/share.php
+ln -s /var/www/html/rutorrent/plugins/fileshare/share.php /var/www/html/share/index.php
+chown -R www-data:www-data /var/www/html/share
+cp /etc/seedbox-from-scratch/rutorrent.plugins.fileshare.conf.php.template /var/www/html/rutorrent/plugins/fileshare/conf.php
+perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/html/rutorrent/plugins/fileshare/conf.php
 
 # 33.
 
@@ -688,17 +745,17 @@ bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YE
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
 set +x verbose
-perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
+#perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 apt-get update
-cd /var/www/rutorrent/plugins/autodl-irssi
+cd /var/www/html/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
-cd /var/www/rutorrent/js
+cd /var/www/html/rutorrent/js
 rm webui.js
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
 cd ..
-chown -R www-data:www-data /var/www/rutorrent
-chmod -R 755 /var/www/rutorrent
+chown -R www-data:www-data /var/www/html/rutorrent
+chmod -R 755 /var/www/html/rutorrent
 cd
 apt-get --yes install rar 
 git clone https://code.google.com/p/plowshare/
