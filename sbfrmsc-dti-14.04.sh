@@ -27,6 +27,7 @@
 #
   SBFSCURRENTVERSION1=2.1.9
   OS1=$(lsb_release -si)
+  OSV1=$(lsb_release -rs)
 #
 # Changelog
 #
