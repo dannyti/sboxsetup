@@ -4,8 +4,8 @@
 # create crontab entries. Rest is all perfect from Notos. Thanks.
 #
 # The Seedbox From Scratch Script
-#   By Notos ---> https://github.com/Notos/ & Modified by dannyti --> https://github.com/dannyti/
-#
+#   By Notos ---> https://github.com/Notos/ 
+#        & Modified by dannyti --> https://github.com/dannyti/
 #
 ######################################################################
 #
