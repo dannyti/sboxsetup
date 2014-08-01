@@ -25,7 +25,7 @@
 #  sudo git stash; sudo git pull
 #
 #
-  SBFSCURRENTVERSION1=2.1.9
+  SBFSCURRENTVERSION1=14.04
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
 #
