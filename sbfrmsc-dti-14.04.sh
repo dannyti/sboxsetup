@@ -266,6 +266,12 @@ if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
   exit 1
 fi
 
+if [ "$OSV1" = "14.04" ]; then
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+fi
+
+
 apt-get --yes update
 apt-get --yes install whois sudo makepasswd git nano 
 
