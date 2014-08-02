@@ -514,7 +514,6 @@ if [ "$OSV1" = "14.04" ]; then
   perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/000-default.conf
   perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/000-default.conf
   perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/000-default.conf
-  perl -pi -e "s/var/www/rutorrent/var/www/rutorrent/g" /etc/apache2/sites-available/000-default.conf
 else
   mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
   rm -f /etc/apache2/sites-available/default
@@ -758,7 +757,7 @@ rm -r plowshare
 # ./crontabentries
 export EDITOR=nano
 # 100
-set -x verbose
+set +x verbose
 
 
 
