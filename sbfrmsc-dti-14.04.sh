@@ -274,7 +274,6 @@ fi
 apt-get --yes update
 apt-get --yes install whois sudo makepasswd git nano 
 
-
 rm -f -r /etc/seedbox-from-scratch
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch
 mkdir -p cd /etc/seedbox-from-scratch/source
@@ -310,7 +309,7 @@ service ssh restart
 # 6.
 #remove cdrom from apt so it doesn't stop asking for it
 perl -pi -e "s/deb cdrom/#deb cdrom/g" /etc/apt/sources.list
-
+perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 #add non-free sources to Debian Squeeze# those two spaces below are on purpose
 perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
@@ -349,13 +348,7 @@ if [ $? -gt 0 ]; then
 fi
 apt-get --yes install zip
 apt-get --yes install python-software-properties software-properties-common
-if [ "$OSV1" = "14.04" ]; then
-  add-apt-repository "deb http://archive.ubuntu.com/ubuntu trusty multiverse"
-fi
-if [ "$OSV1" = "12.04" ]; then
-  add-apt-repository "deb http://archive.ubuntu.com/ubuntu precise multiverse"
-fi
-apt-get --yes update
+
 apt-get --yes install rar
 if [ $? -gt 0 ]; then
   apt-get --yes install rar-free
@@ -756,8 +749,7 @@ bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YE
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
 set +x verbose
-#perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
-apt-get update
+#
 cd /var/www/html/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
@@ -768,7 +760,6 @@ cd ..
 chown -R www-data:www-data /var/www/html/rutorrent
 chmod -R 755 /var/www/html/rutorrent
 cd
-apt-get --yes install rar 
 git clone https://code.google.com/p/plowshare/
 cd ~/plowshare
 make install
