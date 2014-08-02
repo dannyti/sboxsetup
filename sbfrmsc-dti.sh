@@ -308,7 +308,7 @@ perl -pi -e "s/deb cdrom/#deb cdrom/g" /etc/apt/sources.list
 #add non-free sources to Debian Squeeze# those two spaces below are on purpose
 perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
-
+perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 # 7.
 # update and upgrade packages
 apt-get --yes update
@@ -686,9 +686,8 @@ bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YE
 # git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
-set +x verbose
-perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
-apt-get update
+
+
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
@@ -745,7 +744,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-
+cat /etc/seedbox-from-scratch/users/$NEWUSER1.info
 # 101.
 
 reboot
