@@ -251,14 +251,14 @@ getString YES "Password for user $NEWUSER1: " PASSWORD1
 getString NO  "IP address or hostname of your box: " IPADDRESS1 $IPADDRESS1
 getString NO  "SSH port: " NEWSSHPORT1 21976
 getString NO  "vsftp port (usually 21): " NEWFTPPORT1 21201
-#getString NO  "OpenVPN port: " OPENVPNPORT1 31195
+getString NO  "OpenVPN port: " OPENVPNPORT1 31195
 #getString NO  "Do you want to have some of your users in a chroot jail? " CHROOTJAIL1 YES
 getString NO  "Install Webmin? " INSTALLWEBMIN1 YES
 getString NO  "Install Fail2ban? " INSTALLFAIL2BAN1 YES
-#getString NO  "Install OpenVPN? " INSTALLOPENVPN1 YES
-#getString NO  "Install SABnzbd? " INSTALLSABNZBD1 YES
-#getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 YES
-#getString NO  "Install Deluge? " INSTALLDELUGE1 YES
+getString NO  "Install OpenVPN? " INSTALLOPENVPN1 YES
+getString NO  "Install SABnzbd? " INSTALLSABNZBD1 YES
+getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 YES
+getString NO  "Install Deluge? " INSTALLDELUGE1 YES
 getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3'? " RTORRENT1 0.9.2
 
 if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
