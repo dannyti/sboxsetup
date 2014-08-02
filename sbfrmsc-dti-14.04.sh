@@ -318,7 +318,7 @@ perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /e
 # update and upgrade packages
 apt-get --yes install python-software-properties software-properties-common
 if [ "$OSV1" = "14.04" ]; then
-  apt-add-repository ppa:jon-severinsson/ffmpeg
+  apt-add-repository --yes ppa:jon-severinsson/ffmpeg
 fi
 apt-get --yes update
 apt-get --yes upgrade
