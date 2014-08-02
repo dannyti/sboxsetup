@@ -271,7 +271,6 @@ if [ "$OSV1" = "14.04" ]; then
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 fi
 
-
 apt-get --yes update
 apt-get --yes install whois sudo makepasswd git nano 
 
@@ -350,7 +349,13 @@ if [ $? -gt 0 ]; then
 fi
 apt-get --yes install zip
 apt-get --yes install python-software-properties software-properties-common
-
+if [ "$OSV1" = "14.04" ]; then
+  add-apt-repository "deb http://archive.ubuntu.com/ubuntu trusty multiverse"
+fi
+if [ "$OSV1" = "12.04" ]; then
+  add-apt-repository "deb http://archive.ubuntu.com/ubuntu precise multiverse"
+fi
+apt-get --yes update
 apt-get --yes install rar
 if [ $? -gt 0 ]; then
   apt-get --yes install rar-free
