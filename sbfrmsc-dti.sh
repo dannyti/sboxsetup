@@ -4,8 +4,8 @@
 # create crontab entries. Rest is all perfect from Notos. Thanks.
 #
 # The Seedbox From Scratch Script
-#   By Notos ---> https://github.com/Notos/ 
-#        & Modified by dannyti --> https://github.com/dannyti/
+#   By Notos ---> https://github.com/Notos/
+#     Modified by dannyti ---> https://github.com/dannyti/
 #
 ######################################################################
 #
@@ -25,8 +25,9 @@
 #  sudo git stash; sudo git pull
 #
 #
-  SBFSCURRENTVERSION1=2.1.9
+  SBFSCURRENTVERSION1=14.04
   OS1=$(lsb_release -si)
+  OSV1=$(lsb_release -rs)
 #
 # Changelog
 #
@@ -161,7 +162,7 @@ function getString
     echo "#"
     echo "# The Seedbox From Scratch Script"
     echo "#   By Notos ---> https://github.com/Notos/"
-    echo "#"
+    echo "#   Modified by dannyti ---> https://github.com/dannyti/"
     echo "#"
     echo "#"
     echo
@@ -265,9 +266,13 @@ if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
   exit 1
 fi
 
+if [ "$OSV1" = "14.04" ]; then
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+fi
+
 apt-get --yes update
 apt-get --yes install whois sudo makepasswd git nano 
-
 
 rm -f -r /etc/seedbox-from-scratch
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch
@@ -288,14 +293,14 @@ set -x verbose
 
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
-perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
+#perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
 perl -pi -e "s/#Protocol 2/Protocol 2/g" /etc/ssh/sshd_config
 perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
 echo "" | tee -a /etc/ssh/sshd_config > /dev/null
 echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
-echo "AllowGroups sshdusers" >> /etc/ssh/sshd_config
+echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 
@@ -304,21 +309,29 @@ service ssh restart
 # 6.
 #remove cdrom from apt so it doesn't stop asking for it
 perl -pi -e "s/deb cdrom/#deb cdrom/g" /etc/apt/sources.list
-
+perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 #add non-free sources to Debian Squeeze# those two spaces below are on purpose
 perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
-perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
+
 # 7.
 # update and upgrade packages
+apt-get --yes install python-software-properties software-properties-common
+if [ "$OSV1" = "14.04" ]; then
+  apt-add-repository --yes ppa:jon-severinsson/ffmpeg
+fi
 apt-get --yes update
 apt-get --yes upgrade
-
 # 8.
 #install all needed packages
 
 apt-get --yes build-dep znc
 apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect joe automake1.9 flex bison debhelper binutils-gold ffmpeg libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl znc tcpdump
+
+if [ "$OSV1" = "14.04"]; then
+  apt-get --yes install vsftpd
+fi
+
 if [ $? -gt 0 ]; then
   set +x verbose
   echo
@@ -333,7 +346,6 @@ if [ $? -gt 0 ]; then
   exit 1
 fi
 apt-get --yes install zip
-apt-get --yes install python-software-properties software-properties-common
 
 apt-get --yes install rar
 if [ $? -gt 0 ]; then
@@ -360,6 +372,10 @@ fi
 # this is better to be apart from the others
 apt-get --yes install php5-fpm
 apt-get --yes install php5-xcache
+
+if [ "$OSV1" = "13.10"]; then
+  apt-get install php5-json
+fi
 
 #Check if its Debian an do a sysvinit by upstart replacement:
 
@@ -463,6 +479,9 @@ if [ "$OS1" = "Debian" ]; then
   apt-get --yes install vsftpd
 else
   apt-get --yes install libcap-dev libpam0g-dev libwrap0-dev
+fi
+
+if [ "$OSV1" = "12.04" ]; then
   dpkg -i /etc/seedbox-from-scratch/vsftpd_2.3.2-3ubuntu5.1_`uname -m`.deb
 fi
 
@@ -486,13 +505,29 @@ echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
 
 # 13.
-mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
-rm -f /etc/apache2/sites-available/default
 
-cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/default
-perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/default
-perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/default
-perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
+if [ "$OSV1" = "14.04" ]; then
+  cp /var/www/html/index.html /var/www/index.html 
+  mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
+  rm -f /etc/apache2/sites-available/000-default.conf
+  cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/000-default.conf
+  perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/000-default.conf
+else
+  mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
+  rm -f /etc/apache2/sites-available/default
+  cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/default
+  perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/default
+  perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/default
+  perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
+fi
+#mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.ORI
+#rm -f /etc/apache2/sites-available/default
+#cp /etc/seedbox-from-scratch/etc.apache2.default.template /etc/apache2/sites-available/default
+#perl -pi -e "s/http\:\/\/.*\/rutorrent/http\:\/\/$IPADDRESS1\/rutorrent/g" /etc/apache2/sites-available/default
+#perl -pi -e "s/<servername>/$IPADDRESS1/g" /etc/apache2/sites-available/default
+#perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
 
 echo "ServerName $IPADDRESS1" | tee -a /etc/apache2/apache2.conf > /dev/null
 
@@ -521,8 +556,10 @@ make install
 
 bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1
 
+######### Below this /var/www/rutorrent/ has been replaced with /var/www/rutorrent for Ubuntu 14.04
+
 # 22.
-cd /var/www
+cd /var/www/
 rm -f -r rutorrent
 svn checkout http://rutorrent.googlecode.com/svn/trunk/rutorrent
 svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
@@ -686,8 +723,8 @@ bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YE
 # git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
-
-
+set -x verbose
+#
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
@@ -698,7 +735,6 @@ cd ..
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
 cd
-apt-get --yes install rar 
 git clone https://code.google.com/p/plowshare/
 cd ~/plowshare
 make install
