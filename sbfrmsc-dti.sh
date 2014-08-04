@@ -503,7 +503,7 @@ echo "write_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "local_umask=022" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
-
+echo "passwd_chroot_enable=yes" | tee -a /etc/vsftpd.conf >> /dev/null
 # 13.
 
 if [ "$OSV1" = "14.04" ]; then
