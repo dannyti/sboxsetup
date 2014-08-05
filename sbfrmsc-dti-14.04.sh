@@ -261,6 +261,7 @@ getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 YES
 getString NO  "Install Deluge? " INSTALLDELUGE1 YES
 getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3'? " RTORRENT1 0.9.2
 
+
 if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
   echo "$RTORRENT1 typed is not 0.9.3 or 0.9.2!"
   exit 1
