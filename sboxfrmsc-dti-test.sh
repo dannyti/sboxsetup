@@ -304,7 +304,10 @@ echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 #echo '/usr/lib/openssh/sftp-server' >> /etc/shells
-echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
+echo "Match Group sftponly" >> /etc/ssh/sshd_config
+echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
+echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
+echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
 service ssh restart
 
 # 6.
