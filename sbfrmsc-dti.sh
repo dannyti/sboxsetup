@@ -25,7 +25,7 @@
 #  sudo git stash; sudo git pull
 #
 #
-  SBFSCURRENTVERSION1=14.04
+  SBFSCURRENTVERSION1=14.05
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
 #
@@ -298,12 +298,17 @@ perl -pi -e "s/#Protocol 2/Protocol 2/g" /etc/ssh/sshd_config
 perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
+groupadd sftponly
 echo "" | tee -a /etc/ssh/sshd_config > /dev/null
 echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
 echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
-echo '/usr/lib/openssh/sftp-server' >> /etc/shells
+#echo '/usr/lib/openssh/sftp-server' >> /etc/shells
+echo "Match Group sftponly" >> /etc/ssh/sshd_config
+echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
+echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
+echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
 service ssh restart
 
 # 6.
@@ -338,7 +343,7 @@ if [ $? -gt 0 ]; then
   echo
   echo *** ERROR ***
   echo
-  echo "Looks like somethig is wrong with apt-get install, aborting."
+  echo "Looks like something is wrong with apt-get install, aborting."
   echo
   echo
   echo
@@ -441,6 +446,7 @@ fi
 a2enmod ssl
 a2enmod auth_digest
 a2enmod reqtimeout
+a2enmod rewrite
 #a2enmod scgi ############### if we cant make python-scgi works
 
 # 10.
@@ -455,7 +461,8 @@ echo "" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerSignature Off" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
-
+echo "RewriteEngine On" | tee -a /etc/apache2/apache2.conf > /dev/null
+echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]" | tee -a /etc/apache2/apache2.conf > /dev/null
 service apache2 restart
 
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
@@ -718,15 +725,15 @@ fi
 # 97.
 
 #first user will not be jailed
-#  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <?>
-bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES
+#  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
+bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO
 
 # 98. Populating trackers corrrectly & plowshare
 # adding trackers && browser-msie patch Shifted to createSeedboxUser script
 # git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
-set -x verbose
+set +x verbose
 #
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
