@@ -298,6 +298,7 @@ perl -pi -e "s/#Protocol 2/Protocol 2/g" /etc/ssh/sshd_config
 perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
+groupadd sftponly
 echo "" | tee -a /etc/ssh/sshd_config > /dev/null
 echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
 echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
@@ -342,7 +343,7 @@ if [ $? -gt 0 ]; then
   echo
   echo *** ERROR ***
   echo
-  echo "Looks like somethig is wrong with apt-get install, aborting."
+  echo "Looks like something is wrong with apt-get install, aborting."
   echo
   echo
   echo
