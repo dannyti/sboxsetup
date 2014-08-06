@@ -303,7 +303,8 @@ echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
 echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
-echo '/usr/lib/openssh/sftp-server' >> /etc/shells
+#echo '/usr/lib/openssh/sftp-server' >> /etc/shells
+echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
 service ssh restart
 
 # 6.
