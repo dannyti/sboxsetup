@@ -718,15 +718,15 @@ fi
 # 97.
 
 #first user will not be jailed
-#  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <?>
-bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES
+#  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
+bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO
 
 # 98. Populating trackers corrrectly & plowshare
 # adding trackers && browser-msie patch Shifted to createSeedboxUser script
 # git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
 # chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
 # chmod -R 755 .irssi
-set -x verbose
+set +x verbose
 #
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
