@@ -10,4 +10,4 @@ Adding new themes to it : Agent46 & Oblivion blue.
 Latest: Proper chroot specified users 
 
 
-Latest: http redirects to https, More secure environment.
+Latest: Site wide http redirects to https, More secure environment.
