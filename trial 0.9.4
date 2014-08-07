@@ -1,0 +1,340 @@
+#!/bin/sh
+
+# ------------------------------------------------------------------------------
+# redtorrent.sh
+# Script to install the newest rTorrent and (optionally) ruTorrent front-end
+# Should work out-of-the-box on Debian and Ubuntu systems
+#
+# Call it with the user who will run rTorrent as an argument. Like this:
+# sudo sh redtorrent.sh <rtorrent-user>
+#
+# Made by kabeleon
+# License: none (public domain)
+# ------------------------------------------------------------------------------
+
+
+# Settings
+# For enable/disable settings: "0" to disable, any other value to enable
+
+# User who will run rTorrent
+USER="$1"
+# Command to use to install packages from the repo's
+PINSTALL="aptitude -y install"
+# Build packages using checkinstall?
+CHECKINSTALL="1"
+# Type of pacakge to build with checkinstall
+# Valid options are "slackware", "rpm" and "debian"
+# Not relevant if CHECKINSTALL isn't enabled
+PAK_TYPE="debian"
+# rTorrent version to install
+# libTorrent version will be chosen accordingly
+# Valid options are "0.9.3" and "0.9.4"
+RTVERSION="0.9.4"
+# Whether libTorrent should be built with atomic operations
+# Disable if you don't have GCC version 4.7 or newer
+# Not relevant if RTVERSION isn't set to "0.9.4"
+ATOMIC="1"
+# Install Apache + PHP5?
+# Only disable if you already have a different webserver setup
+APACHE="1"
+# Webserver root dir
+WEBROOT="/var/www"
+# Install ruTorrent?
+RUTORRENT="1"
+# Install ruTorrent plugins?
+# This will also install dependencies for the plugins
+# Not relevant if RUTORRENT isn't enabled
+RUTORRENT_PLUGINS="1"
+# Which ruTorrent RPC plugin?
+# Use "RPC" or "HTTPRPC" - any other value for native SCGI
+# If RUTORRENT_PLUGINS isn't enabled, native SCGI will be used
+RUTORRENT_RPC="HTTPRPC"
+# User owner of the website
+# Not relevant if RUTORRENT isn't enabled
+WUSER="$USER"
+# Group owner of the website
+# Not relevant if RUTORRENT isn't enabled
+WGROUP="www-data"
+# Permissions (chmod) for the website
+# Not relevant if RUTORRENT isn't enabled
+WPERM="770"
+# Init var for USER's home dir (do NOT change this one)
+USER_HOME=$(awk -F ":" "/^${USER}:/ {print \$6}" /etc/passwd)
+
+
+# Functions
+
+set -e
+
+exit_trap() {
+	printf "\nExiting with status code ${?}.\n"
+	rm -rf "${USER_HOME}/redtorrent"
+}
+trap exit_trap EXIT
+
+# Check if script is being run as root
+if [ "$(id -u)" != "0" ]; then
+	printf "This script must be run as root."
+	exit 1
+fi
+
+# Check if a valid user has been specified
+if [ -z "$USER" ]; then
+	printf "Please specify a user."
+	exit 1
+else
+	USER_ID=$(awk -F ":" "/^${USER}:/ {print \$3}" /etc/passwd)
+	
+	if [ -z "$USER_ID" -o "$USER_ID" = "0" ]; then
+		printf "Please specify a valid user."
+		exit 1
+	fi
+fi
+
+# If ruTorrent is to be installed, also check RUSER and RGROUP
+if [ "$RUTORRENT" != "0" ]; then
+	if [ -z "$WUSER" ]; then
+		printf "Please specify a website user owner."
+		exit 1
+	else
+		WUSER_ID=$(awk -F ":" "/^${WUSER}:/ {print \$3}" /etc/passwd)
+		
+		if [ -z "$WUSER_ID" ]; then
+			printf "Please specify a valid website user owner."
+			exit 1
+		fi
+	fi
+	
+	if [ -z "$WGROUP" ]; then
+		printf "Please specify a group."
+		exit 1
+	else
+		WGID=$(awk -F ":" "/^${WGROUP}:/ {print \$3}" /etc/group)
+		
+		if [ -z "$WGID" ]; then
+			printf "Please specify a valid website group owner."
+			exit 1
+		fi
+	fi
+fi
+
+# Install dependencies
+eval "$PINSTALL build-essential automake pkg-config libcppunit-dev libtool \
+                libssl-dev libc-ares-dev libssh2-1-dev libidn11-dev \
+                subversion libxml2-dev \
+                libncurses5-dev \
+                dos2unix"
+
+if [ "$RTVERSION" = "0.9.4" ]; then
+	LTVERSION="0.13.4"
+elif [ "$RTVERSION" = "0.9.3" ]; then
+	eval "$PINSTALL libsigc++-2.0-dev"
+	LTVERSION="0.13.3"
+else
+	printf "Please specify a valid rTorrent version (0.9.3 or 0.9.4)."
+	exit 1
+fi
+
+# If CHECKINSTALL is set, install the pacakage
+if [ "$CHECKINSTALL" != "0" ]; then
+	eval "$PINSTALL checkinstall"
+fi
+
+export LTVERSION RTVERSION ATOMIC
+
+# Download and build rTorrent dependencies (as USER)
+su $USER << "build_dep"
+
+set -e
+
+# Create temp dir
+mkdir ~/redtorrent
+cd ~/redtorrent
+
+# libcurl/cURL
+wget http://curl.haxx.se/download/curl-7.37.0.tar.gz
+tar xzf curl-7.37.0.tar.gz
+cd curl-7.37.0
+./buildconf
+./configure --enable-ares --enable-tls-srp --with-zlib --with-ssl --with-libssh2 --with-libidn
+make
+cd ..
+
+# XMLRPC-C
+svn checkout https://svn.code.sf.net/p/xmlrpc-c/code/stable/ xmlrpc-c
+cd xmlrpc-c
+./configure --enable-libxml2-backend --disable-abyss-server --disable-cgi-server
+make
+cd ..
+
+# libTorrent
+wget http://libtorrent.rakshasa.no/downloads/libtorrent-"$LTVERSION".tar.gz
+tar xzf libtorrent-"$LTVERSION".tar.gz
+cd libtorrent-"$LTVERSION"
+./autogen.sh
+if [ "$LTVERSION" = "0.13.4" -a "$ATOMIC" = "0" ]; then
+	./configure --disable-instrumentation --with-posix-fallocate
+else
+	./configure --with-posix-fallocate
+fi
+make
+cd ..
+
+build_dep
+
+cd ${USER_HOME}/redtorrent
+
+# Install dependencies
+if [ "$CHECKINSTALL" != "0" ]; then
+	# libcurl/cURL
+	cd curl-7.37.0
+	printf "command line library + tool for transferring data with URL syntax" > "description-pak"
+	checkinstall \
+	--default \
+	--type="$PAK_TYPE" \
+	--pkgname="curl" \
+	--pkgversion="7.37.0" \
+	--fstrans="no" \
+	--install="yes" \
+	make install
+	cd ..
+	
+	# XMLRPC-C
+	cd xmlrpc-c
+	printf "lightweight RPC library based on XML and HTTP" > "description-pak"
+	VERSIONP1=$(awk "/^XMLRPC_MAJOR_RELEASE/ {print \$3}" version.mk)
+	VERSIONP2=$(awk "/^XMLRPC_MINOR_RELEASE/ {print \$3}" version.mk)
+	VERSIONP3=$(awk "/^XMLRPC_POINT_RELEASE/ {print \$3}" version.mk)
+	checkinstall \
+	--default \
+	--type="$PAK_TYPE" \
+	--pkgname="xmlrpc-c" \
+	--pkgversion="${VERSIONP1}.${VERSIONP2}.${VERSIONP3}" \
+	--fstrans="no" \
+	--install="yes" \
+	make install
+	cd ..
+	
+	# libTorrent
+	cd libtorrent-"$LTVERSION"
+	printf "BitTorrent library by Rakshasa" > "description-pak"
+	checkinstall \
+	--default \
+	--type="$PAK_TYPE" \
+	--pkgname="libtorrent" \
+	--pkgversion="$LTVERSION" \
+	--fstrans="no" \
+	--install="yes" \
+	make install
+	cd ..
+else
+	cd curl-7.37.0
+	make install
+	cd ..
+	cd xmlrpc-c
+	make install
+	cd ..
+	cd libtorrent-"$LTVERSION"
+	make install
+	cd ..
+fi
+
+ldconfig
+
+# Download and build rTorrent (as USER)
+su $USER << "build_main"
+
+set -e
+
+cd ~/redtorrent
+
+# rTorrent
+wget http://libtorrent.rakshasa.no/downloads/rtorrent-"$RTVERSION".tar.gz
+tar xzf rtorrent-"$RTVERSION".tar.gz
+cd rtorrent-"$RTVERSION"
+./autogen.sh
+./configure --with-xmlrpc-c
+make
+cd ..
+
+# Download rTorrent config file template
+wget http://pastebin.com/raw.php?i=CkvtrH3L -O ~/.rtorrent.rc
+dos2unix ~/.rtorrent.rc
+
+build_main
+
+# Install rTorrent
+if [ "$CHECKINSTALL" != "0" ]; then
+	# rTorrent
+	cd rtorrent-"$RTVERSION"
+	printf "BitTorrent client based on libTorrent by Rakshasa" > "description-pak"
+	checkinstall \
+	--default \
+	--type="$PAK_TYPE" \
+	--pkgname="rtorrent" \
+	--pkgversion="$RTVERSION" \
+	--fstrans="no" \
+	--install="yes" \
+	make install
+	cd ..
+else
+	cd rtorrent-"$RTVERSION"
+	make install
+	cd ..
+fi
+
+ldconfig
+
+# Install and configure Apache if needed
+if [ "$APACHE" != "0" ]; then
+	eval "$PINSTALL libapache2-mod-php5 libapache2-mod-scgi"
+	
+	printf "SCGIMount /RPC2 127.0.0.1:5000" > /etc/apache2/conf.d/rtorrent.conf
+	a2enmod scgi
+fi
+
+# Install ruTorrent if needed
+if [ "$RUTORRENT" != "0" ]; then
+	cd "${WEBROOT}"
+	svn checkout http://rutorrent.googlecode.com/svn/trunk
+	rm -rf trunk/rutorrent/plugins/
+	mv trunk/rutorrent/ /var/www/
+	
+	# Install ruTorrent plugins if needed
+	if [ "$RUTORRENT_PLUGINS" != "0" ]; then
+		# Install dependencies
+		eval "$PINSTALL unzip unrar-free php5-cli ffmpeg mediainfo"
+		
+		mv trunk/plugins/ /var/www/rutorrent/
+		
+		# Configure ruTorrent and/or Apache to use the RPC plugin, the HTTPRPC plugin or native SCGI
+		case "$RUTORRENT_RPC" in
+			"RPC")
+				printf "\n[httprpc]\nenabled = no\n[rpc]\nenabled = yes" >> "${WEBROOT}/rutorrent/conf/plugins.ini"
+				rm /etc/apache2/conf.d/rtorrent.conf
+				a2dismod scgi
+				;;
+			"HTTPRPC")
+				printf "\n[httprpc]\nenabled = yes\n[rpc]\nenabled = no" >> "${WEBROOT}/rutorrent/conf/plugins.ini"
+				rm /etc/apache2/conf.d/rtorrent.conf
+				a2dismod scgi
+				;;
+			*)
+				printf "\n[httprpc]\nenabled = no\n[rpc]\nenabled = no" >> "${WEBROOT}/rutorrent/conf/plugins.ini"
+		esac
+	fi
+	
+	rm -rf /var/www/trunk/
+
+	# Change ownerships and permissions
+	chown -R ${WUSER_ID}:${WGID} "${WEBROOT}/rutorrent"
+	chmod -R $WPERM "${WEBROOT}/rutorrent"
+fi
+
+if [ "$APACHE" != "0" ]; then
+	service apache2 restart
+else
+	if [ "$RUTORRENT" != "0" ]; then printf "Please restart your web server.\n"; fi
+fi
+
+printf "Finished. I recommend you to configure rTorrent now by editing the .rtorrent.rc file (located in you home dir)."
