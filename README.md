@@ -6,3 +6,6 @@ This will properly populate tracker list for autodl. Make crontab entries for th
 This script will also eliminate the msie browser errors due to jQuery updates. 
 Other aesthetic corrections will be done as well.
 Adding new themes to it : Agent46 & Oblivion blue.
+
+Latest: Proper chroot specified users 
+Latest: http redirects to https, More secure environment.
