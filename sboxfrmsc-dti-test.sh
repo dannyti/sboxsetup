@@ -25,7 +25,7 @@
 #  sudo git stash; sudo git pull
 #
 #
-  SBFSCURRENTVERSION1=14.06
+  SBFSCURRENTVERSION1=14.05
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
 #
@@ -35,7 +35,7 @@
 #   Dec 26 2012 17:37 GMT-3
 #     - RTorrent 0.9.3 support (optionally installed)
 #     - New installRTorrent script: move to RTorrent 0.9.3 or back to 0.9.2 at any time
-#     - Deluge v1.3.5 multi-user installation script (it will install the last stable version): installDeluge
+#     - Deluge v1.3.6 multi-user installation script (it will install the last stable version): installDeluge
 #     - Optionally install Deluge when you first install your seedbox-from-scratch box
 #
 #  Version 2.1.8 (stable)
@@ -255,14 +255,14 @@ getString NO  "OpenVPN port: " OPENVPNPORT1 31195
 #getString NO  "Do you want to have some of your users in a chroot jail? " CHROOTJAIL1 YES
 getString NO  "Install Webmin? " INSTALLWEBMIN1 YES
 getString NO  "Install Fail2ban? " INSTALLFAIL2BAN1 YES
-getString NO  "Install OpenVPN? " INSTALLOPENVPN1 YES
-getString NO  "Install SABnzbd? " INSTALLSABNZBD1 YES
-getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 YES
-getString NO  "Install Deluge? " INSTALLDELUGE1 YES
-getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3'? " RTORRENT1 0.9.2
+getString NO  "Install OpenVPN? " INSTALLOPENVPN1 NO
+getString NO  "Install SABnzbd? " INSTALLSABNZBD1 NO
+getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 NO
+getString NO  "Install Deluge? " INSTALLDELUGE1 NO
+getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3' or '0.9.4'? " RTORRENT1 0.9.4
 
-if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ]; then
-  echo "$RTORRENT1 typed is not 0.9.3 or 0.9.2!"
+if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ] && [ "$RTORRENT1" != "0.9.4" ]; then
+  echo "$RTORRENT1 typed is not 0.9.4 or 0.9.3 or 0.9.2!"
   exit 1
 fi
 
@@ -540,24 +540,38 @@ echo "ServerName $IPADDRESS1" | tee -a /etc/apache2/apache2.conf > /dev/null
 
 # 14.
 a2ensite default-ssl
-
-#14.1
 #ln -s /etc/apache2/mods-available/scgi.load /etc/apache2/mods-enabled/scgi.load
 #service apache2 restart
 #apt-get --yes install libxmlrpc-core-c3-dev
 
+#14.1 Download xmlrpc, rtorrent & libtorrent for 0.9.4
+cd
+svn co https://svn.code.sf.net/p/xmlrpc-c/code/stable /etc/seedbox-from-scratch/source/xmlrpc
+get -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz && mv rtorrent-0.9.4.tar.gz /etc/seedbox-from-scratch/rtorrent-0.9.4.tar.gz
+wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz && mv libtorrent-0.13.4.tar.gz /etc/seedbox-from-scratch/libtorrent-0.13.4.tar.gz
+
+#configure & make xmlrpc BASED ON RTORRENT VERSION
+if [ "$RTORRENT1" = "0.9.4" ]; then
+  cd /etc/seedbox-from-scratch/source/xmlrpc
+  ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
+  make
+  make install
+else
+  tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.16.42.tgz -C /etc/seedbox-from-scratch/source/
+  cd /etc/seedbox-from-scratch/source/
+  unzip ../xmlrpc-c-1.31.06.zip
+  cd xmlrpc-c-1.31.06
+  ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
+  make
+  make install
+fi
 # 15.
-tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.16.42.tgz -C /etc/seedbox-from-scratch/source/
-cd /etc/seedbox-from-scratch/source/
-unzip ../xmlrpc-c-1.31.06.zip
+
 
 # 16.
 #cd xmlrpc-c-1.16.42 ### old, but stable, version, needs a missing old types.h file
 #ln -s /usr/include/curl/curl.h /usr/include/curl/types.h
-cd xmlrpc-c-1.31.06
-./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
-make
-make install
+
 
 # 21.
 
