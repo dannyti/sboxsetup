@@ -25,7 +25,7 @@
 #  sudo git stash; sudo git pull
 #
 #
-  SBFSCURRENTVERSION1=14.05
+  SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
 #
@@ -331,7 +331,7 @@ apt-get --yes upgrade
 #install all needed packages
 
 apt-get --yes build-dep znc
-apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect joe automake1.9 flex bison debhelper binutils-gold ffmpeg libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl znc tcpdump
+apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect automake1.9 flex bison debhelper binutils-gold ffmpeg libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl znc tcpdump
 
 if [ "$OSV1" = "14.04"]; then
   apt-get --yes install vsftpd
@@ -461,8 +461,8 @@ echo "" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerSignature Off" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
-echo "RewriteEngine On" | tee -a /etc/apache2/apache2.conf > /dev/null
-echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]" | tee -a /etc/apache2/apache2.conf > /dev/null
+#echo "RewriteEngine On" | tee -a /etc/apache2/apache2.conf > /dev/null
+#echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]" | tee -a /etc/apache2/apache2.conf > /dev/null
 service apache2 restart
 
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
