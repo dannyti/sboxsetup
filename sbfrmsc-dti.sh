@@ -461,8 +461,8 @@ echo "" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerSignature Off" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
-echo "RewriteEngine On" | tee -a /etc/apache2/apache2.conf > /dev/null
-echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]" | tee -a /etc/apache2/apache2.conf > /dev/null
+#echo "RewriteEngine On" | tee -a /etc/apache2/apache2.conf > /dev/null
+#echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]" | tee -a /etc/apache2/apache2.conf > /dev/null
 service apache2 restart
 
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
