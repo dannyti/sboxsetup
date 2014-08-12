@@ -35,7 +35,7 @@
 #   Dec 26 2012 17:37 GMT-3
 #     - RTorrent 0.9.3 support (optionally installed)
 #     - New installRTorrent script: move to RTorrent 0.9.3 or back to 0.9.2 at any time
-#     - Deluge v1.3.5 multi-user installation script (it will install the last stable version): installDeluge
+#     - Deluge v1.3.6 multi-user installation script (it will install the last stable version): installDeluge
 #     - Optionally install Deluge when you first install your seedbox-from-scratch box
 #
 #  Version 2.1.8 (stable)
