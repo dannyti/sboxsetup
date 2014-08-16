@@ -783,7 +783,13 @@ rm -r plowshare
 export EDITOR=nano
 # 100
 set +x verbose
-
+if [ "$OSV1" = "14.04" ]; then
+  cd /var/www/rutorrent/plugins
+  rm -frv diskspace
+  wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
+  tar -xf diskspace-3.6.tar.gz
+  rm diskspace-3.6.tar.gz
+fi
 
 
 clear
