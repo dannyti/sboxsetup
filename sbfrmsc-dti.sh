@@ -607,7 +607,7 @@ make install
 
 cd /var/www/rutorrent/plugins
 git clone https://github.com/autodl-community/autodl-rutorrent.git autodl-irssi
-cp autodl-irssi/_conf.php autodl-irssi/conf.php
+#cp autodl-irssi/_conf.php autodl-irssi/conf.php
 #svn co https://svn.code.sf.net/p/autodl-irssi/code/trunk/rutorrent/autodl-irssi/
 cd autodl-irssi
 
