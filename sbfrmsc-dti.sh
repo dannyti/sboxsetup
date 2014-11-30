@@ -497,8 +497,8 @@ perl -pi -e "s/connect_from_port_20\=YES/#connect_from_port_20\=YES/g" /etc/vsft
 echo "listen_port=$NEWFTPPORT1" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "ssl_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "allow_anon_ssl=YES" | tee -a /etc/vsftpd.conf >> /dev/null
-echo "force_local_data_ssl=YES" | tee -a /etc/vsftpd.conf >> /dev/null
-echo "force_local_logins_ssl=YES" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "force_local_data_ssl=NO" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "force_local_logins_ssl=NO" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "ssl_tlsv1=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "ssl_sslv2=NO" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "ssl_sslv3=NO" | tee -a /etc/vsftpd.conf >> /dev/null
@@ -510,7 +510,9 @@ echo "write_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "local_umask=022" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
-echo "passwd_chroot_enable=yes" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "passwd_chroot_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
+
 # 13.
 
 if [ "$OSV1" = "14.04" ]; then
