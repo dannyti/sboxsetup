@@ -496,6 +496,8 @@ fi
 
 perl -pi -e "s/anonymous_enable\=YES/\#anonymous_enable\=YES/g" /etc/vsftpd.conf
 perl -pi -e "s/connect_from_port_20\=YES/#connect_from_port_20\=YES/g" /etc/vsftpd.conf
+perl -pi -e "s/rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem/#rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem/g" /etc/vsftpd.conf
+perl -pi -e "s/rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key/#rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key/g" /etc/vsftpd.conf
 echo "listen_port=$NEWFTPPORT1" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "ssl_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "allow_anon_ssl=YES" | tee -a /etc/vsftpd.conf >> /dev/null
