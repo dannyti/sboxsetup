@@ -496,6 +496,8 @@ fi
 
 perl -pi -e "s/anonymous_enable\=YES/\#anonymous_enable\=YES/g" /etc/vsftpd.conf
 perl -pi -e "s/connect_from_port_20\=YES/#connect_from_port_20\=YES/g" /etc/vsftpd.conf
+perl -pi -e 's/rsa_private_key_file/#rsa_private_key_file/' /etc/vsftpd.conf
+perl -pi -e 's/rsa_cert_file/#rsa_cert_file/' /etc/vsftpd.conf
 #perl -pi -e "s/rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem/#rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem/g" /etc/vsftpd.conf
 #perl -pi -e "s/rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key/#rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key/g" /etc/vsftpd.conf
 echo "listen_port=$NEWFTPPORT1" | tee -a /etc/vsftpd.conf >> /dev/null
@@ -516,8 +518,8 @@ echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "passwd_chroot_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
-sed -i '147 d' /etc/vsftpd.conf
-sed -i '149 d' /etc/vsftpd.conf
+#sed -i '147 d' /etc/vsftpd.conf
+#sed -i '149 d' /etc/vsftpd.conf
 
 
 # 13.
