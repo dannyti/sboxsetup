@@ -567,7 +567,7 @@ wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
 if [ "$RTORRENT1" = "0.9.4" ]; then
   cd /etc/seedbox-from-scratch/source/xmlrpc
   ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
-  make
+  make -j$(grep -c ^processor /proc/cpuinfo)
   make install
 else
   tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.16.42.tgz -C /etc/seedbox-from-scratch/source/
@@ -575,7 +575,7 @@ else
   unzip ../xmlrpc-c-1.31.06.zip
   cd xmlrpc-c-1.31.06
   ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
-  make
+  make -j$(grep -c ^processor /proc/cpuinfo)
   make install
 fi
 # 15.
