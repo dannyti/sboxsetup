@@ -484,8 +484,8 @@ openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsf
 
 if [ "$OS1" = "Debian" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
- aptitude update
- aptitude install -y -o Aptitude::Cmdline::ignore-trust-violations=true -t wheezy-updates debian-cyconet-archive-keyring vsftpd
+  apt-get update
+  apt-get install -y -o Aptitude::Cmdline::ignore-trust-violations=true -t wheezy-updates debian-cyconet-archive-keyring vsftpd
 else
   apt-get --yes install libcap-dev libpam0g-dev libwrap0-dev
 fi
