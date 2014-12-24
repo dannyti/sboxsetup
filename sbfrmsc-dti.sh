@@ -786,7 +786,9 @@ make install
 cd
 rm -r plowshare
 
-
+if [ "$OS1" = "Debian" ]; then
+  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd
+fi
  
 # 99 Creating check - start rtorrent , irssi script && creating crontab entries to 
 # start at boot and check every 10 mins interval 
