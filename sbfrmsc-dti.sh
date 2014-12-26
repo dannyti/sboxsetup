@@ -804,14 +804,21 @@ fi
 # ./crontabentries
 export EDITOR=nano
 # 100
+cd /var/www/rutorrent/plugins
+rm -frv diskspace
+wget https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar
+#wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
+#tar -xf diskspace-3.6.tar.gz
+unrar x hectortheone.rar
+#rm diskspace-3.6.tar.gz
+rm hectortheone.rar
+cd quotaspace
+chmod 755 run.sh
+cd ..
+chown -R www-data:www-data /var/www/rutorrent
+
 set +x verbose
-if [ "$OSV1" = "14.04" ]; then
-  cd /var/www/rutorrent/plugins
-  rm -frv diskspace
-  wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
-  tar -xf diskspace-3.6.tar.gz
-  rm diskspace-3.6.tar.gz
-fi
+
 
 
 clear
