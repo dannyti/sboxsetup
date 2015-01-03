@@ -463,6 +463,9 @@ echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
 #echo "RewriteEngine On" | tee -a /etc/apache2/apache2.conf > /dev/null
 #echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]" | tee -a /etc/apache2/apache2.conf > /dev/null
+cd /etc/apache2
+rm ports.conf
+wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf
 service apache2 restart
 
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
