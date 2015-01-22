@@ -1,4 +1,10 @@
 #!/bin/sh
+# By dannyti ---> https://github.com/dannyti/
+#
+#
+######################################################################
+#
+#  Copyright (c) 2015 dannyti (https://github.com/dannyti/)
 # Starts rtorrent if it is not already running
 
 FILE="$HOME/downloads/.session/rtorrent.lock"

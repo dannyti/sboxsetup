@@ -30,6 +30,20 @@
   OSV1=$(lsb_release -rs)
 #
 # Changelog
+#   Version 14.06 (By dannyti)
+#   Jan 16 2015
+#      - RTorrent 0.9.4 supported
+#      - Openvpn Fixed and Working 
+#      - Autodl tracker list correctly populated
+#      - Diskspace fixed for multiuser environment
+#      - Added http Data Download directory for users ; Can be accessed at http://Server-IP/private/Downloads ; Only http://
+#      - Sitewide https only 
+#      - User Login info can be accessed individually at http://Server-IP/private/SBinfo.html ; Only http://
+#      - Mediainfo fixed ; installtion from source
+#      - Jquery Error corrected 
+#      - Crontab entries made for checking rtorrrent is running and starting it if not running
+#      - Plowshare Fixed
+#      - Deprecated seedboxInfo.php 
 #
 #  Version 2.1.9 (not stable yet)
 #   Dec 26 2012 17:37 GMT-3
@@ -281,7 +295,7 @@ mkdir -p cd /etc/seedbox-from-scratch/users
 
 if [ ! -f /etc/seedbox-from-scratch/seedbox-from-scratch.sh ]; then
   clear
-  echo Looks like somethig is wrong, this script was not able to download its whole git repository.
+  echo Looks like something is wrong, this script was not able to download its whole git repository.
   set -e
   exit 1
 fi
@@ -329,7 +343,6 @@ apt-get --yes update
 apt-get --yes upgrade
 # 8.
 #install all needed packages
-
 apt-get --yes build-dep znc
 apt-get --yes install apache2 apache2-utils autoconf build-essential vsftpd ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect automake1.9 flex bison debhelper binutils-gold ffmpeg libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl znc tcpdump
 
@@ -382,7 +395,7 @@ if [ "$OSV1" = "13.10"]; then
   apt-get install php5-json
 fi
 
-#Check if its Debian an do a sysvinit by upstart replacement:
+#Check if its Debian and do a sysvinit by upstart replacement:
 
 if [ "$OS1" = "Debian" ]; then
   echo 'Yes, do as I say!' | apt-get -y --force-yes install upstart
@@ -467,6 +480,7 @@ cd /etc/apache2
 rm ports.conf
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf
 service apache2 restart
+mkdir /etc/apache2/auth.users
 
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
 
@@ -590,7 +604,6 @@ fi
 
 
 # 21.
-
 bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1
 
 ######### Below this /var/www/rutorrent/ has been replaced with /var/www/rutorrent for Ubuntu 14.04
@@ -611,7 +624,7 @@ echo "www-data ALL=(root) NOPASSWD: /usr/sbin/repquota" | tee -a /etc/sudoers > 
 
 cp /etc/seedbox-from-scratch/favicon.ico /var/www/
 
-# 26.
+# 26. Installing Mediainfo from source
 cd /tmp
 wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2
 tar jxvf MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2
@@ -633,31 +646,24 @@ git clone https://github.com/autodl-community/autodl-rutorrent.git autodl-irssi
 cd autodl-irssi
 
 
-# 30.
-
+# 30. 
 cp /etc/jailkit/jk_init.ini /etc/jailkit/jk_init.ini.original
 echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
 bash /etc/seedbox-from-scratch/updatejkinit
 
-# 31.
-
-#clear
+# 31. ZNC
 #echo "ZNC Configuration"
 #echo ""
 #znc --makeconf
 #/home/antoniocarlos/.znc/configs/znc.conf
 
-# 32.
-
-# Installing poweroff button on ruTorrent
-
+# 32. Installing poweroff button on ruTorrent
 cd /var/www/rutorrent/plugins/
 wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz
 tar -zxf logoff-1.0.tar.gz
 rm -f logoff-1.0.tar.gz
 
 # Installing Filemanager and MediaStream
-
 rm -f -R /var/www/rutorrent/plugins/filemanager
 rm -f -R /var/www/rutorrent/plugins/fileupload
 rm -f -R /var/www/rutorrent/plugins/mediastream
@@ -689,7 +695,6 @@ chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
 
 #32.3
-
 perl -pi -e "s/\\\$topDirectory\, \\\$fm/\\\$homeDirectory\, \\\$topDirectory\, \\\$fm/g" /var/www/rutorrent/plugins/filemanager/flm.class.php
 perl -pi -e "s/\\\$this\-\>userdir \= addslash\(\\\$topDirectory\)\;/\\\$this\-\>userdir \= \\\$homeDirectory \? addslash\(\\\$homeDirectory\) \: addslash\(\\\$topDirectory\)\;/g" /var/www/rutorrent/plugins/filemanager/flm.class.php
 perl -pi -e "s/\\\$topDirectory/\\\$homeDirectory/g" /var/www/rutorrent/plugins/filemanager/settings.js.php
@@ -706,10 +711,9 @@ git clone https://github.com/InAnimaTe/rutorrent-themes.git /var/www/rutorrent/p
 cp -r /var/www/rutorrent/plugins/theme/themes/Extra/OblivionBlue /var/www/rutorrent/plugins/theme/themes/
 cp -r /var/www/rutorrent/plugins/theme/themes/Extra/Agent46 /var/www/rutorrent/plugins/theme/themes/
 rm -r /var/www/rutorrent/plugins/theme/themes/Extra
-ln -s /etc/seedbox-from-scratch/seedboxInfo.php.template /var/www/seedboxInfo.php
+#ln -s /etc/seedbox-from-scratch/seedboxInfo.php.template /var/www/seedboxInfo.php
 
 # 32.5
-
 cd /var/www/rutorrent/plugins/
 rm -r /var/www/rutorrent/plugins/fileshare
 rm -r /var/www/share
@@ -722,28 +726,20 @@ cp /etc/seedbox-from-scratch/rutorrent.plugins.fileshare.conf.php.template /var/
 perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/conf.php
 
 # 33.
-
 bash /etc/seedbox-from-scratch/updateExecutables
 
 #34.
-
 echo $SBFSCURRENTVERSION1 > /etc/seedbox-from-scratch/version.info
 echo $NEWFTPPORT1 > /etc/seedbox-from-scratch/ftp.info
 echo $NEWSSHPORT1 > /etc/seedbox-from-scratch/ssh.info
 echo $OPENVPNPORT1 > /etc/seedbox-from-scratch/openvpn.info
 
 # 36.
-
 wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt
 update-ca-certificates
 c_rehash
 
-
-
-
-
 # 96.
-
 if [ "$INSTALLOPENVPN1" = "YES" ]; then
   bash /etc/seedbox-from-scratch/installOpenVPN
 fi
@@ -760,19 +756,11 @@ if [ "$INSTALLDELUGE1" = "YES" ]; then
   bash /etc/seedbox-from-scratch/installDeluge
 fi
 
-# 97.
-
-#first user will not be jailed
+# 97. First user will not be jailed
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO
 
-# 98. Populating trackers corrrectly & plowshare
-# adding trackers && browser-msie patch Shifted to createSeedboxUser script
-# git clone https://github.com/autodl-community/autodl-trackers.git /home/$NEWUSER1/.irssi/scripts/AutodlIrssi/trackers
-# chown -R $NEWUSER1: /home/$NEWUSER1/.irssi
-# chmod -R 755 .irssi
-set +x verbose
-#
+# 98. Cosmetic corrections & installing plowshare
 cd /var/www/rutorrent/plugins/autodl-irssi
 rm AutodlFilesDownloader.js
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
@@ -782,7 +770,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
-cd
+cd 
 git clone https://code.google.com/p/plowshare/
 cd ~/plowshare
 make install
@@ -793,18 +781,6 @@ if [ "$OS1" = "Debian" ]; then
   apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd
 fi
  
-# 99 Creating check - start rtorrent , irssi script && creating crontab entries to 
-# start at boot and check every 10 mins interval 
-# mkdir /home/$NEWUSER1/bin
-# cd /home/$NEWUSER1/bin
-# wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/rtcheck
-# chmod +x rtcheck
-# cd ..
-# chown $NEWUSER1: -R bin
-# cd
-# wget https://raw.githubusercontent.com/dannyti/sboxsetup/master/crontabentries
-# chmod +x crontabentries
-# ./crontabentries
 export EDITOR=nano
 # 100
 cd /var/www/rutorrent/plugins
@@ -821,29 +797,23 @@ cd ..
 chown -R www-data:www-data /var/www/rutorrent
 
 set +x verbose
-
-
-
 clear
 
 echo ""
 echo "<<< The Seedbox From Scratch Script >>>"
-echo ""
-echo ""
+echo "Script Modified by dannyti ---> https://github.com/dannyti/"
 echo ""
 echo "Looks like everything is set."
 echo ""
 echo "Remember that your SSH port is now ======> $NEWSSHPORT1"
 echo ""
+echo "Your Login info can also be found at https://$IPADDRESS1/private/SBinfo.html"
+echo "Download Data Directory is located at http://$IPADDRESS1/private/   <==== Remember: http only"
+echo ""
 echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
 echo ""
 echo ""
-echo ""
-echo ""
-echo ""
-echo ""
-echo ""
-cat /etc/seedbox-from-scratch/users/$NEWUSER1.info
+#cat /etc/seedbox-from-scratch/users/$NEWUSER1.info
 # 101.
 
 reboot
