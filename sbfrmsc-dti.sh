@@ -461,6 +461,9 @@ a2enmod auth_digest
 a2enmod reqtimeout
 a2enmod rewrite
 #a2enmod scgi ############### if we cant make python-scgi works
+cd /etc/apache2
+rm apache2.conf
+wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/apache2.conf
 
 # 10.
 
@@ -474,9 +477,6 @@ echo "" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerSignature Off" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
-#echo "RewriteEngine On" | tee -a /etc/apache2/apache2.conf > /dev/null
-#echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]" | tee -a /etc/apache2/apache2.conf > /dev/null
-cd /etc/apache2
 rm ports.conf
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf
 service apache2 restart
