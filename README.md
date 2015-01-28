@@ -16,5 +16,7 @@ Latest: Site wide http redirects to https, More secure environment.
 
 Latest: Added following for Multi User environment: 
 Individual Login info:  https://Server-IP/private/SBinfo.html 
-Individual Data Download directory:  http://Server-IP/private/Downloads
+
+
+Individual Data Download directory:  https://Server-IP/private/Downloads
 OpenVPN Fixed
