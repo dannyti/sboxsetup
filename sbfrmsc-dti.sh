@@ -461,10 +461,10 @@ a2enmod auth_digest
 a2enmod reqtimeout
 a2enmod rewrite
 #a2enmod scgi ############### if we cant make python-scgi works
-cd /etc/apache2
-rm apache2.conf
-wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/apache2.conf
-
+#cd /etc/apache2
+#rm apache2.conf
+#wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/apache2.conf
+cat /etc/seedbox-from-scratch/add2apache2.conf >> /etc/apache2/apache2.conf
 # 10.
 
 #remove timeout if  there are any
@@ -795,7 +795,6 @@ cd quotaspace
 chmod 755 run.sh
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
-
 set +x verbose
 clear
 
