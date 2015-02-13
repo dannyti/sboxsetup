@@ -15,7 +15,7 @@ Latest: Site wide http redirects to https, More secure environment.
 
 
 Latest: Added following for Multi User environment: 
-Individual Login info:  https://Server-IP/private/SBinfo.html 
+Individual Login info:  https://Server-IP/private/SBinfo.txt 
 
 
 Individual Data Download directory:  https://Server-IP/private/Downloads
