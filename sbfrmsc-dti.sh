@@ -38,7 +38,7 @@
 #      - Diskspace fixed for multiuser environment
 #      - Added http Data Download directory for users ; Can be accessed at http://Server-IP/private/Downloads ; Only http://
 #      - Sitewide https only 
-#      - User Login info can be accessed individually at http://Server-IP/private/SBinfo.html ; Only http://
+#      - User Login info can be accessed individually at http://Server-IP/private/SBinfo.txt 
 #      - Mediainfo fixed ; installtion from source
 #      - Jquery Error corrected 
 #      - Crontab entries made for checking rtorrrent is running and starting it if not running
