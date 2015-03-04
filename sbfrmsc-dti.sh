@@ -812,8 +812,6 @@ echo ""
 echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
 echo ""
 echo ""
-#cat /etc/seedbox-from-scratch/users/$NEWUSER1.info
-# 101.
 
 reboot
 
