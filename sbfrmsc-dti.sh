@@ -611,7 +611,7 @@ bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1
 # 22.
 cd /var/www/
 rm -f -r rutorrent
-svn checkout https://github.com/Novik/ruTorrent
+svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent
 #svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
 #rm -r -f rutorrent/plugins
 #mv plugins rutorrent/
