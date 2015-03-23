@@ -611,10 +611,10 @@ bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1
 # 22.
 cd /var/www/
 rm -f -r rutorrent
-svn checkout http://rutorrent.googlecode.com/svn/trunk/rutorrent
-svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
-rm -r -f rutorrent/plugins
-mv plugins rutorrent/
+svn checkout https://github.com/Novik/ruTorrent
+#svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
+#rm -r -f rutorrent/plugins
+#mv plugins rutorrent/
 
 cp /etc/seedbox-from-scratch/action.php.template /var/www/rutorrent/plugins/diskspace/action.php
 
@@ -761,13 +761,13 @@ fi
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO
 
 # 98. Cosmetic corrections & installing plowshare
-cd /var/www/rutorrent/plugins/autodl-irssi
-rm AutodlFilesDownloader.js
-wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
-cd /var/www/rutorrent/js
-rm webui.js
-wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
-cd ..
+#cd /var/www/rutorrent/plugins/autodl-irssi
+#rm AutodlFilesDownloader.js
+#wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
+#cd /var/www/rutorrent/js
+#rm webui.js
+#wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
+cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
 cd 
