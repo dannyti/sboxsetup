@@ -21,4 +21,4 @@ Individual Login info:  https://Server-IP/private/SBinfo.txt
 Individual Data Download directory:  https://Server-IP/private/Downloads
 OpenVPN Fixed
 
-Buy me a Beer : BTC address: 1M8eoTeNwLKohHxieY3Av1tSbMMYi97bcq
+Donate if you can - Beer Joint Address : Bitcoin address: 1ACi4NRpfzkCNDaTgwFpCFcHoMMRCCT4wC
