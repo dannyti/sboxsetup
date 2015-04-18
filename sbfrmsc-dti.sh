@@ -771,7 +771,7 @@ cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
 cd 
-git clone https://code.google.com/p/plowshare/
+git clone https://github.com/mcrapet/plowshare.git plowshare
 cd ~/plowshare
 make install
 cd
