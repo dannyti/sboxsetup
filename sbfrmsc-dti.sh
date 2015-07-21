@@ -584,7 +584,7 @@ wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar
 
 #configure & make xmlrpc BASED ON RTORRENT VERSION
 if [ "$RTORRENT1" = "0.9.4" ]; then
-  cd /etc/seedbox-from-scratch/source/xmlrpc
+  cd /etc/seedbox-from-scratch/xmlrpc
   ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
   make -j$(grep -c ^processor /proc/cpuinfo)
   make install
