@@ -575,7 +575,7 @@ a2ensite default-ssl
 
 #14.1 Download xmlrpc, rtorrent & libtorrent for 0.9.4
 cd
-svn co https://svn.code.sf.net/p/xmlrpc-c/code/stable /etc/seedbox-from-scratch/source/xmlrpc
+#svn co https://svn.code.sf.net/p/xmlrpc-c/code/stable /etc/seedbox-from-scratch/source/xmlrpc
 cd /etc/seedbox-from-scratch/
 #wget -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
 #wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
