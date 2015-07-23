@@ -542,7 +542,7 @@ echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 
 # 13.
 
-if [ "$OSV1" = "14.04" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ]; then
   cp /var/www/html/index.html /var/www/index.html 
   mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
   rm -f /etc/apache2/sites-available/000-default.conf
