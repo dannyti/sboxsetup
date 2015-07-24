@@ -24,7 +24,7 @@
 #  git clone -b master https://github.com/Notos/seedbox-from-scratch.git /etc/seedbox-from-scratch
 #  sudo git stash; sudo git pull
 #
-#
+apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
@@ -313,16 +313,20 @@ perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
 groupadd sftponly
-echo "" | tee -a /etc/ssh/sshd_config > /dev/null
-echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
-echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
+
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 #echo '/usr/lib/openssh/sftp-server' >> /etc/shells
-echo "Match Group sftponly" >> /etc/ssh/sshd_config
-echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
-echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
-echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
+if [ "$OS1" = "Ubuntu" ]; then
+  echo "" | tee -a /etc/ssh/sshd_config > /dev/null
+  echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
+  echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
+  echo "Match Group sftponly" >> /etc/ssh/sshd_config
+  echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
+  echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
+  echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
+fi
+
 service ssh restart
 
 # 6.
@@ -389,7 +393,7 @@ fi
 # 8.1 additional packages for Ubuntu
 # this is better to be apart from the others
 apt-get --yes install php5-fpm
-apt-get --yes install php5-xcache
+apt-get --yes install php5-xcache libxml2-dev
 
 if [ "$OSV1" = "13.10"]; then
   apt-get install php5-json
@@ -503,7 +507,7 @@ if [ "$OS1" = "Debian" ]; then
   apt-get purge -y --force-yes vsftpd
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
   apt-get update
-  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd
+  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion
 else
   apt-get --yes install libcap-dev libpam0g-dev libwrap0-dev
 fi
@@ -539,7 +543,7 @@ echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 #sed -i '147 d' /etc/vsftpd.conf
 #sed -i '149 d' /etc/vsftpd.conf
 
-
+apt-get install --yes subversion
 # 13.
 
 if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ]; then
@@ -781,7 +785,7 @@ cd
 rm -r plowshare
 
 if [ "$OS1" = "Debian" ]; then
-  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd
+  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd subversion
 fi
  
 export EDITOR=nano
