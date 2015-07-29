@@ -327,7 +327,7 @@ if [ "$OS1" = "Ubuntu" ]; then
   echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
 fi
 
-service ssh restart
+service ssh reload
 
 # 6.
 #remove cdrom from apt so it doesn't stop asking for it
@@ -336,6 +336,15 @@ perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 #add non-free sources to Debian Squeeze# those two spaces below are on purpose
 perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
+
+#apt-get --yes install python-software-properties
+#Adding debian pkgs for adding repo and installing ffmpeg
+apt-get --yes install software-properties-common
+if [ "$OSV1" = "8.1" ]; then
+  apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free"
+  apt-get update
+  apt-get --force-yes --yes install ffmpeg
+fi
 
 # 7.
 # update and upgrade packages
@@ -370,13 +379,16 @@ if [ $? -gt 0 ]; then
 fi
 apt-get --yes install zip
 
-apt-get --yes install rar
+apt-get --force-yes --yes install rar
 if [ $? -gt 0 ]; then
   apt-get --yes install rar-free
 fi
 
 apt-get --yes install unrar
 if [ $? -gt 0 ]; then
+  apt-get --yes install unrar-free
+fi
+if [ "$OSV1" = "8.1" ]; then
   apt-get --yes install unrar-free
 fi
 
@@ -482,6 +494,7 @@ echo "" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerSignature Off" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
+cd /etc/apache2
 rm ports.conf
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf
 service apache2 restart
