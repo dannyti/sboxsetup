@@ -413,10 +413,10 @@ if [ "$OSV1" = "13.10" ]; then
 fi
 
 #Check if its Debian and do a sysvinit by upstart replacement:
-
-if [ "$OS1" = "Debian" ]; then
-  echo 'Yes, do as I say!' | apt-get -y --force-yes install upstart
-fi
+#Commented the follwoing three lines for testing
+#if [ "$OS1" = "Debian" ]; then
+#  echo 'Yes, do as I say!' | apt-get -y --force-yes install upstart
+#fi
 
 # 8.3 Generate our lists of ports and RPC and create variables
 
