@@ -262,7 +262,7 @@ PASSWORD2=b
 
 getString NO  "You need to create an user for your seedbox: " NEWUSER1
 getString YES "Password for user $NEWUSER1: " PASSWORD1
-getString NO  "IP address or hostname of your box: " IPADDRESS1 $IPADDRESS1
+getString NO  "IP address of your box: " IPADDRESS1 $IPADDRESS1
 getString NO  "SSH port: " NEWSSHPORT1 21976
 getString NO  "vsftp port (usually 21): " NEWFTPPORT1 21201
 getString NO  "OpenVPN port: " OPENVPNPORT1 31195
