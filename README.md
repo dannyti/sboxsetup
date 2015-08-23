@@ -39,7 +39,7 @@ Installed software
     Fail2ban - to avoid apache and ssh exploits. Fail2ban bans IPs that show malicious signs -- too many password failures, seeking for exploits, etc.
     Apache (SSL)
     OpenVPN - Fixed
-    ZNC - To install it - Wait for script completion and reboot, after reboot you must run "installZNC" as main user and set it up
+    ZNC Latest - To install it - Wait for script completion and reboot, after reboot you must run "installZNC" as main user and set it up
     PHP 5 and PHP-FPM (FastCGI to increase performance)
     Linux Quota
     SSH Server (for SSH terminal and sFTP connections)
@@ -94,7 +94,7 @@ After installing you will have access to the following commands to be used direc
     updategitRepository
     removeWebmin
     installRTorrent
-    installZNC
+    installZNC - Let the script complete and reboot, then run this command
     restartSeedbox
 
     While executing them, if sudo is needed, they will ask for a password.
