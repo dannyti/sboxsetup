@@ -24,7 +24,7 @@
 #  git clone -b master https://github.com/Notos/seedbox-from-scratch.git /etc/seedbox-from-scratch
 #  sudo git stash; sudo git pull
 #
-#
+apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
@@ -262,7 +262,7 @@ PASSWORD2=b
 
 getString NO  "You need to create an user for your seedbox: " NEWUSER1
 getString YES "Password for user $NEWUSER1: " PASSWORD1
-getString NO  "IP address or hostname of your box: " IPADDRESS1 $IPADDRESS1
+getString NO  "IP address of your box: " IPADDRESS1 $IPADDRESS1
 getString NO  "SSH port: " NEWSSHPORT1 21976
 getString NO  "vsftp port (usually 21): " NEWFTPPORT1 21201
 getString NO  "OpenVPN port: " OPENVPNPORT1 31195
@@ -313,17 +313,21 @@ perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
 groupadd sftponly
-echo "" | tee -a /etc/ssh/sshd_config > /dev/null
-echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
-echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
+
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 #echo '/usr/lib/openssh/sftp-server' >> /etc/shells
-echo "Match Group sftponly" >> /etc/ssh/sshd_config
-echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
-echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
-echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
-service ssh restart
+if [ "$OS1" = "Ubuntu" ]; then
+  echo "" | tee -a /etc/ssh/sshd_config > /dev/null
+  echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
+  echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
+  echo "Match Group sftponly" >> /etc/ssh/sshd_config
+  echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
+  echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
+  echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
+fi
+
+service ssh reload
 
 # 6.
 #remove cdrom from apt so it doesn't stop asking for it
@@ -333,20 +337,29 @@ perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
 
+#apt-get --yes install python-software-properties
+#Adding debian pkgs for adding repo and installing ffmpeg
+apt-get --yes install software-properties-common
+if [ "$OSV1" = "8.1" ]; then
+  apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free"
+  apt-get update
+  apt-get --force-yes --yes install ffmpeg
+fi
+
 # 7.
 # update and upgrade packages
 apt-get --yes install python-software-properties software-properties-common
-if [ "$OSV1" = "14.04" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "14.10" ]; then
   apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next
 fi
 apt-get --yes update
 apt-get --yes upgrade
 # 8.
 #install all needed packages
-apt-get --yes build-dep znc
-apt-get --yes install apache2 apache2-utils autoconf build-essential vsftpd ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect automake1.9 flex bison debhelper binutils-gold ffmpeg libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl znc tcpdump
-
-if [ "$OSV1" = "14.04"]; then
+apt-get --yes install apache2 apache2-utils autoconf build-essential vsftpd ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump
+apt-get --yes install ffmpeg 
+apt-get --yes install automake1.9
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "14.10" ]; then
   apt-get --yes install vsftpd
 fi
 
@@ -365,13 +378,16 @@ if [ $? -gt 0 ]; then
 fi
 apt-get --yes install zip
 
-apt-get --yes install rar
+apt-get --force-yes --yes install rar
 if [ $? -gt 0 ]; then
   apt-get --yes install rar-free
 fi
 
 apt-get --yes install unrar
 if [ $? -gt 0 ]; then
+  apt-get --yes install unrar-free
+fi
+if [ "$OSV1" = "8.1" ]; then
   apt-get --yes install unrar-free
 fi
 
@@ -389,17 +405,17 @@ fi
 # 8.1 additional packages for Ubuntu
 # this is better to be apart from the others
 apt-get --yes install php5-fpm
-apt-get --yes install php5-xcache
+apt-get --yes install php5-xcache libxml2-dev
 
-if [ "$OSV1" = "13.10"]; then
+if [ "$OSV1" = "13.10" ]; then
   apt-get install php5-json
 fi
 
 #Check if its Debian and do a sysvinit by upstart replacement:
-
-if [ "$OS1" = "Debian" ]; then
-  echo 'Yes, do as I say!' | apt-get -y --force-yes install upstart
-fi
+#Commented the follwoing three lines for testing
+#if [ "$OS1" = "Debian" ]; then
+#  echo 'Yes, do as I say!' | apt-get -y --force-yes install upstart
+#fi
 
 # 8.3 Generate our lists of ports and RPC and create variables
 
@@ -477,6 +493,7 @@ echo "" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerSignature Off" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
+cd /etc/apache2
 rm ports.conf
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf
 service apache2 restart
@@ -503,7 +520,7 @@ if [ "$OS1" = "Debian" ]; then
   apt-get purge -y --force-yes vsftpd
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
   apt-get update
-  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd
+  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion
 else
   apt-get --yes install libcap-dev libpam0g-dev libwrap0-dev
 fi
@@ -539,10 +556,10 @@ echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 #sed -i '147 d' /etc/vsftpd.conf
 #sed -i '149 d' /etc/vsftpd.conf
 
-
+apt-get install --yes subversion
 # 13.
 
-if [ "$OSV1" = "14.04" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "8.1" ]; then
   cp /var/www/html/index.html /var/www/index.html 
   mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
   rm -f /etc/apache2/sites-available/000-default.conf
@@ -574,15 +591,18 @@ a2ensite default-ssl
 #apt-get --yes install libxmlrpc-core-c3-dev
 
 #14.1 Download xmlrpc, rtorrent & libtorrent for 0.9.4
-cd
-svn co https://svn.code.sf.net/p/xmlrpc-c/code/stable /etc/seedbox-from-scratch/source/xmlrpc
+#cd
+#svn co https://svn.code.sf.net/p/xmlrpc-c/code/stable /etc/seedbox-from-scratch/source/xmlrpc
 cd /etc/seedbox-from-scratch/
-wget -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
-wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
+#wget -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
+#wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
+wget -c http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/rtorrent-0.9.4.tar.gz/fd9490a2ac67d0fa2a567c6267845876/rtorrent-0.9.4.tar.gz
+wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar.gz/e82f380a9d4b55b379e0e73339c73895/libtorrent-0.13.4.tar.gz
 
 #configure & make xmlrpc BASED ON RTORRENT VERSION
 if [ "$RTORRENT1" = "0.9.4" ]; then
-  cd /etc/seedbox-from-scratch/source/xmlrpc
+  tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.33.17.tgz -C /etc/seedbox-from-scratch/
+  cd /etc/seedbox-from-scratch/xmlrpc-c-1.33.17
   ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
   make -j$(grep -c ^processor /proc/cpuinfo)
   make install
@@ -652,10 +672,7 @@ echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
 bash /etc/seedbox-from-scratch/updatejkinit
 
 # 31. ZNC
-#echo "ZNC Configuration"
-#echo ""
-#znc --makeconf
-#/home/antoniocarlos/.znc/configs/znc.conf
+#Have put this in script form
 
 # 32. Installing poweroff button on ruTorrent
 cd /var/www/rutorrent/plugins/
@@ -778,7 +795,7 @@ cd
 rm -r plowshare
 
 if [ "$OS1" = "Debian" ]; then
-  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd
+  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd subversion
 fi
  
 export EDITOR=nano
@@ -796,6 +813,11 @@ cd quotaspace
 chmod 755 run.sh
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
+
+if [ "$OSV1" = "8.1" ]; then
+  systemctl enable apache2
+  service apache2 start 
+fi
 set +x verbose
 clear
 
@@ -809,7 +831,7 @@ echo "Remember that your SSH port is now ======> $NEWSSHPORT1"
 echo ""
 echo "Your Login info can also be found at https://$IPADDRESS1/private/SBinfo.txt"
 echo "Download Data Directory is located at https://$IPADDRESS1/private "
-echo ""
+echo "To install ZNC, run installZNC from ssh as main user"
 echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
 echo ""
 echo ""
