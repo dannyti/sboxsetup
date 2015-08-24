@@ -800,17 +800,17 @@ fi
  
 export EDITOR=nano
 # 100
-cd /var/www/rutorrent/plugins
-sleep 1
-rm -frv diskspace
-wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar
+#####cd /var/www/rutorrent/plugins
+#####sleep 1
+#####rm -frv diskspace
+#####wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
-unrar x hectortheone.rar
+#####unrar x hectortheone.rar
 #rm diskspace-3.6.tar.gz
-rm hectortheone.rar
-cd quotaspace
-chmod 755 run.sh
+#####rm hectortheone.rar
+#####cd quotaspace
+#####chmod 755 run.sh
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 
