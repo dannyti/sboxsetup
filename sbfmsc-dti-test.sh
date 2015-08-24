@@ -25,7 +25,7 @@
 #  sudo git stash; sudo git pull
 #
 apt-get --yes install lsb-release
-  SBFSCURRENTVERSION1=14.06
+  SBFSCURRENTVERSION1=14.05
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
 #
