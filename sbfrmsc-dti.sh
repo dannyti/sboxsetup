@@ -358,9 +358,6 @@ apt-get --yes upgrade
 # 8.
 #install all needed packages
 apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump
-apt-get --yes install ffmpeg 
-apt-get --yes install automake1.9
-
 
 if [ $? -gt 0 ]; then
   set +x verbose
@@ -376,6 +373,9 @@ if [ $? -gt 0 ]; then
   exit 1
 fi
 apt-get --yes install zip
+
+apt-get --yes install ffmpeg 
+apt-get --yes install automake1.9
 
 apt-get --force-yes --yes install rar
 if [ $? -gt 0 ]; then
