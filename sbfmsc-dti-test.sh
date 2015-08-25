@@ -515,16 +515,15 @@ mkdir -p /etc/ssl/private/
 openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
 
 if [ "$OSV1" = "7" ]; then
-  apt-get purge -y --force-yes vsftpd
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
   apt-get update
   apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion
 elif [ "$OSV1" = "12.04" ]; then
   add-apt-repository -yes ppa:thefrontiergroup/vsftpd
   apt-get update
-  apt-get -yes install vsftpd
+  apt-get --yes install vsftpd
 else
-  apt-get -yes install vsftpd
+  apt-get --yes install vsftpd
 fi
 
 
