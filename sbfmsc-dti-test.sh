@@ -519,11 +519,11 @@ if [ "$OSV1" = "7" ]; then
   apt-get update
   apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion
 elif [ "$OSV1" = "12.04" ]; then
-  add-apt-repository -yes ppa:thefrontiergroup/vsftpd
+  add-apt-repository -y ppa:thefrontiergroup/vsftpd
   apt-get update
-  apt-get --yes install vsftpd
+  apt-get -y install vsftpd
 else
-  apt-get --yes install vsftpd
+  apt-get -y install vsftpd
 fi
 
 
