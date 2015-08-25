@@ -28,6 +28,7 @@ apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
+  OSV11=$(sed 's/\..*//' /etc/debian_version)
 #
 # Changelog
 #   Version 14.06 (By dannyti)
@@ -340,7 +341,7 @@ perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /e
 #apt-get --yes install python-software-properties
 #Adding debian pkgs for adding repo and installing ffmpeg
 apt-get --yes install software-properties-common
-if [ "$OSV1" = "8.1" ]; then
+if [ "$OSV11" = "8" ]; then
   apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free"
   apt-get update
   apt-get --force-yes --yes install ffmpeg
@@ -514,7 +515,7 @@ bash /etc/seedbox-from-scratch/createOpenSSLCACertificate
 mkdir -p /etc/ssl/private/
 openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
 
-if [ "$OSV1" = "7" ]; then
+if [ "$OSV11" = "7" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
   apt-get update
   apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion
@@ -561,7 +562,7 @@ echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 apt-get install --yes subversion
 # 13.
 
-if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "8.1" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV11" = "8" ]; then
   cp /var/www/html/index.html /var/www/index.html 
   mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
   rm -f /etc/apache2/sites-available/000-default.conf
@@ -816,7 +817,7 @@ chmod 755 run.sh
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 
-if [ "$OSV1" = "8.1" ]; then
+if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
   service apache2 start 
 fi
