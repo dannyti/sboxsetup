@@ -799,6 +799,11 @@ rm -r plowshare
 #if [ "$OS1" = "Debian" ]; then
 #  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd subversion
 #fi
+## Installing xrdp && Mate Desktop Env.
+dpkg -i /etc/seedbox-from-scratch/xrdp_0.6.1-1_`uname -m`.deb
+apt-get -f -y install
+apt-get -y install mate-core mate-desktop-environment mate-notification-daemon
+apt-get install firefox
  
 export EDITOR=nano
 # 100
