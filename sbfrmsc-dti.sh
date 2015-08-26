@@ -803,7 +803,7 @@ rm -r plowshare
 dpkg -i /etc/seedbox-from-scratch/xrdp_0.6.1-1_`uname -m`.deb
 apt-get -f -y install
 apt-get -y install mate-core mate-desktop-environment mate-notification-daemon
-apt-get install firefox
+apt-get -y install firefox
  
 export EDITOR=nano
 # 100
