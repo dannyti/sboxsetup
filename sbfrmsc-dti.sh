@@ -29,6 +29,7 @@ apt-get --yes install lsb-release
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
   OSV11=$(sed 's/\..*//' /etc/debian_version)
+  logfile="/dev/null"
 #
 # Changelog
 #   Version 14.06 (By dannyti)
@@ -286,11 +287,11 @@ if [ "$OSV1" = "14.04" ]; then
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 fi
 
-apt-get --yes update
-apt-get --yes install whois sudo makepasswd git nano 
+apt-get --yes update >> $logfile 2>&1
+apt-get --yes install whois sudo makepasswd git nano >> $logfile 2>&1
 
 rm -f -r /etc/seedbox-from-scratch
-git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch
+git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch >> $logfile 2>&1
 mkdir -p cd /etc/seedbox-from-scratch/source
 mkdir -p cd /etc/seedbox-from-scratch/users
 
@@ -343,8 +344,8 @@ perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /e
 apt-get --yes install software-properties-common
 if [ "$OSV11" = "8" ]; then
   apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free"
-  apt-get update
-  apt-get --force-yes --yes install ffmpeg
+  apt-get update >> $logfile 2>&1
+  apt-get --force-yes --yes install ffmpeg >> $logfile 2>&1
 fi
 
 # 7.
@@ -353,11 +354,11 @@ apt-get --yes install python-software-properties software-properties-common
 if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "14.10" ]; then
   apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next
 fi
-apt-get --yes update
-apt-get --yes upgrade
+apt-get --yes update >> $logfile 2>&1
+apt-get --yes upgrade >> $logfile 2>&1
 # 8.
 #install all needed packages
-apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump
+apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump >> $logfile 2>&1
 if [ $? -gt 0 ]; then
   set +x verbose
   echo
@@ -371,9 +372,9 @@ if [ $? -gt 0 ]; then
   set -e
   exit 1
 fi
-apt-get --yes install zip
+apt-get --yes install zip >> $logfile 2>&1
 
-apt-get --yes install ffmpeg 
+apt-get --yes install ffmpeg >> $logfile 2>&1
 apt-get --yes install automake1.9
 
 apt-get --force-yes --yes install rar
@@ -386,7 +387,7 @@ if [ $? -gt 0 ]; then
   apt-get --yes install unrar-free
 fi
 if [ "$OSV1" = "8.1" ]; then
-  apt-get --yes install unrar-free
+  apt-get --yes install unrar-free 
 fi
 
 apt-get --yes install dnsutils
@@ -402,8 +403,8 @@ fi
 
 # 8.1 additional packages for Ubuntu
 # this is better to be apart from the others
-apt-get --yes install php5-fpm
-apt-get --yes install php5-xcache libxml2-dev
+apt-get --yes install php5-fpm >> $logfile 2>&1
+apt-get --yes install php5-xcache libxml2-dev >> $logfile 2>&1
 
 if [ "$OSV1" = "13.10" ]; then
   apt-get install php5-json
@@ -457,13 +458,13 @@ if [ "$INSTALLWEBMIN1" = "YES" ]; then
   fi
 
   if [ "$WEBMINDOWN" = "NO" ]; then
-    apt-get --yes update
-    apt-get --yes install webmin
+    apt-get --yes update >> $logfile 2>&1
+    apt-get --yes install webmin >> $logfile 2>&1
   fi
 fi
 
 if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
-  apt-get --yes install fail2ban
+  apt-get --yes install fail2ban >> $logfile 2>&1
   cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
   cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
   fail2ban-client reload
@@ -493,9 +494,9 @@ echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
 cd /etc/apache2
 rm ports.conf
-wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf
+wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf >> $logfile 2>&1
 service apache2 restart
-mkdir /etc/apache2/auth.users
+mkdir /etc/apache2/auth.users 
 
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
 
@@ -509,7 +510,7 @@ export IPADDRESS1
 echo "$NEWUSER1" > /etc/seedbox-from-scratch/mainuser.info
 echo "$CERTPASS1" > /etc/seedbox-from-scratch/certpass.info
 
-bash /etc/seedbox-from-scratch/createOpenSSLCACertificate
+bash /etc/seedbox-from-scratch/createOpenSSLCACertificate 
 
 mkdir -p /etc/ssl/private/
 openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
@@ -517,7 +518,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsf
 if [ "$OSV11" = "7" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
   apt-get update
-  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion
+  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion >> $logfile 2>&1
 elif [ "$OSV1" = "12.04" ]; then
   add-apt-repository -y ppa:thefrontiergroup/vsftpd
   apt-get update
@@ -558,7 +559,7 @@ echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 #sed -i '147 d' /etc/vsftpd.conf
 #sed -i '149 d' /etc/vsftpd.conf
 
-apt-get install --yes subversion
+apt-get install --yes subversion >> $logfile 2>&1
 # 13.
 
 if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV11" = "8" ]; then
@@ -598,24 +599,24 @@ a2ensite default-ssl
 cd /etc/seedbox-from-scratch/
 #wget -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
 #wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
-wget -c http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/rtorrent-0.9.4.tar.gz/fd9490a2ac67d0fa2a567c6267845876/rtorrent-0.9.4.tar.gz
-wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar.gz/e82f380a9d4b55b379e0e73339c73895/libtorrent-0.13.4.tar.gz
+wget -c http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/rtorrent-0.9.4.tar.gz/fd9490a2ac67d0fa2a567c6267845876/rtorrent-0.9.4.tar.gz >> $logfile 2>&1
+wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar.gz/e82f380a9d4b55b379e0e73339c73895/libtorrent-0.13.4.tar.gz >> $logfile 2>&1
 
 #configure & make xmlrpc BASED ON RTORRENT VERSION
 if [ "$RTORRENT1" = "0.9.4" ]; then
-  tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.33.17.tgz -C /etc/seedbox-from-scratch/
+  tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.33.17.tgz -C /etc/seedbox-from-scratch/ >> $logfile 2>&1
   cd /etc/seedbox-from-scratch/xmlrpc-c-1.33.17
-  ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
-  make -j$(grep -c ^processor /proc/cpuinfo)
-  make install
+  ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server >> $logfile 2>&1
+  make -j$(grep -c ^processor /proc/cpuinfo) >> $logfile 2>&1
+  make install >> $logfile 2>&1
 else
-  tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.16.42.tgz -C /etc/seedbox-from-scratch/source/
+  tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.16.42.tgz -C /etc/seedbox-from-scratch/source/ >> $logfile 2>&1
   cd /etc/seedbox-from-scratch/source/
-  unzip ../xmlrpc-c-1.31.06.zip
+  unzip ../xmlrpc-c-1.31.06.zip >> $logfile 2>&1
   cd xmlrpc-c-1.31.06
-  ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
-  make -j$(grep -c ^processor /proc/cpuinfo)
-  make install
+  ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server >> $logfile 2>&1
+  make -j$(grep -c ^processor /proc/cpuinfo) >> $logfile 2>&1
+  make install >> $logfile 2>&1
 fi
 # 15.
 
@@ -626,14 +627,14 @@ fi
 
 
 # 21.
-bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1
+bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1 >> $logfile 2>&1
 
 ######### Below this /var/www/rutorrent/ has been replaced with /var/www/rutorrent for Ubuntu 14.04
 
 # 22.
 cd /var/www/
 rm -f -r rutorrent
-svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent
+svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent >> $logfile 2>&1
 #svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
 #rm -r -f rutorrent/plugins
 #mv plugins rutorrent/
@@ -648,21 +649,21 @@ cp /etc/seedbox-from-scratch/favicon.ico /var/www/
 
 # 26. Installing Mediainfo from source
 cd /tmp
-wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2
-tar jxvf MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2
+wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
+tar jxvf MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
 cd MediaInfo_CLI_GNU_FromSource/
-sh CLI_Compile.sh
+sh CLI_Compile.sh >> $logfile 2>&1
 cd MediaInfo/Project/GNU/CLI
-make install
+make install >> $logfile 2>&1
 
 cd /var/www/rutorrent/js/
-git clone https://github.com/gabceb/jquery-browser-plugin.git
+git clone https://github.com/gabceb/jquery-browser-plugin.git >> $logfile 2>&1
 mv jquery-browser-plugin/dist/jquery.browser.js .
 rm -r -f jquery-browser-plugin
 sed -i '31i\<script type=\"text/javascript\" src=\"./js/jquery.browser.js\"></script> ' /var/www/rutorrent/index.html
 
 cd /var/www/rutorrent/plugins
-git clone https://github.com/autodl-community/autodl-rutorrent.git autodl-irssi
+git clone https://github.com/autodl-community/autodl-rutorrent.git autodl-irssi >> $logfile 2>&1
 #cp autodl-irssi/_conf.php autodl-irssi/conf.php
 #svn co https://svn.code.sf.net/p/autodl-irssi/code/trunk/rutorrent/autodl-irssi/
 cd autodl-irssi
@@ -678,8 +679,8 @@ bash /etc/seedbox-from-scratch/updatejkinit
 
 # 32. Installing poweroff button on ruTorrent
 cd /var/www/rutorrent/plugins/
-wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz
-tar -zxf logoff-1.0.tar.gz
+wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz >> $logfile 2>&1
+tar -zxf logoff-1.0.tar.gz >> $logfile 2>&1
 rm -f logoff-1.0.tar.gz
 
 # Installing Filemanager and MediaStream
@@ -689,10 +690,10 @@ rm -f -R /var/www/rutorrent/plugins/mediastream
 rm -f -R /var/www/stream
 
 cd /var/www/rutorrent/plugins/
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream
+svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
 
 cd /var/www/rutorrent/plugins/
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/filemanager
+svn co http://svn.rutorrent.org/svn/filemanager/trunk/filemanager >> $logfile 2>&1
 
 cp /etc/seedbox-from-scratch/rutorrent.plugins.filemanager.conf.php.template /var/www/rutorrent/plugins/filemanager/conf.php
 
@@ -705,9 +706,9 @@ echo "<?php \$streampath = 'http://$IPADDRESS1/stream/view.php'; ?>" | tee /var/
 
 # 32.2 # FILEUPLOAD
 cd /var/www/rutorrent/plugins/
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload
+svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload >> $logfile 2>&1
 chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
-apt-get --yes -f install
+apt-get --yes -f install >> $logfile 2>&1
 
 # 32.2
 chown -R www-data:www-data /var/www/rutorrent
@@ -726,7 +727,7 @@ perl -pi -e "s/\\\$topDirectory/\\\$homeDirectory/g" /var/www/rutorrent/plugins/
 #echo ".meter-value-end-color { background-color: #8FBC00 }" | tee -a /var/www/rutorrent/css/style.css > /dev/null
 #echo "::-webkit-scrollbar {width:12px;height:12px;padding:0px;margin:0px;}" | tee -a /var/www/rutorrent/css/style.css > /dev/null
 perl -pi -e "s/\$defaultTheme \= \"\"\;/\$defaultTheme \= \"Oblivion\"\;/g" /var/www/rutorrent/plugins/theme/conf.php
-git clone https://github.com/InAnimaTe/rutorrent-themes.git /var/www/rutorrent/plugins/theme/themes/Extra
+git clone https://github.com/InAnimaTe/rutorrent-themes.git /var/www/rutorrent/plugins/theme/themes/Extra >> $logfile 2>&1
 cp -r /var/www/rutorrent/plugins/theme/themes/Extra/OblivionBlue /var/www/rutorrent/plugins/theme/themes/
 cp -r /var/www/rutorrent/plugins/theme/themes/Extra/Agent46 /var/www/rutorrent/plugins/theme/themes/
 rm -r /var/www/rutorrent/plugins/theme/themes/Extra
@@ -736,7 +737,7 @@ rm -r /var/www/rutorrent/plugins/theme/themes/Extra
 cd /var/www/rutorrent/plugins/
 rm -r /var/www/rutorrent/plugins/fileshare
 rm -r /var/www/share
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileshare
+svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileshare >> $logfile 2>&1
 mkdir /var/www/share
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/share.php
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/index.php
@@ -745,7 +746,7 @@ cp /etc/seedbox-from-scratch/rutorrent.plugins.fileshare.conf.php.template /var/
 perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/conf.php
 
 # 33.
-bash /etc/seedbox-from-scratch/updateExecutables
+bash /etc/seedbox-from-scratch/updateExecutables >> $logfile 2>&1
 
 #34.
 echo $SBFSCURRENTVERSION1 > /etc/seedbox-from-scratch/version.info
@@ -754,7 +755,7 @@ echo $NEWSSHPORT1 > /etc/seedbox-from-scratch/ssh.info
 echo $OPENVPNPORT1 > /etc/seedbox-from-scratch/openvpn.info
 
 # 36.
-wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt
+wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt 
 update-ca-certificates
 c_rehash
 
@@ -777,7 +778,7 @@ fi
 
 # 97. First user will not be jailed
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
-bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO
+bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO >> $logfile 2>&1
 
 # 98. Cosmetic corrections & installing plowshare
 #cd /var/www/rutorrent/plugins/autodl-irssi
@@ -790,9 +791,9 @@ cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
 cd 
-git clone https://github.com/mcrapet/plowshare.git plowshare
+git clone https://github.com/mcrapet/plowshare.git plowshare >> $logfile 2>&1
 cd ~/plowshare
-make install
+make install >> $logfile 2>&1
 cd
 rm -r plowshare
 
@@ -811,7 +812,7 @@ export EDITOR=nano
 cd /var/www/rutorrent/plugins
 sleep 1
 rm -frv diskspace
-wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar
+wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
 unrar x hectortheone.rar
