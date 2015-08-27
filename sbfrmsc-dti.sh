@@ -560,6 +560,7 @@ echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 #sed -i '149 d' /etc/vsftpd.conf
 
 apt-get install --yes subversion >> $logfile 2>&1
+apt-get install --yes dialog >> $logfile 2>&1
 # 13.
 
 if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV11" = "8" ]; then
