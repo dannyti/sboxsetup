@@ -710,7 +710,7 @@ cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload >> $logfile 2>&1
 chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
 apt-get --yes -f install >> $logfile 2>&1
-
+rm /var/www/rutorrent/plugins/unpack/conf.php
 # 32.2
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
@@ -745,6 +745,8 @@ ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/index.php
 chown -R www-data:www-data /var/www/share
 cp /etc/seedbox-from-scratch/rutorrent.plugins.fileshare.conf.php.template /var/www/rutorrent/plugins/fileshare/conf.php
 perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/conf.php
+
+mv /etc/seedbox-from-scratch/unpack.conf.php /var/www/rutorrent/plugins/unpack/conf.php
 
 # 33.
 bash /etc/seedbox-from-scratch/updateExecutables >> $logfile 2>&1

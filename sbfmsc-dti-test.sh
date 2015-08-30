@@ -276,6 +276,7 @@ getString NO  "Install SABnzbd? " INSTALLSABNZBD1 NO
 getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 NO
 getString NO  "Install Deluge? " INSTALLDELUGE1 NO
 getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3' or '0.9.4'? " RTORRENT1 0.9.4
+getString NO  "Is this Single User Setup?" SINGLEUSER1 YES
 
 if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ] && [ "$RTORRENT1" != "0.9.4" ]; then
   echo "$RTORRENT1 typed is not 0.9.4 or 0.9.3 or 0.9.2!"
@@ -640,7 +641,7 @@ svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent >> $logfile 2>&1
 #rm -r -f rutorrent/plugins
 #mv plugins rutorrent/
 
-cp /etc/seedbox-from-scratch/action.php.template /var/www/rutorrent/plugins/diskspace/action.php
+#cp /etc/seedbox-from-scratch/action.php.template /var/www/rutorrent/plugins/diskspace/action.php
 
 groupadd admin
 
@@ -810,17 +811,17 @@ rm -r plowshare
  
 export EDITOR=nano
 # 100
-cd /var/www/rutorrent/plugins
-sleep 1
-rm -frv diskspace
-wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
+##cd /var/www/rutorrent/plugins
+##sleep 1
+##rm -frv diskspace
+##wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
-unrar x hectortheone.rar
+##unrar x hectortheone.rar
 #rm diskspace-3.6.tar.gz
-rm hectortheone.rar
-cd quotaspace
-chmod 755 run.sh
+##rm hectortheone.rar
+##cd quotaspace
+##chmod 755 run.sh
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 
