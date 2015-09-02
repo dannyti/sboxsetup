@@ -649,13 +649,16 @@ echo "www-data ALL=(root) NOPASSWD: /usr/sbin/repquota" | tee -a /etc/sudoers > 
 cp /etc/seedbox-from-scratch/favicon.ico /var/www/
 
 # 26. Installing Mediainfo from source
-cd /tmp
-wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
-tar jxvf MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
-cd MediaInfo_CLI_GNU_FromSource/
-sh CLI_Compile.sh >> $logfile 2>&1
-cd MediaInfo/Project/GNU/CLI
-make install >> $logfile 2>&1
+apt-get install --yes mediainfo
+if [ $? -gt 0 ]; then
+  cd /tmp
+  wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
+  tar jxvf MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
+  cd MediaInfo_CLI_GNU_FromSource/
+  sh CLI_Compile.sh >> $logfile 2>&1
+  cd MediaInfo/Project/GNU/CLI
+  make install >> $logfile 2>&1
+fi
 
 cd /var/www/rutorrent/js/
 git clone https://github.com/gabceb/jquery-browser-plugin.git >> $logfile 2>&1
