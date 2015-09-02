@@ -286,7 +286,10 @@ if [ "$OSV1" = "14.04" ]; then
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 fi
-
+echo "........"
+echo "............."
+echo "Work in Progres..........   "
+echo "Please Standby................   "
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes install whois sudo makepasswd git nano >> $logfile 2>&1
 
