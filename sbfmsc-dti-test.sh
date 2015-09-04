@@ -22,6 +22,7 @@
 ######################################################################
 #
 #
+
 apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
