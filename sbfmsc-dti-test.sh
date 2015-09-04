@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#
 # Updated for $.broswer-msie error; will populate tracker list properly ; create check/start scripts; 
 # create crontab entries. Rest is all perfect from Notos. Thanks.
 #
@@ -23,11 +23,32 @@
 #
 #
 apt-get --yes install lsb-release
-  SBFSCURRENTVERSION1=14.06
-  OS1=$(lsb_release -si)
-  OSV1=$(lsb_release -rs)
-  OSV11=$(sed 's/\..*//' /etc/debian_version)
-  logfile="/dev/null"
+SBFSCURRENTVERSION1=14.06
+OS1=$(lsb_release -si)
+OSV1=$(lsb_release -rs)
+OSV11=$(sed 's/\..*//' /etc/debian_version)
+logfile="/dev/null"
+#
+#
+#
+######################################################################
+#
+#
+#
+######################################################################
+#
+#
+#
+######################################################################
+#
+#
+#
+######################################################################
+#
+#
+#
+######################################################################
+#
 #
 function getString
 {
