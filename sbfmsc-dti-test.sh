@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Updated for $.broswer-msie error; will populate tracker list properly ; create check/start scripts; 
 # create crontab entries. Rest is all perfect from Notos. Thanks.
 #
