@@ -25,7 +25,7 @@
 #  sudo git stash; sudo git pull
 #
 apt-get --yes install lsb-release
-  SBFSCURRENTVERSION1=14.05
+  SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
   OSV11=$(sed 's/\..*//' /etc/debian_version)
@@ -269,6 +269,7 @@ getString NO  "SSH port: " NEWSSHPORT1 21976
 getString NO  "vsftp port (usually 21): " NEWFTPPORT1 21201
 getString NO  "OpenVPN port: " OPENVPNPORT1 31195
 #getString NO  "Do you want to have some of your users in a chroot jail? " CHROOTJAIL1 YES
+getString NO "Is this Single User Seedbox? " SINGLEUSER1 YES
 getString NO  "Install Webmin? " INSTALLWEBMIN1 YES
 getString NO  "Install Fail2ban? " INSTALLFAIL2BAN1 YES
 getString NO  "Install OpenVPN? " INSTALLOPENVPN1 NO
@@ -276,7 +277,7 @@ getString NO  "Install SABnzbd? " INSTALLSABNZBD1 NO
 getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 NO
 getString NO  "Install Deluge? " INSTALLDELUGE1 NO
 getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3' or '0.9.4'? " RTORRENT1 0.9.4
-getString NO  "Is this Single User Setup?" SINGLEUSER1 YES
+
 
 if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ] && [ "$RTORRENT1" != "0.9.4" ]; then
   echo "$RTORRENT1 typed is not 0.9.4 or 0.9.3 or 0.9.2!"
@@ -287,7 +288,10 @@ if [ "$OSV1" = "14.04" ]; then
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 fi
-
+echo "........"
+echo "............."
+echo "Work in Progres..........   "
+echo "Please Standby................   "
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes install whois sudo makepasswd git nano >> $logfile 2>&1
 
@@ -641,7 +645,7 @@ svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent >> $logfile 2>&1
 #rm -r -f rutorrent/plugins
 #mv plugins rutorrent/
 
-#cp /etc/seedbox-from-scratch/action.php.template /var/www/rutorrent/plugins/diskspace/action.php
+cp /etc/seedbox-from-scratch/action.php.template /var/www/rutorrent/plugins/diskspace/action.php
 
 groupadd admin
 
@@ -650,13 +654,16 @@ echo "www-data ALL=(root) NOPASSWD: /usr/sbin/repquota" | tee -a /etc/sudoers > 
 cp /etc/seedbox-from-scratch/favicon.ico /var/www/
 
 # 26. Installing Mediainfo from source
-cd /tmp
-wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
-tar jxvf MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
-cd MediaInfo_CLI_GNU_FromSource/
-sh CLI_Compile.sh >> $logfile 2>&1
-cd MediaInfo/Project/GNU/CLI
-make install >> $logfile 2>&1
+apt-get install --yes mediainfo
+if [ $? -gt 0 ]; then
+  cd /tmp
+  wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
+  tar jxvf MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
+  cd MediaInfo_CLI_GNU_FromSource/
+  sh CLI_Compile.sh >> $logfile 2>&1
+  cd MediaInfo/Project/GNU/CLI
+  make install >> $logfile 2>&1
+fi
 
 cd /var/www/rutorrent/js/
 git clone https://github.com/gabceb/jquery-browser-plugin.git >> $logfile 2>&1
@@ -711,7 +718,7 @@ cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload >> $logfile 2>&1
 chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
 apt-get --yes -f install >> $logfile 2>&1
-
+rm /var/www/rutorrent/plugins/unpack/conf.php
 # 32.2
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
@@ -746,6 +753,8 @@ ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/index.php
 chown -R www-data:www-data /var/www/share
 cp /etc/seedbox-from-scratch/rutorrent.plugins.fileshare.conf.php.template /var/www/rutorrent/plugins/fileshare/conf.php
 perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/conf.php
+
+mv /etc/seedbox-from-scratch/unpack.conf.php /var/www/rutorrent/plugins/unpack/conf.php
 
 # 33.
 bash /etc/seedbox-from-scratch/updateExecutables >> $logfile 2>&1
@@ -811,18 +820,20 @@ rm -r plowshare
  
 export EDITOR=nano
 # 100
-##cd /var/www/rutorrent/plugins
-##sleep 1
-##rm -frv diskspace
-##wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
+if [ "$SINGLEUSER1" = "NO" ]; then
+  cd /var/www/rutorrent/plugins
+  sleep 1
+  rm -frv diskspace
+  wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
-##unrar x hectortheone.rar
+  unrar x hectortheone.rar
 #rm diskspace-3.6.tar.gz
-##rm hectortheone.rar
-##cd quotaspace
-##chmod 755 run.sh
-cd ..
+  rm hectortheone.rar
+  cd quotaspace
+  chmod 755 run.sh
+  cd ..
+fi
 chown -R www-data:www-data /var/www/rutorrent
 
 if [ "$OSV11" = "8" ]; then
