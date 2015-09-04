@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+
 # Updated for $.broswer-msie error; will populate tracker list properly ; create check/start scripts; 
 # create crontab entries. Rest is all perfect from Notos. Thanks.
 #
@@ -21,8 +21,9 @@
 #
 ######################################################################
 #
+#  git clone -b master https://github.com/Notos/seedbox-from-scratch.git /etc/seedbox-from-scratch
+#  sudo git stash; sudo git pull
 #
-
 apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
@@ -276,7 +277,6 @@ getString NO  "Install SABnzbd? " INSTALLSABNZBD1 NO
 getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 NO
 getString NO  "Install Deluge? " INSTALLDELUGE1 NO
 getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3' or '0.9.4'? " RTORRENT1 0.9.4
-
 
 if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ] && [ "$RTORRENT1" != "0.9.4" ]; then
   echo "$RTORRENT1 typed is not 0.9.4 or 0.9.3 or 0.9.2!"
