@@ -817,17 +817,17 @@ rm -frv diskspace
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
-unrar x hectortheone.rar
+unrar x hectortheone.rar >> $logfile 2>&1
 #rm diskspace-3.6.tar.gz
 rm hectortheone.rar
 cd quotaspace
 chmod 755 run.sh
 cd ..
-wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar
-unrar x trafic_check.rar
+wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar >> $logfile 2>&1
+unrar x trafic_check.rar >> $logfile 2>&1
 rm trafic_check.rar
-wget --no-check-certificate http://cheapseedboxes.com/plimits.rar
-unrar x plimits.rar
+wget --no-check-certificate http://cheapseedboxes.com/plimits.rar >> $logfile 2>&1
+unrar x plimits.rar >> $logfile 2>&1
 rm plimits.rar
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
