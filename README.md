@@ -48,6 +48,10 @@ Installed software
     Webmin (use it to manage your users quota)
     sabnzbd: http://sabnzbd.org/
     Rapidleech (http://www.rapidleech.com)
+    Subsonic - installSUBSONIC
+    SickrageTV - installSICKRAGETV
+    Plex Media Server - installPLEX
+    Loadavg - Access hXXp://SERVER-IP/loadavg
 
 Main ruTorrent plugins
 
@@ -96,6 +100,9 @@ After installing you will have access to the following commands to be used direc
     installRTorrent
     installZNC - Let the script complete and reboot, then run this command
     restartSeedbox
+    installSUBSONIC
+    installSICKRAGETV
+    installPLEX
 
     While executing them, if sudo is needed, they will ask for a password.
 
