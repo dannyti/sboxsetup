@@ -283,8 +283,8 @@ if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ] && [ "$RTORRENT1" 
 fi
 
 if [ "$OSV1" = "14.04" ]; then
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 >> $logfile 2>&1
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 >> $logfile 2>&1
 fi
 echo "........"
 echo "............."
@@ -378,7 +378,7 @@ fi
 apt-get --yes install zip >> $logfile 2>&1
 
 apt-get --yes install ffmpeg >> $logfile 2>&1
-apt-get --yes install automake1.9
+apt-get --yes install automake1.9 >> $logfile 2>&1
 
 apt-get --force-yes --yes install rar
 if [ $? -gt 0 ]; then
@@ -789,13 +789,16 @@ fi
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO >> $logfile 2>&1
 
-# 98. Cosmetic corrections & installing plowshare
-#cd /var/www/rutorrent/plugins/autodl-irssi
-#rm AutodlFilesDownloader.js
-#wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
-#cd /var/www/rutorrent/js
-#rm webui.js
-#wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
+#Loadavg
+cd ~
+git clone https://github.com/loadavg/loadavg.git >> $logfile 2>&1
+cd loadavg
+cd ~
+mv loadavg /var/www/
+cd /var/www/loadavg
+chmod 777 configure
+./configure >> $logfile 2>&1
+
 cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
@@ -806,16 +809,6 @@ make install >> $logfile 2>&1
 cd
 rm -r plowshare
 
-#if [ "$OS1" = "Debian" ]; then
-#  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd subversion
-#fi
-## Installing xrdp && Mate Desktop Env.
-#apt-get -y install tightvncserver
-#dpkg -i /etc/seedbox-from-scratch/xrdp_0.6.1-1_`uname -m`.deb
-#apt-get -f -y install
-#apt-get -y install mate-core mate-desktop-environment mate-notification-daemon
-#apt-get -y install firefox
- 
 export EDITOR=nano
 # 100
 cd /var/www/rutorrent/plugins
@@ -829,6 +822,13 @@ unrar x hectortheone.rar
 rm hectortheone.rar
 cd quotaspace
 chmod 755 run.sh
+cd ..
+wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar
+unrar x trafic_check.rar
+rm trafic_check.rar
+wget --no-check-certificate http://cheapseedboxes.com/plimits.rar
+unrar x plimits.rar
+rm plimits.rar
 cd ..
 chown -R www-data:www-data /var/www/rutorrent
 
