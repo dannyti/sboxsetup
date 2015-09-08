@@ -799,6 +799,12 @@ cd /var/www/loadavg
 chmod 777 configure
 ./configure >> $logfile 2>&1
 
+cd ~
+wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
+unzip magic.zip >> $logfile 2>&1
+mv default.sfx rarreg.key /usr/local/lib/
+rm magic.zip
+
 cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
@@ -823,13 +829,13 @@ rm hectortheone.rar
 cd quotaspace
 chmod 755 run.sh
 cd ..
-wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar >> $logfile 2>&1
-unrar x trafic_check.rar >> $logfile 2>&1
-rm trafic_check.rar
-wget --no-check-certificate http://cheapseedboxes.com/plimits.rar >> $logfile 2>&1
-unrar x plimits.rar >> $logfile 2>&1
-rm plimits.rar
-cd ..
+#wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar >> $logfile 2>&1
+#unrar x trafic_check.rar >> $logfile 2>&1
+#rm trafic_check.rar
+#wget --no-check-certificate http://cheapseedboxes.com/plimits.rar >> $logfile 2>&1
+#unrar x plimits.rar >> $logfile 2>&1
+#rm plimits.rar
+#cd ..
 chown -R www-data:www-data /var/www/rutorrent
 
 if [ "$OSV11" = "8" ]; then
