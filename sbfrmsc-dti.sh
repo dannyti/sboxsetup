@@ -286,10 +286,10 @@ if [ "$OSV1" = "14.04" ]; then
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 >> $logfile 2>&1
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 >> $logfile 2>&1
 fi
-echo "........"
-echo "............."
-echo "Work in Progres..........   "
-echo "Please Standby................   "
+echo -e "\033[0;32;148m........\033[39m"
+echo -e "\033[0;32;148m.............\033[39m"
+echo -e "\033[0;32;148mWork in progress.........\033[39m"
+echo -e "\033[0;32;148mPlease Standby................\033[39m"
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes install whois sudo makepasswd git nano >> $logfile 2>&1
 
@@ -846,12 +846,12 @@ set +x verbose
 clear
 
 echo ""
-echo "<<< The Seedbox From Scratch Script >>>"
-echo "Script Modified by dannyti ---> https://github.com/dannyti/"
+echo -e "\033[0;32;148m<<< The Seedbox From Scratch Script >>>\033[39m"
+echo -e "\033[0;32;148mScript Modified by dannyti ---> https://github.com/dannyti/\033[39m"
 echo ""
 echo "Looks like everything is set."
 echo ""
-echo "Remember that your SSH port is now ======> $NEWSSHPORT1"
+echo "Remember that your SSH port is now ======> $NEWSSHPORT1 "
 echo ""
 echo "Your Login info can also be found at https://$IPADDRESS1/private/SBinfo.txt"
 echo "Download Data Directory is located at https://$IPADDRESS1/private "
