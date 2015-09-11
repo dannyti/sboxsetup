@@ -1,4 +1,4 @@
 #!/bin/bash
 user1="USERNAME"
-line1="*/2 * * * * ~/bin/rtcheck"
+line1="*/10 * * * * ~/bin/rtcheck"
 (crontab -u "$user1" -l; echo "$line1" ) | crontab -u "$user1" -
