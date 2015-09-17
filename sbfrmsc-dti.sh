@@ -344,18 +344,18 @@ perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /e
 
 #apt-get --yes install python-software-properties
 #Adding debian pkgs for adding repo and installing ffmpeg
-apt-get --yes install software-properties-common
+apt-get --yes install software-properties-common >> $logfile 2>&1
 if [ "$OSV11" = "8" ]; then
-  apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free"
+  apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free" >> $logfile 2>&1
   apt-get update >> $logfile 2>&1
   apt-get --force-yes --yes install ffmpeg >> $logfile 2>&1
 fi
 
 # 7.
 # update and upgrade packages
-apt-get --yes install python-software-properties software-properties-common
+apt-get --yes install python-software-properties software-properties-common >> $logfile 2>&1
 if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "14.10" ]; then
-  apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next
+  apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next >> $logfile 2>&1
 fi
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes upgrade >> $logfile 2>&1
@@ -393,7 +393,7 @@ if [ "$OSV1" = "8.1" ]; then
   apt-get --yes install unrar-free 
 fi
 
-apt-get --yes install dnsutils
+apt-get --yes install dnsutils >> $logfile 2>&1
 
 if [ "$CHROOTJAIL1" = "YES" ]; then
   cd /etc/seedbox-from-scratch
@@ -513,21 +513,21 @@ export IPADDRESS1
 echo "$NEWUSER1" > /etc/seedbox-from-scratch/mainuser.info
 echo "$CERTPASS1" > /etc/seedbox-from-scratch/certpass.info
 
-bash /etc/seedbox-from-scratch/createOpenSSLCACertificate 
+bash /etc/seedbox-from-scratch/createOpenSSLCACertificate >> $logfile 2>&1 
 
 mkdir -p /etc/ssl/private/
 openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
 
 if [ "$OSV11" = "7" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
-  apt-get update
+  apt-get update >> $logfile 2>&1
   apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion >> $logfile 2>&1
 elif [ "$OSV1" = "12.04" ]; then
   add-apt-repository -y ppa:thefrontiergroup/vsftpd
-  apt-get update
-  apt-get -y install vsftpd
+  apt-get update >> $logfile 2>&1
+  apt-get -y install vsftpd >> $logfile 2>&1
 else
-  apt-get -y install vsftpd
+  apt-get -y install vsftpd >> $logfile 2>&1
 fi
 
 
@@ -768,6 +768,8 @@ wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy
 update-ca-certificates
 c_rehash
 
+sleep 2
+
 # 96.
 if [ "$INSTALLOPENVPN1" = "YES" ]; then
   bash /etc/seedbox-from-scratch/installOpenVPN
@@ -784,6 +786,8 @@ fi
 if [ "$INSTALLDELUGE1" = "YES" ]; then
   bash /etc/seedbox-from-scratch/installDeluge
 fi
+
+sleep 1
 
 # 97. First user will not be jailed
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
