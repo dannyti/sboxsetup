@@ -90,7 +90,7 @@ After installing you will have access to the following commands to be used direc
 
     createSeedboxUser
     deleteSeedboxUser
-    changeUserPassword
+    changeUserPassword  [ changeUserPassword <username> <NewPassword> rutorrent ]
     installRapidleech
     installOpenVPN
     installSABnzbd
