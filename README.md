@@ -4,7 +4,7 @@ By dannyti ---> https://github.com/dannyti/
 
 Donate if you can - Beer Joint Address : Bitcoin address: 1ACi4NRpfzkCNDaTgwFpCFcHoMMRCCT4wC
 
-## [Wiki](https://github.com/dannyti/sboxsetup/wiki)    ||    ## [FAQ](https://github.com/dannyti/sboxsetup/wiki/FAQ)
+## [Wiki](https://github.com/dannyti/sboxsetup/wiki)    ||    [FAQ](https://github.com/dannyti/sboxsetup/wiki/FAQ)
 
 Intends to install sbox without errors alongwith crontab entries to restart services on reboots. 
 This will properly populate tracker list for autodl. Make crontab entries for the user to restart rtorrent on reboots and check whether it's running. 
