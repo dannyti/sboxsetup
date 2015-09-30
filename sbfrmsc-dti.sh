@@ -803,6 +803,7 @@ cd /var/www/loadavg
 chmod 777 configure
 ./configure >> $logfile 2>&1
 
+
 cd ~
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
 unzip magic.zip >> $logfile 2>&1
@@ -811,6 +812,7 @@ rm magic.zip
 
 cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
+chown -R www-data:www-data /var/www/loadavg
 chmod -R 755 /var/www/rutorrent
 cd 
 git clone https://github.com/mcrapet/plowshare.git plowshare >> $logfile 2>&1
