@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Updated for $.broswer-msie error; will populate tracker list properly ; create check/start scripts; 
 # create crontab entries. Rest is all perfect from Notos. Thanks.
 #
@@ -23,7 +24,6 @@
 #  git clone -b master https://github.com/Notos/seedbox-from-scratch.git /etc/seedbox-from-scratch
 #  sudo git stash; sudo git pull
 #
-
 apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
   OS1=$(lsb_release -si)
@@ -159,7 +159,6 @@ apt-get --yes install lsb-release
 #  Version 0.89a
 #   17/08/2012 19:39 (by Notos)
 #
-
 function getString
 {
   local ISPASSWORD=$1
@@ -270,28 +269,27 @@ getString NO  "SSH port: " NEWSSHPORT1 21976
 getString NO  "vsftp port (usually 21): " NEWFTPPORT1 21201
 getString NO  "OpenVPN port: " OPENVPNPORT1 31195
 #getString NO  "Do you want to have some of your users in a chroot jail? " CHROOTJAIL1 YES
-getString NO "Is this Single User Seedbox? " SINGLEUSER1 YES
 getString NO  "Install Webmin? " INSTALLWEBMIN1 YES
 getString NO  "Install Fail2ban? " INSTALLFAIL2BAN1 YES
 getString NO  "Install OpenVPN? " INSTALLOPENVPN1 NO
 getString NO  "Install SABnzbd? " INSTALLSABNZBD1 NO
 getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 NO
 getString NO  "Install Deluge? " INSTALLDELUGE1 NO
-getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3' or '0.9.4'? " RTORRENT1 0.9.4
+getString NO  "Wich RTorrent version would you like to install, '0.9.3' or '0.9.4' or '0.9.6'? " RTORRENT1 0.9.6
 
-if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ] && [ "$RTORRENT1" != "0.9.4" ]; then
-  echo "$RTORRENT1 typed is not 0.9.4 or 0.9.3 or 0.9.2!"
+if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.6" ] && [ "$RTORRENT1" != "0.9.4" ]; then
+  echo "$RTORRENT1 typed is not 0.9.6 or 0.9.4 or 0.9.3!"
   exit 1
 fi
 
 if [ "$OSV1" = "14.04" ]; then
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 >> $logfile 2>&1
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 >> $logfile 2>&1
 fi
-echo "........"
-echo "............."
-echo "Work in Progres..........   "
-echo "Please Standby................   "
+echo -e "\033[0;32;148m........\033[39m"
+echo -e "\033[0;32;148m.............\033[39m"
+echo -e "\033[0;32;148mWork in progress.........\033[39m"
+echo -e "\033[0;32;148mPlease Standby................\033[39m"
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes install whois sudo makepasswd git nano >> $logfile 2>&1
 
@@ -346,18 +344,18 @@ perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /e
 
 #apt-get --yes install python-software-properties
 #Adding debian pkgs for adding repo and installing ffmpeg
-apt-get --yes install software-properties-common
+apt-get --yes install software-properties-common >> $logfile 2>&1
 if [ "$OSV11" = "8" ]; then
-  apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free"
+  apt-add-repository --yes "deb http://www.deb-multimedia.org jessie main non-free" >> $logfile 2>&1
   apt-get update >> $logfile 2>&1
   apt-get --force-yes --yes install ffmpeg >> $logfile 2>&1
 fi
 
 # 7.
 # update and upgrade packages
-apt-get --yes install python-software-properties software-properties-common
+apt-get --yes install python-software-properties software-properties-common >> $logfile 2>&1
 if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "14.10" ]; then
-  apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next
+  apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next >> $logfile 2>&1
 fi
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes upgrade >> $logfile 2>&1
@@ -380,7 +378,7 @@ fi
 apt-get --yes install zip >> $logfile 2>&1
 
 apt-get --yes install ffmpeg >> $logfile 2>&1
-apt-get --yes install automake1.9
+apt-get --yes install automake1.9 >> $logfile 2>&1
 
 apt-get --force-yes --yes install rar
 if [ $? -gt 0 ]; then
@@ -395,7 +393,7 @@ if [ "$OSV1" = "8.1" ]; then
   apt-get --yes install unrar-free 
 fi
 
-apt-get --yes install dnsutils
+apt-get --yes install dnsutils >> $logfile 2>&1
 
 if [ "$CHROOTJAIL1" = "YES" ]; then
   cd /etc/seedbox-from-scratch
@@ -515,21 +513,21 @@ export IPADDRESS1
 echo "$NEWUSER1" > /etc/seedbox-from-scratch/mainuser.info
 echo "$CERTPASS1" > /etc/seedbox-from-scratch/certpass.info
 
-bash /etc/seedbox-from-scratch/createOpenSSLCACertificate 
+bash /etc/seedbox-from-scratch/createOpenSSLCACertificate >> $logfile 2>&1 
 
 mkdir -p /etc/ssl/private/
 openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
 
 if [ "$OSV11" = "7" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
-  apt-get update
+  apt-get update >> $logfile 2>&1
   apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd libxml2-dev libcurl4-gnutls-dev subversion >> $logfile 2>&1
 elif [ "$OSV1" = "12.04" ]; then
   add-apt-repository -y ppa:thefrontiergroup/vsftpd
-  apt-get update
-  apt-get -y install vsftpd
+  apt-get update >> $logfile 2>&1
+  apt-get -y install vsftpd >> $logfile 2>&1
 else
-  apt-get -y install vsftpd
+  apt-get -y install vsftpd >> $logfile 2>&1
 fi
 
 
@@ -605,13 +603,13 @@ a2ensite default-ssl
 cd /etc/seedbox-from-scratch/
 #wget -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
 #wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
-#wget -c http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/rtorrent-0.9.4.tar.gz/fd9490a2ac67d0fa2a567c6267845876/rtorrent-0.9.4.tar.gz >> $logfile 2>&1
-#wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar.gz/e82f380a9d4b55b379e0e73339c73895/libtorrent-0.13.4.tar.gz >> $logfile 2>&1
-wget -c http://rtorrent.net/downloads/rtorrent-0.9.4.tar.gz
-wget -c http://rtorrent.net/downloads/libtorrent-0.13.4.tar.gz
+wget -c http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/rtorrent-0.9.4.tar.gz/fd9490a2ac67d0fa2a567c6267845876/rtorrent-0.9.4.tar.gz >> $logfile 2>&1
+wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar.gz/e82f380a9d4b55b379e0e73339c73895/libtorrent-0.13.4.tar.gz >> $logfile 2>&1
+wget -c http://rtorrent.net/downloads/rtorrent-0.9.6.tar.gz >> $logfile 2>&1 
+wget -c http://rtorrent.net/downloads/libtorrent-0.13.6.tar.gz >> $logfile 2>&1
 
 #configure & make xmlrpc BASED ON RTORRENT VERSION
-if [ "$RTORRENT1" = "0.9.4" ]; then
+if [ "$RTORRENT1" = "0.9.4" ] || [ "$RTORRENT1" = "0.9.6" ]; then
   tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.33.17.tgz -C /etc/seedbox-from-scratch/ >> $logfile 2>&1
   cd /etc/seedbox-from-scratch/xmlrpc-c-1.33.17
   ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server >> $logfile 2>&1
@@ -772,6 +770,8 @@ wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy
 update-ca-certificates
 c_rehash
 
+sleep 2
+
 # 96.
 if [ "$INSTALLOPENVPN1" = "YES" ]; then
   bash /etc/seedbox-from-scratch/installOpenVPN
@@ -789,19 +789,32 @@ if [ "$INSTALLDELUGE1" = "YES" ]; then
   bash /etc/seedbox-from-scratch/installDeluge
 fi
 
+sleep 1
+
 # 97. First user will not be jailed
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO >> $logfile 2>&1
 
-# 98. Cosmetic corrections & installing plowshare
-#cd /var/www/rutorrent/plugins/autodl-irssi
-#rm AutodlFilesDownloader.js
-#wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/AutodlFilesDownloader.js
-#cd /var/www/rutorrent/js
-#rm webui.js
-#wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/webui.js
+#Loadavg
+cd ~
+git clone https://github.com/loadavg/loadavg.git >> $logfile 2>&1
+cd loadavg
+cd ~
+mv loadavg /var/www/
+cd /var/www/loadavg
+chmod 777 configure
+./configure >> $logfile 2>&1
+
+
+cd ~
+wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
+unzip magic.zip >> $logfile 2>&1
+mv default.sfx rarreg.key /usr/local/lib/
+rm magic.zip
+
 cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
+chown -R www-data:www-data /var/www/loadavg
 chmod -R 755 /var/www/rutorrent
 cd 
 git clone https://github.com/mcrapet/plowshare.git plowshare >> $logfile 2>&1
@@ -810,32 +823,27 @@ make install >> $logfile 2>&1
 cd
 rm -r plowshare
 
-#if [ "$OS1" = "Debian" ]; then
-#  apt-get install -y --force-yes -t wheezy-updates debian-cyconet-archive-keyring vsftpd subversion
-#fi
-## Installing xrdp && Mate Desktop Env.
-#apt-get -y install tightvncserver
-#dpkg -i /etc/seedbox-from-scratch/xrdp_0.6.1-1_`uname -m`.deb
-#apt-get -f -y install
-#apt-get -y install mate-core mate-desktop-environment mate-notification-daemon
-#apt-get -y install firefox
- 
 export EDITOR=nano
 # 100
-if [ "$SINGLEUSER1" = "NO" ]; then
-  cd /var/www/rutorrent/plugins
-  sleep 1
-  rm -frv diskspace
-  wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
+cd /var/www/rutorrent/plugins
+sleep 1
+rm -frv diskspace
+wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
-  unrar x hectortheone.rar
+unrar x hectortheone.rar >> $logfile 2>&1
 #rm diskspace-3.6.tar.gz
-  rm hectortheone.rar
-  cd quotaspace
-  chmod 755 run.sh
-  cd ..
-fi
+rm hectortheone.rar
+cd quotaspace
+chmod 755 run.sh
+cd ..
+#wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar >> $logfile 2>&1
+#unrar x trafic_check.rar >> $logfile 2>&1
+#rm trafic_check.rar
+#wget --no-check-certificate http://cheapseedboxes.com/plimits.rar >> $logfile 2>&1
+#unrar x plimits.rar >> $logfile 2>&1
+#rm plimits.rar
+#cd ..
 chown -R www-data:www-data /var/www/rutorrent
 
 if [ "$OSV11" = "8" ]; then
@@ -846,12 +854,12 @@ set +x verbose
 clear
 
 echo ""
-echo "<<< The Seedbox From Scratch Script >>>"
-echo "Script Modified by dannyti ---> https://github.com/dannyti/"
+echo -e "\033[0;32;148m<<< The Seedbox From Scratch Script >>>\033[39m"
+echo -e "\033[0;32;148mScript Modified by dannyti ---> https://github.com/dannyti/\033[39m"
 echo ""
 echo "Looks like everything is set."
 echo ""
-echo "Remember that your SSH port is now ======> $NEWSSHPORT1"
+echo "Remember that your SSH port is now ======> $NEWSSHPORT1 "
 echo ""
 echo "Your Login info can also be found at https://$IPADDRESS1/private/SBinfo.txt"
 echo "Download Data Directory is located at https://$IPADDRESS1/private "
