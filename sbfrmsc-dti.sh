@@ -275,10 +275,10 @@ getString NO  "Install OpenVPN? " INSTALLOPENVPN1 NO
 getString NO  "Install SABnzbd? " INSTALLSABNZBD1 NO
 getString NO  "Install Rapidleech? " INSTALLRAPIDLEECH1 NO
 getString NO  "Install Deluge? " INSTALLDELUGE1 NO
-getString NO  "Wich RTorrent version would you like to install, '0.9.2' or '0.9.3' or '0.9.4'? " RTORRENT1 0.9.4
+getString NO  "Wich RTorrent version would you like to install, '0.9.3' or '0.9.4' or '0.9.6'? " RTORRENT1 0.9.6
 
-if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.2" ] && [ "$RTORRENT1" != "0.9.4" ]; then
-  echo "$RTORRENT1 typed is not 0.9.4 or 0.9.3 or 0.9.2!"
+if [ "$RTORRENT1" != "0.9.3" ] && [ "$RTORRENT1" != "0.9.6" ] && [ "$RTORRENT1" != "0.9.4" ]; then
+  echo "$RTORRENT1 typed is not 0.9.6 or 0.9.4 or 0.9.3!"
   exit 1
 fi
 
@@ -559,8 +559,6 @@ echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "passwd_chroot_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
-echo "seccomp_sandbox=NO" | tee -a /etc/vsftpd.conf >> /dev/null
-
 #sed -i '147 d' /etc/vsftpd.conf
 #sed -i '149 d' /etc/vsftpd.conf
 
@@ -605,11 +603,13 @@ a2ensite default-ssl
 cd /etc/seedbox-from-scratch/
 #wget -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
 #wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
-wget -c http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/rtorrent-0.9.4.tar.gz/fd9490a2ac67d0fa2a567c6267845876/rtorrent-0.9.4.tar.gz >> $logfile 2>&1
-wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar.gz/e82f380a9d4b55b379e0e73339c73895/libtorrent-0.13.4.tar.gz >> $logfile 2>&1
+wget -c http://rtorrent.net/downloads/rtorrent-0.9.4.tar.gz >> $logfile 2>&1
+wget -c http://rtorrent.net/downloads/libtorrent-0.13.4.tar.gz >> $logfile 2>&1
+wget -c http://rtorrent.net/downloads/rtorrent-0.9.6.tar.gz >> $logfile 2>&1 
+wget -c http://rtorrent.net/downloads/libtorrent-0.13.6.tar.gz >> $logfile 2>&1
 
 #configure & make xmlrpc BASED ON RTORRENT VERSION
-if [ "$RTORRENT1" = "0.9.4" ]; then
+if [ "$RTORRENT1" = "0.9.4" ] || [ "$RTORRENT1" = "0.9.6" ]; then
   tar xvfz /etc/seedbox-from-scratch/xmlrpc-c-1.33.17.tgz -C /etc/seedbox-from-scratch/ >> $logfile 2>&1
   cd /etc/seedbox-from-scratch/xmlrpc-c-1.33.17
   ./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server >> $logfile 2>&1
