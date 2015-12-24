@@ -559,6 +559,7 @@ echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "passwd_chroot_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "seccomp_sandbox=NO" | tee -a /etc/vsftpd.conf >> /dev/null
 #sed -i '147 d' /etc/vsftpd.conf
 #sed -i '149 d' /etc/vsftpd.conf
 
