@@ -603,8 +603,8 @@ a2ensite default-ssl
 cd /etc/seedbox-from-scratch/
 #wget -c http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
 #wget -c http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.4.tar.gz
-wget -c http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/rtorrent-0.9.4.tar.gz/fd9490a2ac67d0fa2a567c6267845876/rtorrent-0.9.4.tar.gz >> $logfile 2>&1
-wget -c http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/libtorrent-0.13.4.tar.gz/e82f380a9d4b55b379e0e73339c73895/libtorrent-0.13.4.tar.gz >> $logfile 2>&1
+wget -c http://rtorrent.net/downloads/rtorrent-0.9.4.tar.gz >> $logfile 2>&1
+wget -c http://rtorrent.net/downloads/libtorrent-0.13.4.tar.gz >> $logfile 2>&1
 wget -c http://rtorrent.net/downloads/rtorrent-0.9.6.tar.gz >> $logfile 2>&1 
 wget -c http://rtorrent.net/downloads/libtorrent-0.13.6.tar.gz >> $logfile 2>&1
 
