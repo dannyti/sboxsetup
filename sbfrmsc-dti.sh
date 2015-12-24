@@ -354,7 +354,7 @@ fi
 # 7.
 # update and upgrade packages
 apt-get --yes install python-software-properties software-properties-common >> $logfile 2>&1
-if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "14.10" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV1" = "14.10" ]; then
   apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next >> $logfile 2>&1
 fi
 apt-get --yes update >> $logfile 2>&1
@@ -389,7 +389,7 @@ apt-get --yes install unrar
 if [ $? -gt 0 ]; then
   apt-get --yes install unrar-free
 fi
-if [ "$OSV1" = "8.1" ]; then
+if [ "$OSV11" = "8" ]; then
   apt-get --yes install unrar-free 
 fi
 
@@ -567,7 +567,7 @@ apt-get install --yes subversion >> $logfile 2>&1
 apt-get install --yes dialog >> $logfile 2>&1
 # 13.
 
-if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV11" = "8" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV11" = "8" ]; then
   cp /var/www/html/index.html /var/www/index.html 
   mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
   rm -f /etc/apache2/sites-available/000-default.conf
