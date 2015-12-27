@@ -83,7 +83,7 @@ DO NOT upgrade anything in your box, ask in the thread before even thinking abou
 
 DO NOT try to reconfigure packages using other tutorials.
 
-##How to install
+##How to install ?
 
 That is the question you must ask yourself.
 You must be logged in as root to run this installation or use sudo on it.
@@ -135,10 +135,12 @@ Supported and tested servers
     Ubuntu Server 14.04.x - 64bit (OVH's Kimsufi 2G and 16G - Precise)
     Ubuntu Server 14.10 - 32 and 64 bit
     Ubuntu Server 15.04 - 32 and 64 bit
+    Ubuntu Server 15.10 - 32 and 64 bit
     Debian 6.0.6 - 32 and 64bit (OVH's Kimsufi 2G - Squeeze)
     Debian 6.0.6 - 32 and 64bit (on VM environment)
     Debian 7.0 - 32 and 64 bit
     Debian 8.1 - 32 and 64 bit
+    Debian 8.2 - 32 and 64 bit
 
 Quota
 
