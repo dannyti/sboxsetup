@@ -18,9 +18,9 @@ Latest: Site wide http redirects to https, More secure environment.
 
 Latest: Added following for Multi User environment: 
 
-Individual Login info:  hXXps://<Server IP or Server Name>/private/SBinfo.txt 
+Individual Login info:  hXXps://Server IP or Server Name/private/SBinfo.txt 
 
-Individual Data Download directory:  hXXps://<Server IP or Server Name>/private/Downloads
+Individual Data Download directory:  hXXps://Server IP/private/Downloads
 
 OpenVPN Fixed
 
