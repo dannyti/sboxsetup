@@ -28,8 +28,8 @@ This script has the following features
 
     A multi-user enviroment, you'll have scripts to add and delete users.
     Linux Quota, to control how much space every user can use in your box.
-    Individual User Login Info https://Server-IP/private/SBinfo.txt
-    Individual User Https Downloads directory (https://Server-IP/private/Downloads)
+    Individual User Login Info https://<Server-IP>/private/SBinfo.txt
+    Individual User Https Downloads directory (https://<Server-IP>/private/Downloads)
 
 Installed software
 
@@ -55,7 +55,7 @@ Installed software
     Plex Media Server - installPLEX
     Loadavg - Access hXXp://SERVER-IP/loadavg
 
-Main ruTorrent plugins
+#Main ruTorrent plugins
 
 autotoolscpuload, diskspace, erasedata, extratio, extsearch, feeds, filedrop, filemanager, geoip, history, logoff, mediainfo, mediastream, rss, scheduler, screenshots, theme, trafic and unpack
 Additional ruTorrent plugins
@@ -69,7 +69,7 @@ Additional ruTorrent plugins
     Logoff
     Theme: Oblivion & Agent 46
 
-Before installation
+#Before installation
 
 You need to have a Fresh "blank" server installation. After that access your box using a SSH client, like PuTTY.
 Warnings
@@ -82,7 +82,8 @@ DO NOT use capital letters, all your usernames should be written in lowercase. P
 DO NOT upgrade anything in your box, ask in the thread before even thinking about it.
 
 DO NOT try to reconfigure packages using other tutorials.
-How to install
+
+##How to install
 
 That is the question you must ask yourself.
 You must be logged in as root to run this installation or use sudo on it.
