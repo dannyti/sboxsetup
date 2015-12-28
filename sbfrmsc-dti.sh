@@ -504,7 +504,7 @@ mkdir /etc/apache2/auth.users
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
 
 # 11.
-
+makepasswd | tee -a /etc/seedbox-from-scratch/sslca.info > /dev/null
 export TEMPHOSTNAME1=tsfsSeedBox
 export CERTPASS1=@@$TEMPHOSTNAME1.$NEWUSER1.ServerP7s$
 export NEWUSER1
