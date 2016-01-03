@@ -838,6 +838,7 @@ rm hectortheone.rar
 cd quotaspace
 chmod 755 run.sh
 cd ..
+perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar >> $logfile 2>&1
 #unrar x trafic_check.rar >> $logfile 2>&1
 #rm trafic_check.rar
