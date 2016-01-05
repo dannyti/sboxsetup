@@ -847,6 +847,12 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #rm plimits.rar
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
+wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+tar -xvf unrarsrc-5.3.8.tar.gz
+cd unrar
+sudo make -f makefile
+sudo install -v -m755 unrar /usr/bin
+rm unrarsrc-5.3.8.tar.gz
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
