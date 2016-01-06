@@ -874,10 +874,10 @@ echo ""
 echo "Your Login info can also be found at https://$IPADDRESS1/private/SBinfo.txt"
 echo "Download Data Directory is located at https://$IPADDRESS1/private "
 echo "To install ZNC, run installZNC from ssh as main user"
-#echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
+echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
 echo ""
-echo -e "\033[0;32;148mPlease login as main user and only then close this Window\033[39m"
+#echo -e "\033[0;32;148mPlease login as main user and only then close this Window\033[39m"
 
-#reboot
+reboot
 
 ##################### LAST LINE ###########
