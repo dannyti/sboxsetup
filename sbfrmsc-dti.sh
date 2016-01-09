@@ -560,8 +560,11 @@ echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /de
 echo "passwd_chroot_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "seccomp_sandbox=NO" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "dual_log_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "syslog_enable=NO" | tee -a /etc/vsftpd.conf >> /dev/null
 #sed -i '147 d' /etc/vsftpd.conf
 #sed -i '149 d' /etc/vsftpd.conf
+touch /var/log/vsftpd.log
 
 apt-get install --yes subversion >> $logfile 2>&1
 apt-get install --yes dialog >> $logfile 2>&1
