@@ -873,6 +873,8 @@ echo "net.ipv4.tcp_slow_start_after_idle = 0" >>/etc/sysctl.conf
 echo "net.ipv4.tcp_tw_reuse = 1" >>/etc/sysctl.conf
 echo "net.ipv4.ip_local_port_range = 10240 65535" >>/etc/sysctl.conf
 echo "fs.file-max = 500000" >>/etc/sysctl.conf
+echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
+echo "vm.pagecache=40" >> /etc/sysctl.conf
 
 ###########
 echo "desktop1 soft nofile 300000" >>/etc/security/limits.conf
