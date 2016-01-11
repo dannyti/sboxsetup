@@ -22,7 +22,7 @@
 ######################################################################
 #
 #  git clone -b master https://github.com/Notos/seedbox-from-scratch.git /etc/seedbox-from-scratch
-#  sudo git stash; sudo git pull
+#  sudo git stash; sudo git pull33
 #
 apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
@@ -696,9 +696,6 @@ wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz >> $logfile 
 tar -zxf logoff-1.0.tar.gz >> $logfile 2>&1
 rm -f logoff-1.0.tar.gz
 
-#33. Tuning Part - Let me know if you find more.
-echo "vm.swappiness=1"  >>/etc/sysctl.conf
-sysctl -p
 
 # Installing Filemanager and MediaStream
 rm -f -R /var/www/rutorrent/plugins/filemanager
@@ -862,6 +859,27 @@ sudo install -v -m755 unrar /usr/bin
 cd ..
 rm -R unrar
 rm unrarsrc-5.3.8.tar.gz
+
+#32.1 Tuning Part - Let me know if you find more.
+echo "vm.swappiness=1"  >>/etc/sysctl.conf
+echo "net.core.somaxconn = 1000" >>/etc/sysctl.conf
+echo "net.core.netdev_max_backlog = 5000" >>/etc/sysctl.conf
+echo "net.core.rmem_max = 16777216" >>/etc/sysctl.conf
+echo "net.core.wmem_max = 16777216" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_wmem = 4096 12582912 16777216" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_rmem = 4096 12582912 16777216" >>/etc/sysctl.conf
+echo "nnet.ipv4.tcp_max_syn_backlog = 8096" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_slow_start_after_idle = 0" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_tw_reuse = 1" >>/etc/sysctl.conf
+echo "net.ipv4.ip_local_port_range = 10240 65535" >>/etc/sysctl.conf
+echo "fs.file-max = 500000" >>/etc/sysctl.conf
+
+###########
+echo "desktop1 soft nofile 300000" >>/etc/security/limits.conf
+echo "desktop1 hard nofile 300000" >>/etc/security/limits.conf
+
+##########
+echo "session required pam_limits.so" >>/etc/pam.d/common-session
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
