@@ -354,7 +354,7 @@ fi
 # 7.
 # update and upgrade packages
 apt-get --yes install python-software-properties software-properties-common >> $logfile 2>&1
-if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "14.10" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV1" = "14.10" ]; then
   apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next >> $logfile 2>&1
 fi
 apt-get --yes update >> $logfile 2>&1
@@ -389,7 +389,7 @@ apt-get --yes install unrar
 if [ $? -gt 0 ]; then
   apt-get --yes install unrar-free
 fi
-if [ "$OSV1" = "8.1" ]; then
+if [ "$OSV11" = "8" ]; then
   apt-get --yes install unrar-free 
 fi
 
@@ -504,7 +504,7 @@ mkdir /etc/apache2/auth.users
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
 
 # 11.
-
+makepasswd | tee -a /etc/seedbox-from-scratch/sslca.info > /dev/null
 export TEMPHOSTNAME1=tsfsSeedBox
 export CERTPASS1=@@$TEMPHOSTNAME1.$NEWUSER1.ServerP7s$
 export NEWUSER1
@@ -559,14 +559,18 @@ echo "chroot_local_user=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "chroot_list_file=/etc/vsftpd.chroot_list" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "passwd_chroot_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
 echo "allow_writeable_chroot=YES" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "seccomp_sandbox=NO" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "dual_log_enable=YES" | tee -a /etc/vsftpd.conf >> /dev/null
+echo "syslog_enable=NO" | tee -a /etc/vsftpd.conf >> /dev/null
 #sed -i '147 d' /etc/vsftpd.conf
 #sed -i '149 d' /etc/vsftpd.conf
+touch /var/log/vsftpd.log
 
 apt-get install --yes subversion >> $logfile 2>&1
 apt-get install --yes dialog >> $logfile 2>&1
 # 13.
 
-if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV11" = "8" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV11" = "8" ]; then
   cp /var/www/html/index.html /var/www/index.html 
   mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
   rm -f /etc/apache2/sites-available/000-default.conf
@@ -691,6 +695,10 @@ cd /var/www/rutorrent/plugins/
 wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz >> $logfile 2>&1
 tar -zxf logoff-1.0.tar.gz >> $logfile 2>&1
 rm -f logoff-1.0.tar.gz
+
+#33. Tuning Part - Let me know if you find more.
+echo "vm.swappiness=1"  >>/etc/sysctl.conf
+sysctl -p
 
 # Installing Filemanager and MediaStream
 rm -f -R /var/www/rutorrent/plugins/filemanager
@@ -837,6 +845,7 @@ rm hectortheone.rar
 cd quotaspace
 chmod 755 run.sh
 cd ..
+perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar >> $logfile 2>&1
 #unrar x trafic_check.rar >> $logfile 2>&1
 #rm trafic_check.rar
@@ -845,6 +854,14 @@ cd ..
 #rm plimits.rar
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
+wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+tar -xvf unrarsrc-5.3.8.tar.gz
+cd unrar
+sudo make -f makefile
+sudo install -v -m755 unrar /usr/bin
+cd ..
+rm -R unrar
+rm unrarsrc-5.3.8.tar.gz
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
@@ -866,7 +883,7 @@ echo "Download Data Directory is located at https://$IPADDRESS1/private "
 echo "To install ZNC, run installZNC from ssh as main user"
 echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
 echo ""
-echo ""
+#echo -e "\033[0;32;148mPlease login as main user and only then close this Window\033[39m"
 
 reboot
 
