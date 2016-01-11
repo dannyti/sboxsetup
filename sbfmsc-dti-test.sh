@@ -860,7 +860,7 @@ cd ..
 rm -R unrar
 rm unrarsrc-5.3.8.tar.gz
 
-#32.1 Tuning Part - Let me know if you find more.
+#XXX Tuning Part - Let me know if you find more.
 echo "vm.swappiness=1"  >>/etc/sysctl.conf
 echo "net.core.somaxconn = 1000" >>/etc/sysctl.conf
 echo "net.core.netdev_max_backlog = 5000" >>/etc/sysctl.conf
