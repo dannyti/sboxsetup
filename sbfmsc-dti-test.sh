@@ -644,6 +644,7 @@ bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1 >> $logfile 2>&1
 # 22.
 cd /var/www/
 rm -f -r rutorrent
+sleep 1
 svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent >> $logfile 2>&1
 #svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
 #rm -r -f rutorrent/plugins
@@ -888,7 +889,7 @@ if [ "$OSV11" = "8" ]; then
   service apache2 start 
 fi
 set +x verbose
-clear
+#clear - To remove before put in use.
 
 echo ""
 echo -e "\033[0;32;148m<<< The Seedbox From Scratch Script >>>\033[39m"
