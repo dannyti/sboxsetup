@@ -700,7 +700,6 @@ rm -f logoff-1.0.tar.gz
 
 #33. Tuning Part - Let me know if you find more.
 echo "vm.swappiness=1"  >>/etc/sysctl.conf
-sysctl -p
 
 # Installing Filemanager and MediaStream
 rm -f -R /var/www/rutorrent/plugins/filemanager
