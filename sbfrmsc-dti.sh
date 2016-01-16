@@ -332,7 +332,7 @@ if [ "$OS1" = "Ubuntu" ]; then
   echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
 fi
 ## Patch for CVE-2016-0777
-echo "UseRoaming no" >> /etc/ssh/sshd_config
+#echo "UseRoaming no" >> /etc/ssh/sshd_config
 
 service ssh reload
 
