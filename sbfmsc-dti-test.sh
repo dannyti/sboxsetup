@@ -869,7 +869,7 @@ echo "net.core.rmem_max = 16777216" >>/etc/sysctl.conf
 echo "net.core.wmem_max = 16777216" >>/etc/sysctl.conf
 echo "net.ipv4.tcp_wmem = 4096 12582912 16777216" >>/etc/sysctl.conf
 echo "net.ipv4.tcp_rmem = 4096 12582912 16777216" >>/etc/sysctl.conf
-echo "nnet.ipv4.tcp_max_syn_backlog = 8096" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_max_syn_backlog = 8096" >>/etc/sysctl.conf
 echo "net.ipv4.tcp_slow_start_after_idle = 0" >>/etc/sysctl.conf
 echo "net.ipv4.tcp_tw_reuse = 1" >>/etc/sysctl.conf
 echo "net.ipv4.ip_local_port_range = 10240 65535" >>/etc/sysctl.conf
@@ -878,8 +878,8 @@ echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
 echo "vm.pagecache=40" >> /etc/sysctl.conf
 
 ###########
-echo "desktop1 soft nofile 300000" >>/etc/security/limits.conf
-echo "desktop1 hard nofile 300000" >>/etc/security/limits.conf
+echo "$NEWUSER1 soft nofile 300000" >>/etc/security/limits.conf
+echo "$NEWUSER1 hard nofile 300000" >>/etc/security/limits.conf
 
 ##########
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
