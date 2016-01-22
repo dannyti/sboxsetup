@@ -291,7 +291,8 @@ echo -e "\033[0;32;148m.............\033[39m"
 echo -e "\033[0;32;148mWork in progress.........\033[39m"
 echo -e "\033[0;32;148mPlease Standby................\033[39m"
 apt-get --yes update >> $logfile 2>&1
-apt-get --yes install whois sudo makepasswd git nano >> $logfile 2>&1
+apt-get --yes install whois sudo makepasswd nano >> $logfile 2>&1
+apt-get --yes install git >> $logfile 2>&1
 
 rm -f -r /etc/seedbox-from-scratch
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch >> $logfile 2>&1
