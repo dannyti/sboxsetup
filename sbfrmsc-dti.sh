@@ -371,7 +371,7 @@ if [ $? -gt 0 ]; then
   echo "Looks like something is wrong with apt-get install, aborting."
   echo
   echo  "You do not have git installed. "
-  echo  "Do :   apt-get install git "
+  echo  "Do :   apt-get update && apt-get install git "
   echo  " Then run script again. "
   set -e
   exit 1
