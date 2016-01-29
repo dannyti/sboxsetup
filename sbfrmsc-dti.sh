@@ -713,6 +713,7 @@ echo "net.ipv4.ip_local_port_range = 10240 65535" >>/etc/sysctl.conf
 echo "fs.file-max = 500000" >>/etc/sysctl.conf
 echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
 echo "vm.pagecache=40" >> /etc/sysctl.conf
+echo "session required pam_limits.so" >>/etc/pam.d/common-session
 
 # Installing Filemanager and MediaStream
 rm -f -R /var/www/rutorrent/plugins/filemanager
