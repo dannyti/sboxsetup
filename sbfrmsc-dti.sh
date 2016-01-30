@@ -717,6 +717,12 @@ echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf
 echo "nnet.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
 sysctl -p
 
+if [ -f /proc/user_beancounters ] || [ -d /proc/bc ]; then
+	echo "Its a VPS, Nothing to do here, Continuing...."
+else
+  sed -i "s/defaults        1 1/defaults,noatime        0 0/" /etc/fstab
+fi
+
 # Installing Filemanager and MediaStream
 rm -f -R /var/www/rutorrent/plugins/filemanager
 rm -f -R /var/www/rutorrent/plugins/fileupload
