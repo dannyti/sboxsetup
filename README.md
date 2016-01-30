@@ -51,9 +51,10 @@ Installed software
     sabnzbd: http://sabnzbd.org/
     Rapidleech (http://www.rapidleech.com)
     Subsonic - installSUBSONIC
-    SickrageTV - installSICKRAGETV
+    Sickrage - installSICKRAGE
     Plex Media Server - installPLEX
     Loadavg - Access hXXp://SERVER-IP/loadavg
+    Speedtest
 
 #Main ruTorrent plugins
 
@@ -104,8 +105,9 @@ After installing you will have access to the following commands to be used direc
     installZNC - Let the script complete and reboot, then run this command
     restartSeedbox
     installSUBSONIC
-    installSICKRAGETV
+    installSICKRAGE
     installPLEX  
+    speedTEST
 
     While executing them, if sudo is needed, they will ask for a password.
 
@@ -139,8 +141,7 @@ Supported and tested servers
     Debian 6.0.6 - 32 and 64bit (OVH's Kimsufi 2G - Squeeze)
     Debian 6.0.6 - 32 and 64bit (on VM environment)
     Debian 7.0 - 32 and 64 bit
-    Debian 8.1 - 32 and 64 bit
-    Debian 8.2 - 32 and 64 bit
+    Debian 8.X - 32 and 64 bit
 
 Quota
 
