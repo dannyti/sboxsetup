@@ -718,7 +718,7 @@ echo "nnet.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
 sysctl -p
 
 if [ -f /proc/user_beancounters ] || [ -d /proc/bc ]; then
-	echo "Its a VPS, Nothing to do here, Continuing...."
+  echo "Its a VPS, Nothing to do here, Continuing...."
 else
   sed -i "s/defaults        1 1/defaults,noatime        0 0/" /etc/fstab
 fi
@@ -838,10 +838,10 @@ chmod 777 configure
 
 
 cd ~
-#wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
-#unzip magic.zip >> $logfile 2>&1
-#mv default.sfx rarreg.key /usr/local/lib/
-#rm magic.zip
+wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
+unzip magic.zip >> $logfile 2>&1
+mv default.sfx rarreg.key /usr/local/lib/
+rm magic.zip
 
 cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
