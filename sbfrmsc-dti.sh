@@ -848,7 +848,7 @@ chmod 777 configure
 cd ~
 wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
 sudo tar xf ~/unrar.tar.gz >> $logfile 2>&1
-&& cd ~/unrar
+cd ~/unrar
 make && make install DESTDIR=~ >> $logfile 2>&1
 cd && rm -rf unrar{,.tar.gz}
 
