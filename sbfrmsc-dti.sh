@@ -309,7 +309,8 @@ fi
 # 3.1
 
 #show all commands
-set -x verbose
+#set -x verbose
+echo -e "\033[0;32;148mI am installing random stuff, Do you like coffee ?\033[39m"
 
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
@@ -352,6 +353,7 @@ if [ "$OSV11" = "8" ]; then
   apt-get --force-yes --yes install ffmpeg >> $logfile 2>&1
 fi
 
+echo -e "\033[0;32;148m.....\033[39m"
 # 7.
 # update and upgrade packages
 apt-get --yes install python-software-properties software-properties-common >> $logfile 2>&1
@@ -406,6 +408,7 @@ if [ "$CHROOTJAIL1" = "YES" ]; then
   dpkg -i jailkit_2.15-1_*.deb
 fi
 
+echo -e "\033[0;32;148mGo make coffee......\033[39m"
 # 8.1 additional packages for Ubuntu
 # this is better to be apart from the others
 apt-get --yes install php5-fpm >> $logfile 2>&1
@@ -474,7 +477,7 @@ if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
   cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
   fail2ban-client reload
 fi
-
+echo -e "\033[0;32;148m.........\033[39m"
 # 9.
 a2enmod ssl
 a2enmod auth_digest
@@ -596,7 +599,7 @@ fi
 #perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
 
 echo "ServerName $IPADDRESS1" | tee -a /etc/apache2/apache2.conf > /dev/null
-
+echo -e "\033[0;32;148mHow was the coffee ?\033[39m"
 # 14.
 a2ensite default-ssl
 #ln -s /etc/apache2/mods-available/scgi.load /etc/apache2/mods-enabled/scgi.load
@@ -639,6 +642,7 @@ fi
 
 
 # 21.
+echo -e "\033[0;32;148m.............\033[39m"
 bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1 >> $logfile 2>&1
 
 ######### Below this /var/www/rutorrent/ has been replaced with /var/www/rutorrent for Ubuntu 14.04
@@ -728,7 +732,7 @@ rm -f -R /var/www/rutorrent/plugins/filemanager
 rm -f -R /var/www/rutorrent/plugins/fileupload
 rm -f -R /var/www/rutorrent/plugins/mediastream
 rm -f -R /var/www/stream
-
+echo -e "\033[0;32;148mNo kidding.... Did you make coffee ?\033[39m"
 cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
 
@@ -788,6 +792,7 @@ perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/
 mv /etc/seedbox-from-scratch/unpack.conf.php /var/www/rutorrent/plugins/unpack/conf.php
 
 # 33.
+echo -e "\033[0;32;148m.................\033[39m"
 bash /etc/seedbox-from-scratch/updateExecutables >> $logfile 2>&1
 
 #34.
@@ -823,6 +828,7 @@ fi
 sleep 1
 
 # 97. First user will not be jailed
+echo -e "\033[0;32;148mLeave it now, About to Finish........\033[39m"
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO >> $logfile 2>&1
 
@@ -882,6 +888,7 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #rm plimits.rar
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
+echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
 wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
 tar -xvf unrarsrc-5.3.8.tar.gz
 cd unrar
@@ -895,7 +902,7 @@ if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
   service apache2 start 
 fi
-set +x verbose
+#set +x verbose
 clear
 
 echo ""
