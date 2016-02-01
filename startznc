@@ -1,4 +1,4 @@
 #!/bin/bash
 user1="USERNAME"
-line1="@reboot /home/USERNAME/znc/bin/znc >/dev/null 2>&1"
+line1="@reboot ~/znc/bin/znc >/dev/null 2>&1"
 (crontab -u "$user1" -l; echo "$line1" ) | crontab -u "$user1" -
