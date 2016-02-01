@@ -300,9 +300,11 @@ mkdir -p cd /etc/seedbox-from-scratch/source
 mkdir -p cd /etc/seedbox-from-scratch/users
 
 if [ ! -f /etc/seedbox-from-scratch/seedbox-from-scratch.sh ]; then
-  clear
+  echo ""
   echo Looks like something is wrong, this script was not able to download its whole git repository.
-  set -e
+  echo  "git could not be installed :/ "
+  echo  "Do :   apt-get update && apt-get --yes install git "
+  echo  " Then run script again. "
   exit 1
 fi
 
@@ -364,29 +366,25 @@ apt-get --yes update >> $logfile 2>&1
 apt-get --yes upgrade >> $logfile 2>&1
 # 8.
 #install all needed packages
-apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump >> $logfile 2>&1
+apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump >> $logfile 2>&1
 if [ $? -gt 0 ]; then
-  set +x verbose
   echo
   echo
   echo *** ERROR ***
   echo
   echo "Looks like something is wrong with apt-get install, aborting."
   echo
-  echo  "You do not have git installed. "
-  echo  "Do :   apt-get update && apt-get install git "
-  echo  " Then run script again. "
-  set -e
   exit 1
 fi
+apt-get install screen >> $logfile 2>&1
 apt-get --yes install zip >> $logfile 2>&1
 
 apt-get --yes install ffmpeg >> $logfile 2>&1
 apt-get --yes install automake1.9 >> $logfile 2>&1
 
-apt-get --force-yes --yes install rar
+apt-get --force-yes --yes install rar >> $logfile 2>&1
 if [ $? -gt 0 ]; then
-  apt-get --yes install rar-free
+  apt-get --yes install rar-free >> $logfile 2>&1
 fi
 
 #apt-get --yes install unrar
@@ -401,11 +399,11 @@ apt-get --yes install dnsutils >> $logfile 2>&1
 
 if [ "$CHROOTJAIL1" = "YES" ]; then
   cd /etc/seedbox-from-scratch
-  tar xvfz jailkit-2.15.tar.gz -C /etc/seedbox-from-scratch/source/
+  tar xvfz jailkit-2.15.tar.gz -C /etc/seedbox-from-scratch/source/ >> $logfile 2>&1
   cd source/jailkit-2.15
   ./debian/rules binary
   cd ..
-  dpkg -i jailkit_2.15-1_*.deb
+  dpkg -i jailkit_2.15-1_*.deb >> $logfile 2>&1
 fi
 
 echo -e "\033[0;32;148mGo make coffee......\033[39m"
@@ -483,9 +481,9 @@ fi
 echo -e "\033[0;32;148m.........\033[39m"
 # 9.
 a2enmod ssl >> $logfile 2>&1
-a2enmod auth_digest
-a2enmod reqtimeout
-a2enmod rewrite
+a2enmod auth_digest >> $logfile 2>&1
+a2enmod reqtimeout >> $logfile 2>&1
+a2enmod rewrite >> $logfile 2>&1
 #a2enmod scgi ############### if we cant make python-scgi works
 #cd /etc/apache2
 #rm apache2.conf
@@ -667,7 +665,7 @@ echo "www-data ALL=(root) NOPASSWD: /usr/sbin/repquota" | tee -a /etc/sudoers > 
 cp /etc/seedbox-from-scratch/favicon.ico /var/www/
 
 # 26. Installing Mediainfo from source
-apt-get install --yes mediainfo
+apt-get install --yes mediainfo >> $logfile 2>&1 
 if [ $? -gt 0 ]; then
   cd /tmp
   wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
@@ -721,7 +719,7 @@ echo "fs.file-max = 500000" >>/etc/sysctl.conf
 echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
 echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf
-echo "nnet.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
 sysctl -p
 
 if [ -f /proc/user_beancounters ] || [ -d /proc/bc ]; then
@@ -805,7 +803,7 @@ echo $NEWSSHPORT1 > /etc/seedbox-from-scratch/ssh.info
 echo $OPENVPNPORT1 > /etc/seedbox-from-scratch/openvpn.info
 
 # 36.
-wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt 
+wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt >> $logfile 2>&1 
 update-ca-certificates >> $logfile 2>&1
 c_rehash >> $logfile 2>&1
 
