@@ -721,7 +721,7 @@ echo "fs.file-max = 500000" >>/etc/sysctl.conf
 echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
 echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf
-echo "nnet.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
 sysctl -p
 
 if [ -f /proc/user_beancounters ] || [ -d /proc/bc ]; then
