@@ -22,7 +22,7 @@
 ######################################################################
 #
 #  git clone -b master https://github.com/Notos/seedbox-from-scratch.git /etc/seedbox-from-scratch
-#  sudo git stash; sudo git pull33
+#  sudo git stash; sudo git pull
 #
 apt-get --yes install lsb-release
   SBFSCURRENTVERSION1=14.06
@@ -291,7 +291,8 @@ echo -e "\033[0;32;148m.............\033[39m"
 echo -e "\033[0;32;148mWork in progress.........\033[39m"
 echo -e "\033[0;32;148mPlease Standby................\033[39m"
 apt-get --yes update >> $logfile 2>&1
-apt-get --yes install whois sudo makepasswd git nano >> $logfile 2>&1
+apt-get --yes install whois sudo makepasswd nano >> $logfile 2>&1
+apt-get --yes install git >> $logfile 2>&1
 
 rm -f -r /etc/seedbox-from-scratch
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch >> $logfile 2>&1
@@ -308,11 +309,12 @@ fi
 # 3.1
 
 #show all commands
-set -x verbose
+#set -x verbose
+echo -e "\033[0;32;148mI am installing random stuff, Do you like coffee ?\033[39m"
 
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
-#perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
+perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
 perl -pi -e "s/#Protocol 2/Protocol 2/g" /etc/ssh/sshd_config
 perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
@@ -351,6 +353,7 @@ if [ "$OSV11" = "8" ]; then
   apt-get --force-yes --yes install ffmpeg >> $logfile 2>&1
 fi
 
+echo -e "\033[0;32;148m.....\033[39m"
 # 7.
 # update and upgrade packages
 apt-get --yes install python-software-properties software-properties-common >> $logfile 2>&1
@@ -370,8 +373,9 @@ if [ $? -gt 0 ]; then
   echo
   echo "Looks like something is wrong with apt-get install, aborting."
   echo
-  echo
-  echo
+  echo  "You do not have git installed. "
+  echo  "Do :   apt-get update && apt-get install git "
+  echo  " Then run script again. "
   set -e
   exit 1
 fi
@@ -385,13 +389,13 @@ if [ $? -gt 0 ]; then
   apt-get --yes install rar-free
 fi
 
-apt-get --yes install unrar
-if [ $? -gt 0 ]; then
-  apt-get --yes install unrar-free
-fi
-if [ "$OSV11" = "8" ]; then
-  apt-get --yes install unrar-free 
-fi
+#apt-get --yes install unrar
+#if [ $? -gt 0 ]; then
+#  apt-get --yes install unrar-free
+#fi
+#if [ "$OSV11" = "8" ]; then
+#  apt-get --yes install unrar-free >> $logfile 2>&1
+#fi
 
 apt-get --yes install dnsutils >> $logfile 2>&1
 
@@ -404,6 +408,7 @@ if [ "$CHROOTJAIL1" = "YES" ]; then
   dpkg -i jailkit_2.15-1_*.deb
 fi
 
+echo -e "\033[0;32;148mGo make coffee......\033[39m"
 # 8.1 additional packages for Ubuntu
 # this is better to be apart from the others
 apt-get --yes install php5-fpm >> $logfile 2>&1
@@ -446,8 +451,8 @@ if [ "$INSTALLWEBMIN1" = "YES" ]; then
   WEBMINDOWN=YES
   ping -c1 -w2 www.webmin.com > /dev/null
   if [ $? = 0 ] ; then
-    wget -t 5 http://www.webmin.com/jcameron-key.asc
-    apt-key add jcameron-key.asc
+    wget -t 5 http://www.webmin.com/jcameron-key.asc >> $logfile 2>&1
+    apt-key add jcameron-key.asc >> $logfile 2>&1
     if [ $? = 0 ] ; then
       WEBMINDOWN=NO
     fi
@@ -470,11 +475,14 @@ if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
   apt-get --yes install fail2ban >> $logfile 2>&1
   cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
   cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
+  touch /etc/fail2ban/fail2ban.local
+  echo "[description]" | tee -a /etc/fail2ban/fail2ban.local > /dev/null
+  echo "logtarget = /var/log/fail2ban.log" | tee -a /etc/fail2ban/fail2ban.local > /dev/null
   fail2ban-client reload
 fi
-
+echo -e "\033[0;32;148m.........\033[39m"
 # 9.
-a2enmod ssl
+a2enmod ssl >> $logfile 2>&1
 a2enmod auth_digest
 a2enmod reqtimeout
 a2enmod rewrite
@@ -516,7 +524,7 @@ echo "$CERTPASS1" > /etc/seedbox-from-scratch/certpass.info
 bash /etc/seedbox-from-scratch/createOpenSSLCACertificate >> $logfile 2>&1 
 
 mkdir -p /etc/ssl/private/
-openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf >> $logfile 2>&1
 
 if [ "$OSV11" = "7" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
@@ -594,7 +602,7 @@ fi
 #perl -pi -e "s/<username>/$NEWUSER1/g" /etc/apache2/sites-available/default
 
 echo "ServerName $IPADDRESS1" | tee -a /etc/apache2/apache2.conf > /dev/null
-
+echo -e "\033[0;32;148mHow was the coffee ?\033[39m"
 # 14.
 a2ensite default-ssl
 #ln -s /etc/apache2/mods-available/scgi.load /etc/apache2/mods-enabled/scgi.load
@@ -637,6 +645,7 @@ fi
 
 
 # 21.
+echo -e "\033[0;32;148mDo not give up on me.........Still Working....\033[39m"
 bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1 >> $logfile 2>&1
 
 ######### Below this /var/www/rutorrent/ has been replaced with /var/www/rutorrent for Ubuntu 14.04
@@ -644,7 +653,6 @@ bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1 >> $logfile 2>&1
 # 22.
 cd /var/www/
 rm -f -r rutorrent
-sleep 1
 svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent >> $logfile 2>&1
 #svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
 #rm -r -f rutorrent/plugins
@@ -686,7 +694,7 @@ cd autodl-irssi
 # 30. 
 cp /etc/jailkit/jk_init.ini /etc/jailkit/jk_init.ini.original
 echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
-bash /etc/seedbox-from-scratch/updatejkinit
+bash /etc/seedbox-from-scratch/updatejkinit >> $logfile 2>&1
 
 # 31. ZNC
 #Have put this in script form
@@ -697,13 +705,37 @@ wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz >> $logfile 
 tar -zxf logoff-1.0.tar.gz >> $logfile 2>&1
 rm -f logoff-1.0.tar.gz
 
+#33. Tuning Part - Let me know if you find more.
+echo "vm.swappiness=1"  >>/etc/sysctl.conf
+echo "net.core.somaxconn = 1000" >>/etc/sysctl.conf
+echo "net.core.netdev_max_backlog = 5000" >>/etc/sysctl.conf
+echo "net.core.rmem_max = 16777216" >>/etc/sysctl.conf
+echo "net.core.wmem_max = 16777216" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_wmem = 4096 12582912 16777216" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_rmem = 4096 12582912 16777216" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_max_syn_backlog = 8096" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_slow_start_after_idle = 0" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_tw_reuse = 1" >>/etc/sysctl.conf
+echo "net.ipv4.ip_local_port_range = 10240 65535" >>/etc/sysctl.conf
+echo "fs.file-max = 500000" >>/etc/sysctl.conf
+echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
+echo "session required pam_limits.so" >>/etc/pam.d/common-session
+echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf
+echo "nnet.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
+sysctl -p
+
+if [ -f /proc/user_beancounters ] || [ -d /proc/bc ]; then
+  echo "Its a VPS, Nothing to do here, Continuing...."
+else
+  sed -i "s/defaults        1 1/defaults,noatime        0 0/" /etc/fstab
+fi
 
 # Installing Filemanager and MediaStream
 rm -f -R /var/www/rutorrent/plugins/filemanager
 rm -f -R /var/www/rutorrent/plugins/fileupload
 rm -f -R /var/www/rutorrent/plugins/mediastream
 rm -f -R /var/www/stream
-
+echo -e "\033[0;32;148mNo kidding.... Did you make coffee ?\033[39m"
 cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
 
@@ -763,6 +795,7 @@ perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/
 mv /etc/seedbox-from-scratch/unpack.conf.php /var/www/rutorrent/plugins/unpack/conf.php
 
 # 33.
+echo -e "\033[0;32;148m.................\033[39m"
 bash /etc/seedbox-from-scratch/updateExecutables >> $logfile 2>&1
 
 #34.
@@ -773,8 +806,8 @@ echo $OPENVPNPORT1 > /etc/seedbox-from-scratch/openvpn.info
 
 # 36.
 wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt 
-update-ca-certificates
-c_rehash
+update-ca-certificates >> $logfile 2>&1
+c_rehash >> $logfile 2>&1
 
 sleep 2
 
@@ -798,6 +831,7 @@ fi
 sleep 1
 
 # 97. First user will not be jailed
+echo -e "\033[0;32;148mLeave it now, About to Finish........\033[39m"
 #  createSeedboxUser <username> <password> <user jailed?> <ssh access?> <Chroot User>
 bash /etc/seedbox-from-scratch/createSeedboxUser $NEWUSER1 $PASSWORD1 YES YES YES NO >> $logfile 2>&1
 
@@ -811,6 +845,12 @@ cd /var/www/loadavg
 chmod 777 configure
 ./configure >> $logfile 2>&1
 
+cd ~
+wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+sudo tar xf ~/unrar.tar.gz >> $logfile 2>&1
+cd ~/unrar
+make && make install DESTDIR=~ >> $logfile 2>&1
+cd && rm -rf unrar{,.tar.gz}
 
 cd ~
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
@@ -852,44 +892,22 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #rm plimits.rar
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
-wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-tar -xvf unrarsrc-5.3.8.tar.gz
-cd unrar
-sudo make -f makefile
-sudo install -v -m755 unrar /usr/bin
-cd ..
-rm -R unrar
-rm unrarsrc-5.3.8.tar.gz
-
-#XXX Tuning Part - Let me know if you find more.
-echo "vm.swappiness=1"  >>/etc/sysctl.conf
-echo "net.core.somaxconn = 1000" >>/etc/sysctl.conf
-echo "net.core.netdev_max_backlog = 5000" >>/etc/sysctl.conf
-echo "net.core.rmem_max = 16777216" >>/etc/sysctl.conf
-echo "net.core.wmem_max = 16777216" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_wmem = 4096 12582912 16777216" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_rmem = 4096 12582912 16777216" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_max_syn_backlog = 8096" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_slow_start_after_idle = 0" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_tw_reuse = 1" >>/etc/sysctl.conf
-echo "net.ipv4.ip_local_port_range = 10240 65535" >>/etc/sysctl.conf
-echo "fs.file-max = 500000" >>/etc/sysctl.conf
-echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
-echo "vm.pagecache=40" >> /etc/sysctl.conf
-
-###########
-echo "$NEWUSER1 soft nofile 300000" >>/etc/security/limits.conf
-echo "$NEWUSER1 hard nofile 300000" >>/etc/security/limits.conf
-
-##########
-echo "session required pam_limits.so" >>/etc/pam.d/common-session
+echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
+#wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+#tar -xvf unrarsrc-5.3.8.tar.gz
+#cd unrar
+#sudo make -f makefile
+#sudo install -v -m755 unrar /usr/bin
+#cd ..
+#rm -R unrar
+#rm unrarsrc-5.3.8.tar.gz
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
   service apache2 start 
 fi
-set +x verbose
-#clear - To remove before put in use.
+#set +x verbose
+#clear
 
 echo ""
 echo -e "\033[0;32;148m<<< The Seedbox From Scratch Script >>>\033[39m"
@@ -902,10 +920,14 @@ echo ""
 echo "Your Login info can also be found at https://$IPADDRESS1/private/SBinfo.txt"
 echo "Download Data Directory is located at https://$IPADDRESS1/private "
 echo "To install ZNC, run installZNC from ssh as main user"
+echo ""
+echo "IMPORTANT NOTE: Refresh rutorrent for Throttle plugin to load properly"
+echo ""
 echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
 echo ""
 #echo -e "\033[0;32;148mPlease login as main user and only then close this Window\033[39m"
 
-reboot
+#reboot
 
 ##################### LAST LINE ###########
+
