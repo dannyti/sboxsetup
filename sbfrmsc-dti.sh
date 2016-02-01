@@ -384,17 +384,17 @@ apt-get --yes install zip >> $logfile 2>&1
 apt-get --yes install ffmpeg >> $logfile 2>&1
 apt-get --yes install automake1.9 >> $logfile 2>&1
 
-apt-get --force-yes --yes install rar >> $logfile 2>&1
+apt-get --force-yes --yes install rar
 if [ $? -gt 0 ]; then
-  apt-get --yes install rar-free >> $logfile 2>&1
+  apt-get --yes install rar-free
 fi
 
-apt-get --yes install unrar >> $logfile 2>&1
+apt-get --yes install unrar
 if [ $? -gt 0 ]; then
-  apt-get --yes install unrar-free >> $logfile 2>&1
+  apt-get --yes install unrar-free
 fi
 if [ "$OSV11" = "8" ]; then
-  apt-get --yes install unrar-free >> $logfile 2>&1
+  apt-get --yes install unrar-free 
 fi
 
 apt-get --yes install dnsutils >> $logfile 2>&1
@@ -451,8 +451,8 @@ if [ "$INSTALLWEBMIN1" = "YES" ]; then
   WEBMINDOWN=YES
   ping -c1 -w2 www.webmin.com > /dev/null
   if [ $? = 0 ] ; then
-    wget -t 5 http://www.webmin.com/jcameron-key.asc >> $logfile 2>&1
-    apt-key add jcameron-key.asc >> $logfile 2>&1
+    wget -t 5 http://www.webmin.com/jcameron-key.asc
+    apt-key add jcameron-key.asc
     if [ $? = 0 ] ; then
       WEBMINDOWN=NO
     fi
@@ -479,10 +479,10 @@ if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
 fi
 echo -e "\033[0;32;148m.........\033[39m"
 # 9.
-a2enmod ssl >> $logfile 2>&1
-a2enmod auth_digest >> $logfile 2>&1
-a2enmod reqtimeout >> $logfile 2>&1
-a2enmod rewrite >> $logfile 2>&1
+a2enmod ssl
+a2enmod auth_digest
+a2enmod reqtimeout
+a2enmod rewrite
 #a2enmod scgi ############### if we cant make python-scgi works
 #cd /etc/apache2
 #rm apache2.conf
@@ -521,7 +521,7 @@ echo "$CERTPASS1" > /etc/seedbox-from-scratch/certpass.info
 bash /etc/seedbox-from-scratch/createOpenSSLCACertificate >> $logfile 2>&1 
 
 mkdir -p /etc/ssl/private/
-openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf >> $logfile 2>&1
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
 
 if [ "$OSV11" = "7" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
@@ -691,7 +691,7 @@ cd autodl-irssi
 # 30. 
 cp /etc/jailkit/jk_init.ini /etc/jailkit/jk_init.ini.original
 echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
-bash /etc/seedbox-from-scratch/updatejkinit >> $logfile 2>&1
+bash /etc/seedbox-from-scratch/updatejkinit
 
 # 31. ZNC
 #Have put this in script form
@@ -802,9 +802,9 @@ echo $NEWSSHPORT1 > /etc/seedbox-from-scratch/ssh.info
 echo $OPENVPNPORT1 > /etc/seedbox-from-scratch/openvpn.info
 
 # 36.
-wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt >> $logfile 2>&1
-update-ca-certificates >> $logfile 2>&1
-c_rehash >> $logfile 2>&1
+wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt 
+update-ca-certificates
+c_rehash
 
 sleep 2
 
@@ -843,10 +843,9 @@ chmod 777 configure
 ./configure >> $logfile 2>&1
 
 cd ~
-wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.4.tar.gz >> $logfile 2>&1
-sudo tar xf ~/unrar.tar.gz >> $logfile 2>&1
-cd ~/unrar 
-make && make install DESTDIR=~ >> $logfile 2>&1
+wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.4.tar.gz
+sudo tar xf ~/unrar.tar.gz && cd ~/unrar
+make && make install DESTDIR=~
 cd && rm -rf unrar{,.tar.gz}
 
 cd ~
@@ -855,10 +854,10 @@ unzip magic.zip >> $logfile 2>&1
 mv default.sfx rarreg.key /usr/local/lib/
 rm magic.zip
 
-cd /var/www 
-chown -R www-data:www-data /var/www/rutorrent >> $logfile 2>&1
-chown -R www-data:www-data /var/www/loadavg >> $logfile 2>&1
-chmod -R 755 /var/www/rutorrent >> $logfile 2>&1
+cd /var/www
+chown -R www-data:www-data /var/www/rutorrent
+chown -R www-data:www-data /var/www/loadavg
+chmod -R 755 /var/www/rutorrent
 cd 
 git clone https://github.com/mcrapet/plowshare.git plowshare >> $logfile 2>&1
 cd ~/plowshare
@@ -870,7 +869,7 @@ export EDITOR=nano
 # 100
 cd /var/www/rutorrent/plugins
 sleep 1
-rm -frv diskspace >> $logfile 2>&1
+rm -frv diskspace
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
@@ -878,7 +877,7 @@ unrar x hectortheone.rar >> $logfile 2>&1
 #rm diskspace-3.6.tar.gz
 rm hectortheone.rar
 cd quotaspace
-chmod 755 run.sh >> $logfile 2>&1
+chmod 755 run.sh
 cd ..
 perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #wget --no-check-certificate http://cheapseedboxes.com/trafic_check.rar >> $logfile 2>&1
@@ -888,16 +887,16 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #unrar x plimits.rar >> $logfile 2>&1
 #rm plimits.rar
 #cd ..
-chown -R www-data:www-data /var/www/rutorrent >> $logfile 2>&1
+chown -R www-data:www-data /var/www/rutorrent
 echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
-#wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
-#tar -xvf unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
-#cd unrar
-#sudo make -f makefile >> $logfile 2>&1
-#sudo install -v -m755 unrar /usr/bin >> $logfile 2>&1
-#cd ..
-#rm -R unrar
-#rm unrarsrc-5.3.8.tar.gz
+wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+tar -xvf unrarsrc-5.3.8.tar.gz
+cd unrar
+sudo make -f makefile
+sudo install -v -m755 unrar /usr/bin
+cd ..
+rm -R unrar
+rm unrarsrc-5.3.8.tar.gz
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
@@ -927,3 +926,4 @@ echo ""
 reboot
 
 ##################### LAST LINE ###########
+
