@@ -389,10 +389,10 @@ if [ $? -gt 0 ]; then
   apt-get --yes install rar-free
 fi
 
-apt-get --yes install unrar
-if [ $? -gt 0 ]; then
-  apt-get --yes install unrar-free
-fi
+#apt-get --yes install unrar
+#if [ $? -gt 0 ]; then
+#  apt-get --yes install unrar-free
+#fi
 if [ "$OSV11" = "8" ]; then
   apt-get --yes install unrar-free 
 fi
@@ -843,9 +843,10 @@ chmod 777 configure
 ./configure >> $logfile 2>&1
 
 cd ~
-wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.4.tar.gz
-sudo tar xf ~/unrar.tar.gz && cd ~/unrar
-make && make install DESTDIR=~
+wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+sudo tar xf ~/unrar.tar.gz >> $logfile 2>&1
+&& cd ~/unrar
+make && make install DESTDIR=~ >> $logfile 2>&1
 cd && rm -rf unrar{,.tar.gz}
 
 cd ~
@@ -889,14 +890,14 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
 echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
-wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-tar -xvf unrarsrc-5.3.8.tar.gz
-cd unrar
-sudo make -f makefile
-sudo install -v -m755 unrar /usr/bin
-cd ..
-rm -R unrar
-rm unrarsrc-5.3.8.tar.gz
+#wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+#tar -xvf unrarsrc-5.3.8.tar.gz
+#cd unrar
+#sudo make -f makefile
+#sudo install -v -m755 unrar /usr/bin
+#cd ..
+#rm -R unrar
+#rm unrarsrc-5.3.8.tar.gz
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
