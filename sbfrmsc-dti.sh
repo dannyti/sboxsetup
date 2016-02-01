@@ -836,6 +836,11 @@ cd /var/www/loadavg
 chmod 777 configure
 ./configure >> $logfile 2>&1
 
+cd ~
+wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.4.tar.gz
+sudo tar xf ~/unrar.tar.gz && cd ~/unrar
+make && make install DESTDIR=~
+cd && rm -rf unrar{,.tar.gz}
 
 cd ~
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
