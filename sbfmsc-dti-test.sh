@@ -778,8 +778,8 @@ rm -r /var/www/rutorrent/plugins/theme/themes/Extra
 
 # 32.5
 cd /var/www/rutorrent/plugins/
-rm -r /var/www/rutorrent/plugins/fileshare
-rm -r /var/www/share
+rm -r /var/www/rutorrent/plugins/fileshare >> $logfile 2>&1
+rm -r /var/www/share >> $logfile 2>&1
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileshare >> $logfile 2>&1
 mkdir /var/www/share
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/share.php
@@ -846,7 +846,7 @@ wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
 tar -xvf unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
 cd unrar
 sudo make -f makefile >> $logfile 2>&1
-sudo install -v -m755 unrar /usr/bin
+sudo install -v -m755 unrar /usr/bin >> $logfile 2>&1
 cd ..
 rm -R unrar >> $logfile 2>&1
 rm unrarsrc-5.3.8.tar.gz
@@ -894,8 +894,8 @@ chown -R www-data:www-data /var/www/rutorrent
 echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
 
 if [ "$OSV11" = "8" ]; then
-  systemctl enable apache2
-  service apache2 start 
+  systemctl enable apache2 >> $logfile 2>&1
+  service apache2 start >> $logfile 2>&1 
 fi
 #set +x verbose
 #clear
