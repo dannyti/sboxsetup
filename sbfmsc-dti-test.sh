@@ -473,9 +473,6 @@ if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
   apt-get --yes install fail2ban >> $logfile 2>&1
   cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
   cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
-  touch /etc/fail2ban/fail2ban.local
-  echo "[description]" | tee -a /etc/fail2ban/fail2ban.local > /dev/null
-  echo "logtarget = /var/log/fail2ban.log" | tee -a /etc/fail2ban/fail2ban.local > /dev/null
   fail2ban-client reload
 fi
 echo -e "\033[0;32;148m.........\033[39m"
@@ -844,13 +841,13 @@ chmod 777 configure
 ./configure >> $logfile 2>&1
 
 cd ~
-wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-tar -xvf unrarsrc-5.3.8.tar.gz
+wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
+tar -xvf unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
 cd unrar
-sudo make -f makefile
+sudo make -f makefile >> $logfile 2>&1
 sudo install -v -m755 unrar /usr/bin
 cd ..
-rm -R unrar
+rm -R unrar >> $logfile 2>&1
 rm unrarsrc-5.3.8.tar.gz
 
 cd ~
@@ -868,13 +865,13 @@ git clone https://github.com/mcrapet/plowshare.git plowshare >> $logfile 2>&1
 cd ~/plowshare
 make install >> $logfile 2>&1
 cd
-rm -r plowshare
+rm -r plowshare >> $logfile 2>&1
 
 export EDITOR=nano
 # 100
 cd /var/www/rutorrent/plugins
 sleep 1
-rm -frv diskspace
+rm -frv diskspace >> $logfile 2>&1
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
