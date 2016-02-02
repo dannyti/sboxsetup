@@ -286,18 +286,18 @@ if [ "$OSV1" = "14.04" ]; then
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 >> $logfile 2>&1
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 >> $logfile 2>&1
 fi
-echo -e "\033[0;32;148m........\033[39m"
-echo -e "\033[0;32;148m.............\033[39m"
-echo -e "\033[0;32;148mWork in progress.........\033[39m"
-echo -e "\033[0;32;148mPlease Standby................\033[39m"
+echo -e "\033[0;32;148m18 Minutes to go... .. .\033[39m"
+
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes install whois sudo makepasswd nano >> $logfile 2>&1
 apt-get --yes install git >> $logfile 2>&1
 
-rm -f -r /etc/seedbox-from-scratch
+echo -e "\033[0;32;148m.............\033[39m"
+rm -f -r /etc/seedbox-from-scratch >> $logfile 2>&1
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch >> $logfile 2>&1
 mkdir -p cd /etc/seedbox-from-scratch/source
 mkdir -p cd /etc/seedbox-from-scratch/users
+echo -e "\033[0;32;148mWork in progress.........\033[39m"
 
 if [ ! -f /etc/seedbox-from-scratch/seedbox-from-scratch.sh ]; then
   echo ""
@@ -312,8 +312,6 @@ fi
 
 #show all commands
 #set -x verbose
-echo -e "\033[0;32;148mI am installing random stuff, Do you like coffee ?\033[39m"
-
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
 perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
@@ -322,7 +320,7 @@ perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
 groupadd sftponly
-
+echo -e "\033[0;32;148mPlease Standby................\033[39m"
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 #echo '/usr/lib/openssh/sftp-server' >> /etc/shells
@@ -345,7 +343,7 @@ perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 #add non-free sources to Debian Squeeze# those two spaces below are on purpose
 perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
-
+echo -e "\033[0;32;148mI am installing random stuff, Do you like coffee ?\033[39m"
 #apt-get --yes install python-software-properties
 #Adding debian pkgs for adding repo and installing ffmpeg
 apt-get --yes install software-properties-common >> $logfile 2>&1
