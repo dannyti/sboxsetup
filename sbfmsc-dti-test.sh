@@ -326,15 +326,15 @@ groupadd sftponly
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 #echo '/usr/lib/openssh/sftp-server' >> /etc/shells
-if [ "$OS1" = "Ubuntu" ]; then
-  echo "" | tee -a /etc/ssh/sshd_config > /dev/null
-  echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
-  echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
-  echo "Match Group sftponly" >> /etc/ssh/sshd_config
-  echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
-  echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
-  echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
-fi
+#if [ "$OS1" = "Ubuntu" ]; then
+echo "" | tee -a /etc/ssh/sshd_config > /dev/null
+echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
+echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
+echo "Match Group sftponly" >> /etc/ssh/sshd_config
+echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
+echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
+echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
+#fi
 
 service ssh reload
 
