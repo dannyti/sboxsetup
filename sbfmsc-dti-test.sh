@@ -717,19 +717,19 @@ echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
 echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
-sysctl -p
+sysctl -p >> $logfile 2>&1
 
-if [ -f /proc/user_beancounters ] || [ -d /proc/bc ]; then
+if [ -f /proc/user_beancounters ] || [ -d /proc/bc ] || [ -d /sys/bus/xen ] || [ -f /proc/vz/veinfo ] || [ -d /proc/vz/veinfo ]; then
   echo "Its a VPS, Nothing to do here, Continuing...."
 else
-  sed -i "s/defaults        1 1/defaults,noatime        0 0/" /etc/fstab
+  sed -i "s/defaults 1 1/defaults,noatime 0 0/" /etc/fstab
 fi
 
 # Installing Filemanager and MediaStream
-rm -f -R /var/www/rutorrent/plugins/filemanager
-rm -f -R /var/www/rutorrent/plugins/fileupload
-rm -f -R /var/www/rutorrent/plugins/mediastream
-rm -f -R /var/www/stream
+rm -f -R /var/www/rutorrent/plugins/filemanager >> $logfile 2>&1
+rm -f -R /var/www/rutorrent/plugins/fileupload >> $logfile 2>&1
+rm -f -R /var/www/rutorrent/plugins/mediastream >> $logfile 2>&1
+rm -f -R /var/www/stream >> $logfile 2>&1
 
 cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
