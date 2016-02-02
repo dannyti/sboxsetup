@@ -845,12 +845,15 @@ cd /var/www/loadavg
 chmod 777 configure
 ./configure >> $logfile 2>&1
 
-cd ~
-wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-sudo tar xf ~/unrar.tar.gz >> $logfile 2>&1
-cd ~/unrar
-make && make install DESTDIR=~ >> $logfile 2>&1
-cd && rm -rf unrar{,.tar.gz}
+echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
+wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+tar -xvf unrarsrc-5.3.8.tar.gz
+cd unrar
+sudo make -f makefile
+sudo install -v -m755 unrar /usr/bin
+cd ..
+rm -R unrar
+rm unrarsrc-5.3.8.tar.gz
 
 cd ~
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
@@ -892,15 +895,7 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #rm plimits.rar
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
-echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
-#wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-#tar -xvf unrarsrc-5.3.8.tar.gz
-#cd unrar
-#sudo make -f makefile
-#sudo install -v -m755 unrar /usr/bin
-#cd ..
-#rm -R unrar
-#rm unrarsrc-5.3.8.tar.gz
+
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
