@@ -602,7 +602,7 @@ fi
 echo "ServerName $IPADDRESS1" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo -e "\033[0;32;148mHow was the coffee ?\033[39m"
 # 14.
-a2ensite default-ssl
+a2ensite default-ssl >> $logfile 2>&1
 #ln -s /etc/apache2/mods-available/scgi.load /etc/apache2/mods-enabled/scgi.load
 #service apache2 restart
 #apt-get --yes install libxmlrpc-core-c3-dev
@@ -647,7 +647,7 @@ echo -e "\033[0;32;148mDo not give up on me.........Still Working....\033[39m"
 bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1 >> $logfile 2>&1
 
 ######### Below this /var/www/rutorrent/ has been replaced with /var/www/rutorrent for Ubuntu 14.04
-
+echo -e "\033[0;32;148mNo kidding.... Did you make coffee ?\033[39m"
 # 22.
 cd /var/www/
 rm -f -r rutorrent
@@ -733,7 +733,7 @@ rm -f -R /var/www/rutorrent/plugins/filemanager
 rm -f -R /var/www/rutorrent/plugins/fileupload
 rm -f -R /var/www/rutorrent/plugins/mediastream
 rm -f -R /var/www/stream
-echo -e "\033[0;32;148mNo kidding.... Did you make coffee ?\033[39m"
+
 cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
 
@@ -844,11 +844,14 @@ chmod 777 configure
 ./configure >> $logfile 2>&1
 
 cd ~
-wget -qO ~/unrar.tar.gz http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-sudo tar xf ~/unrar.tar.gz >> $logfile 2>&1
-cd ~/unrar
-make && make install DESTDIR=~ >> $logfile 2>&1
-cd && rm -rf unrar{,.tar.gz}
+wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
+tar -xvf unrarsrc-5.3.8.tar.gz
+cd unrar
+sudo make -f makefile
+sudo install -v -m755 unrar /usr/bin
+cd ..
+rm -R unrar
+rm unrarsrc-5.3.8.tar.gz
 
 cd ~
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
@@ -891,14 +894,6 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
 echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
-#wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-#tar -xvf unrarsrc-5.3.8.tar.gz
-#cd unrar
-#sudo make -f makefile
-#sudo install -v -m755 unrar /usr/bin
-#cd ..
-#rm -R unrar
-#rm unrarsrc-5.3.8.tar.gz
 
 if [ "$OSV11" = "8" ]; then
   systemctl enable apache2
@@ -928,4 +923,3 @@ echo ""
 #reboot
 
 ##################### LAST LINE ###########
-
