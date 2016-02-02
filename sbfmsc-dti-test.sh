@@ -402,6 +402,9 @@ if [ "$CHROOTJAIL1" = "YES" ]; then
   ./debian/rules binary
   cd ..
   dpkg -i jailkit_2.15-1_*.deb >> $logfile 2>&1
+  cp /etc/jailkit/jk_init.ini /etc/jailkit/jk_init.ini.original
+  echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
+  bash /etc/seedbox-from-scratch/updatejkinit >> $logfile 2>&1
 fi
 
 echo -e "\033[0;32;148mGo make coffee......\033[39m"
@@ -679,9 +682,7 @@ cd autodl-irssi
 
 
 # 30. 
-cp /etc/jailkit/jk_init.ini /etc/jailkit/jk_init.ini.original
-echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
-bash /etc/seedbox-from-scratch/updatejkinit >> $logfile 2>&1
+
 
 # 31. ZNC
 #Have put this in script form
