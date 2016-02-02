@@ -469,12 +469,6 @@ if [ "$INSTALLWEBMIN1" = "YES" ]; then
   fi
 fi
 
-if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
-  apt-get --yes install fail2ban >> $logfile 2>&1
-  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
-  cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
-  fail2ban-client reload
-fi
 echo -e "\033[0;32;148m.........\033[39m"
 # 9.
 a2enmod ssl >> $logfile 2>&1
@@ -699,6 +693,13 @@ cd /var/www/rutorrent/plugins/
 wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz >> $logfile 2>&1
 tar -zxf logoff-1.0.tar.gz >> $logfile 2>&1
 rm -f logoff-1.0.tar.gz
+
+if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
+  apt-get --yes install fail2ban >> $logfile 2>&1
+  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
+  cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
+  fail2ban-client reload
+fi
 
 #33. Tuning Part - Let me know if you find more.
 echo "vm.swappiness=1"  >>/etc/sysctl.conf
