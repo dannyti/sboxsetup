@@ -473,9 +473,9 @@ fi
 
 if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
   apt-get --yes install fail2ban >> $logfile 2>&1
-  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
-  cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
-  fail2ban-client reload
+  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original >> $logfile 2>&1
+  cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf >> $logfile 2>&1
+  fail2ban-client reload >> $logfile 2>&1
 fi
 echo -e "\033[0;32;148m.........\033[39m"
 # 9.
