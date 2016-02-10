@@ -695,8 +695,13 @@ rm -f logoff-1.0.tar.gz
 
 if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
   apt-get --yes install fail2ban >> $logfile 2>&1
-  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
-  cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
+  if [ "$OS1" = "Ubuntu" ]; then
+    mv /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
+    cp /etc/seedbox-from-scratch/ubu.etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
+  elif [ "$OS1" = "Debian" ]; then
+    mv /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
+    cp /etc/seedbox-from-scratch/deb.etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
+  fi
   fail2ban-client reload
 fi
 
