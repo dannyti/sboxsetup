@@ -286,23 +286,25 @@ if [ "$OSV1" = "14.04" ]; then
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 >> $logfile 2>&1
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 >> $logfile 2>&1
 fi
-echo -e "\033[0;32;148m........\033[39m"
-echo -e "\033[0;32;148m.............\033[39m"
-echo -e "\033[0;32;148mWork in progress.........\033[39m"
-echo -e "\033[0;32;148mPlease Standby................\033[39m"
+echo -e "\033[0;32;148m18 Minutes to go... .. .\033[39m"
+
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes install whois sudo makepasswd nano >> $logfile 2>&1
 apt-get --yes install git >> $logfile 2>&1
 
-rm -f -r /etc/seedbox-from-scratch
+echo -e "\033[0;32;148m.............\033[39m"
+rm -f -r /etc/seedbox-from-scratch >> $logfile 2>&1
 git clone -b v$SBFSCURRENTVERSION1 https://github.com/dannyti/seedbox-from-scratch.git /etc/seedbox-from-scratch >> $logfile 2>&1
 mkdir -p cd /etc/seedbox-from-scratch/source
 mkdir -p cd /etc/seedbox-from-scratch/users
+echo -e "\033[0;32;148mWork in progress.........\033[39m"
 
 if [ ! -f /etc/seedbox-from-scratch/seedbox-from-scratch.sh ]; then
-  clear
+  echo ""
   echo Looks like something is wrong, this script was not able to download its whole git repository.
-  set -e
+  echo  "git could not be installed :/ "
+  echo  "Do :   apt-get update && apt-get --yes install git "
+  echo  " Then run script again. "
   exit 1
 fi
 
@@ -310,8 +312,6 @@ fi
 
 #show all commands
 #set -x verbose
-echo -e "\033[0;32;148mI am installing random stuff, Do you like coffee ?\033[39m"
-
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
 perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
@@ -320,19 +320,19 @@ perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
 groupadd sshdusers
 groupadd sftponly
-
+echo -e "\033[0;32;148mPlease Standby................\033[39m"
 mkdir -p /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 #echo '/usr/lib/openssh/sftp-server' >> /etc/shells
-if [ "$OS1" = "Ubuntu" ]; then
-  echo "" | tee -a /etc/ssh/sshd_config > /dev/null
-  echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
-  echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
-  echo "Match Group sftponly" >> /etc/ssh/sshd_config
-  echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
-  echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
-  echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
-fi
+#if [ "$OS1" = "Ubuntu" ]; then
+echo "" | tee -a /etc/ssh/sshd_config > /dev/null
+echo "UseDNS no" | tee -a /etc/ssh/sshd_config > /dev/null
+echo "AllowGroups sshdusers root" >> /etc/ssh/sshd_config
+echo "Match Group sftponly" >> /etc/ssh/sshd_config
+echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
+echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
+echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
+#fi
 
 service ssh reload
 
@@ -343,7 +343,7 @@ perl -pi.orig -e 's/^(deb .* universe)$/$1 multiverse/' /etc/apt/sources.list
 #add non-free sources to Debian Squeeze# those two spaces below are on purpose
 perl -pi -e "s/squeeze main/squeeze  main contrib non-free/g" /etc/apt/sources.list
 perl -pi -e "s/squeeze-updates main/squeeze-updates  main contrib non-free/g" /etc/apt/sources.list
-
+echo -e "\033[0;32;148mI am installing random stuff, Do you like coffee ?\033[39m"
 #apt-get --yes install python-software-properties
 #Adding debian pkgs for adding repo and installing ffmpeg
 apt-get --yes install software-properties-common >> $logfile 2>&1
@@ -364,48 +364,47 @@ apt-get --yes update >> $logfile 2>&1
 apt-get --yes upgrade >> $logfile 2>&1
 # 8.
 #install all needed packages
-apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi screen ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump >> $logfile 2>&1
+apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump >> $logfile 2>&1
 if [ $? -gt 0 ]; then
-  set +x verbose
   echo
   echo
   echo *** ERROR ***
   echo
   echo "Looks like something is wrong with apt-get install, aborting."
   echo
-  echo  "You do not have git installed. "
-  echo  "Do :   apt-get update && apt-get install git "
-  echo  " Then run script again. "
-  set -e
   exit 1
 fi
+apt-get install screen >> $logfile 2>&1
 apt-get --yes install zip >> $logfile 2>&1
 
 apt-get --yes install ffmpeg >> $logfile 2>&1
 apt-get --yes install automake1.9 >> $logfile 2>&1
 
-apt-get --force-yes --yes install rar
+apt-get --force-yes --yes install rar >> $logfile 2>&1
 if [ $? -gt 0 ]; then
-  apt-get --yes install rar-free
+  apt-get --yes install rar-free >> $logfile 2>&1
 fi
 
 #apt-get --yes install unrar
 #if [ $? -gt 0 ]; then
 #  apt-get --yes install unrar-free
 #fi
-if [ "$OSV11" = "8" ]; then
-  apt-get --yes install unrar-free 
-fi
+#if [ "$OSV11" = "8" ]; then
+#  apt-get --yes install unrar-free >> $logfile 2>&1
+#fi
 
 apt-get --yes install dnsutils >> $logfile 2>&1
 
 if [ "$CHROOTJAIL1" = "YES" ]; then
   cd /etc/seedbox-from-scratch
-  tar xvfz jailkit-2.15.tar.gz -C /etc/seedbox-from-scratch/source/
+  tar xvfz jailkit-2.15.tar.gz -C /etc/seedbox-from-scratch/source/ >> $logfile 2>&1
   cd source/jailkit-2.15
   ./debian/rules binary
   cd ..
-  dpkg -i jailkit_2.15-1_*.deb
+  dpkg -i jailkit_2.15-1_*.deb >> $logfile 2>&1
+  cp /etc/jailkit/jk_init.ini /etc/jailkit/jk_init.ini.original
+  echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
+  bash /etc/seedbox-from-scratch/updatejkinit >> $logfile 2>&1
 fi
 
 echo -e "\033[0;32;148mGo make coffee......\033[39m"
@@ -451,8 +450,8 @@ if [ "$INSTALLWEBMIN1" = "YES" ]; then
   WEBMINDOWN=YES
   ping -c1 -w2 www.webmin.com > /dev/null
   if [ $? = 0 ] ; then
-    wget -t 5 http://www.webmin.com/jcameron-key.asc
-    apt-key add jcameron-key.asc
+    wget -t 5 http://www.webmin.com/jcameron-key.asc >> $logfile 2>&1
+    apt-key add jcameron-key.asc >> $logfile 2>&1
     if [ $? = 0 ] ; then
       WEBMINDOWN=NO
     fi
@@ -471,18 +470,12 @@ if [ "$INSTALLWEBMIN1" = "YES" ]; then
   fi
 fi
 
-if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
-  apt-get --yes install fail2ban >> $logfile 2>&1
-  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original >> $logfile 2>&1
-  cp /etc/seedbox-from-scratch/etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf >> $logfile 2>&1
-  fail2ban-client reload >> $logfile 2>&1
-fi
 echo -e "\033[0;32;148m.........\033[39m"
 # 9.
-a2enmod ssl
-a2enmod auth_digest
-a2enmod reqtimeout
-a2enmod rewrite
+a2enmod ssl >> $logfile 2>&1
+a2enmod auth_digest >> $logfile 2>&1
+a2enmod reqtimeout >> $logfile 2>&1
+a2enmod rewrite >> $logfile 2>&1
 #a2enmod scgi ############### if we cant make python-scgi works
 #cd /etc/apache2
 #rm apache2.conf
@@ -521,7 +514,7 @@ echo "$CERTPASS1" > /etc/seedbox-from-scratch/certpass.info
 bash /etc/seedbox-from-scratch/createOpenSSLCACertificate >> $logfile 2>&1 
 
 mkdir -p /etc/ssl/private/
-openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -config /etc/seedbox-from-scratch/ssl/CA/caconfig.cnf >> $logfile 2>&1
 
 if [ "$OSV11" = "7" ]; then
   echo "deb http://ftp.cyconet.org/debian wheezy-updates main non-free contrib" >> /etc/apt/sources.list.d/wheezy-updates.cyconet.list
@@ -601,7 +594,7 @@ fi
 echo "ServerName $IPADDRESS1" | tee -a /etc/apache2/apache2.conf > /dev/null
 echo -e "\033[0;32;148mHow was the coffee ?\033[39m"
 # 14.
-a2ensite default-ssl
+a2ensite default-ssl >> $logfile 2>&1
 #ln -s /etc/apache2/mods-available/scgi.load /etc/apache2/mods-enabled/scgi.load
 #service apache2 restart
 #apt-get --yes install libxmlrpc-core-c3-dev
@@ -642,11 +635,11 @@ fi
 
 
 # 21.
-echo -e "\033[0;32;148m.............\033[39m"
+echo -e "\033[0;32;148mDo not give up on me.........Still Working....\033[39m"
 bash /etc/seedbox-from-scratch/installRTorrent $RTORRENT1 >> $logfile 2>&1
 
 ######### Below this /var/www/rutorrent/ has been replaced with /var/www/rutorrent for Ubuntu 14.04
-
+echo -e "\033[0;32;148mNo kidding.... Did you make coffee ?\033[39m"
 # 22.
 cd /var/www/
 rm -f -r rutorrent
@@ -664,7 +657,7 @@ echo "www-data ALL=(root) NOPASSWD: /usr/sbin/repquota" | tee -a /etc/sudoers > 
 cp /etc/seedbox-from-scratch/favicon.ico /var/www/
 
 # 26. Installing Mediainfo from source
-apt-get install --yes mediainfo
+apt-get install --yes mediainfo >> $logfile 2>&1 
 if [ $? -gt 0 ]; then
   cd /tmp
   wget http://downloads.sourceforge.net/mediainfo/MediaInfo_CLI_0.7.56_GNU_FromSource.tar.bz2 >> $logfile 2>&1
@@ -689,9 +682,7 @@ cd autodl-irssi
 
 
 # 30. 
-cp /etc/jailkit/jk_init.ini /etc/jailkit/jk_init.ini.original
-echo "" | tee -a /etc/jailkit/jk_init.ini >> /dev/null
-bash /etc/seedbox-from-scratch/updatejkinit
+
 
 # 31. ZNC
 #Have put this in script form
@@ -701,6 +692,18 @@ cd /var/www/rutorrent/plugins/
 wget http://rutorrent-logoff.googlecode.com/files/logoff-1.0.tar.gz >> $logfile 2>&1
 tar -zxf logoff-1.0.tar.gz >> $logfile 2>&1
 rm -f logoff-1.0.tar.gz
+
+if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
+  apt-get --yes install fail2ban >> $logfile 2>&1
+  if [ "$OS1" = "Ubuntu" ]; then
+    mv /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
+    cp /etc/seedbox-from-scratch/ubu.etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
+  elif [ "$OS1" = "Debian" ]; then
+    mv /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
+    cp /etc/seedbox-from-scratch/deb.etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
+  fi
+  fail2ban-client reload
+fi
 
 #33. Tuning Part - Let me know if you find more.
 echo "vm.swappiness=1"  >>/etc/sysctl.conf
@@ -719,20 +722,20 @@ echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
 echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
-sysctl -p
+sysctl -p >> $logfile 2>&1
 
-if [ -f /proc/user_beancounters ] || [ -d /proc/bc ]; then
+if [ -f /proc/user_beancounters ] || [ -d /proc/bc ] || [ -d /sys/bus/xen ] || [ -f /proc/vz/veinfo ] || [ -d /proc/vz/veinfo ]; then
   echo "Its a VPS, Nothing to do here, Continuing...."
 else
-  sed -i "s/defaults        1 1/defaults,noatime        0 0/" /etc/fstab
+  sed -i "s/defaults 1 1/defaults,noatime 0 0/" /etc/fstab
 fi
 
 # Installing Filemanager and MediaStream
-rm -f -R /var/www/rutorrent/plugins/filemanager
-rm -f -R /var/www/rutorrent/plugins/fileupload
-rm -f -R /var/www/rutorrent/plugins/mediastream
-rm -f -R /var/www/stream
-echo -e "\033[0;32;148mNo kidding.... Did you make coffee ?\033[39m"
+rm -f -R /var/www/rutorrent/plugins/filemanager >> $logfile 2>&1
+rm -f -R /var/www/rutorrent/plugins/fileupload >> $logfile 2>&1
+rm -f -R /var/www/rutorrent/plugins/mediastream >> $logfile 2>&1
+rm -f -R /var/www/stream >> $logfile 2>&1
+
 cd /var/www/rutorrent/plugins/
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
 
@@ -779,8 +782,8 @@ rm -r /var/www/rutorrent/plugins/theme/themes/Extra
 
 # 32.5
 cd /var/www/rutorrent/plugins/
-rm -r /var/www/rutorrent/plugins/fileshare
-rm -r /var/www/share
+rm -r /var/www/rutorrent/plugins/fileshare >> $logfile 2>&1
+rm -r /var/www/share >> $logfile 2>&1
 svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileshare >> $logfile 2>&1
 mkdir /var/www/share
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/share.php
@@ -802,9 +805,9 @@ echo $NEWSSHPORT1 > /etc/seedbox-from-scratch/ssh.info
 echo $OPENVPNPORT1 > /etc/seedbox-from-scratch/openvpn.info
 
 # 36.
-wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt 
-update-ca-certificates
-c_rehash
+wget -P /usr/share/ca-certificates/ --no-check-certificate https://certs.godaddy.com/repository/gd_intermediate.crt https://certs.godaddy.com/repository/gd_cross_intermediate.crt >> $logfile 2>&1 
+update-ca-certificates >> $logfile 2>&1
+c_rehash >> $logfile 2>&1
 
 sleep 2
 
@@ -842,14 +845,14 @@ cd /var/www/loadavg
 chmod 777 configure
 ./configure >> $logfile 2>&1
 
-echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
-wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz
-tar -xvf unrarsrc-5.3.8.tar.gz
+cd ~
+wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
+tar -xvf unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
 cd unrar
-sudo make -f makefile
-sudo install -v -m755 unrar /usr/bin
+sudo make -f makefile >> $logfile 2>&1
+sudo install -v -m755 unrar /usr/bin >> $logfile 2>&1
 cd ..
-rm -R unrar
+rm -R unrar >> $logfile 2>&1
 rm unrarsrc-5.3.8.tar.gz
 
 cd ~
@@ -867,13 +870,13 @@ git clone https://github.com/mcrapet/plowshare.git plowshare >> $logfile 2>&1
 cd ~/plowshare
 make install >> $logfile 2>&1
 cd
-rm -r plowshare
+rm -r plowshare >> $logfile 2>&1
 
 export EDITOR=nano
 # 100
 cd /var/www/rutorrent/plugins
 sleep 1
-rm -frv diskspace
+rm -frv diskspace >> $logfile 2>&1
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/main/b/base/hectortheone.rar >> $logfile 2>&1
 #wget http://dl.bintray.com/novik65/generi...ace-3.6.tar.gz
 #tar -xf diskspace-3.6.tar.gz
@@ -892,11 +895,11 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #rm plimits.rar
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
-
+echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
 
 if [ "$OSV11" = "8" ]; then
-  systemctl enable apache2
-  service apache2 start 
+  systemctl enable apache2 >> $logfile 2>&1
+  service apache2 start >> $logfile 2>&1 
 fi
 #set +x verbose
 clear
@@ -917,9 +920,8 @@ echo "IMPORTANT NOTE: Refresh rutorrent for Throttle plugin to load properly"
 echo ""
 echo "System will reboot now, but don't close this window until you take note of the port number: $NEWSSHPORT1"
 echo ""
-#echo -e "\033[0;32;148mPlease login as main user and only then close this Window\033[39m"
+echo -e "\033[0;32;148mPlease login as main user and only then close this Window\033[39m"
 
 reboot
 
 ##################### LAST LINE ###########
-
