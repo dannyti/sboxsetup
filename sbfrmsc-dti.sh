@@ -702,7 +702,7 @@ if [ "$INSTALLFAIL2BAN1" = "YES" ]; then
     mv /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.original
     cp /etc/seedbox-from-scratch/deb.etc.fail2ban.jail.conf.template /etc/fail2ban/jail.conf
   fi
-  fail2ban-client reload
+  fail2ban-client reload >> $logfile 2>&1
 fi
 
 #33. Tuning Part - Let me know if you find more.
@@ -722,7 +722,7 @@ echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
 echo "net.ipv4.tcp_rfc1337 = 1" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_fin_timeout = 15" >> /etc/sysctl.conf
 echo "net.core.optmem_max = 25165824" >> /etc/sysctl.conf
-sysctl -w "net.ipv4.tcp_max_tw_buckets=1440000"
+sysctl -w "net.ipv4.tcp_max_tw_buckets=1440000" >> $logfile 2>&1
 sysctl -p >> $logfile 2>&1
 
 echo "* soft nofile 500000" >>/etc/security/limits.conf
@@ -730,7 +730,7 @@ echo "* hard nofile 500000" >>/etc/security/limits.conf
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
 
 if [ -f /proc/user_beancounters ] || [ -d /proc/bc ] || [ -d /sys/bus/xen ] || [ -f /proc/vz/veinfo ] || [ -d /proc/vz/veinfo ]; then
-  echo "Its a VPS, Nothing to do here, Continuing...."
+  echo "Whoops, Its a VPS !!"
 else
   sed -i "s/defaults 1 1/defaults,noatime 0 0/" /etc/fstab
 fi
