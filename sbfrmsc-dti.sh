@@ -707,22 +707,27 @@ fi
 
 #33. Tuning Part - Let me know if you find more.
 echo "vm.swappiness=1"  >>/etc/sysctl.conf
-echo "net.core.somaxconn = 1000" >>/etc/sysctl.conf
+echo "net.core.somaxconn = 1024" >>/etc/sysctl.conf
 echo "net.core.netdev_max_backlog = 5000" >>/etc/sysctl.conf
-echo "net.core.rmem_max = 16777216" >>/etc/sysctl.conf
-echo "net.core.wmem_max = 16777216" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_wmem = 4096 12582912 16777216" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_rmem = 4096 12582912 16777216" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_max_syn_backlog = 8096" >>/etc/sysctl.conf
+echo "net.core.rmem_max = 25165824" >>/etc/sysctl.conf
+echo "net.core.wmem_max = 25165824" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_wmem = 20480 12582912 25165824" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_rmem = 20480 12582912 25165824" >>/etc/sysctl.conf
+echo "net.ipv4.tcp_max_syn_backlog = 65536" >>/etc/sysctl.conf
 echo "net.ipv4.tcp_slow_start_after_idle = 0" >>/etc/sysctl.conf
 echo "net.ipv4.tcp_tw_reuse = 1" >>/etc/sysctl.conf
 echo "net.ipv4.ip_local_port_range = 10240 65535" >>/etc/sysctl.conf
-echo "fs.file-max = 500000" >>/etc/sysctl.conf
+echo "fs.file-max = 2097152" >>/etc/sysctl.conf
 echo vm.min_free_kbytes=1024 >> /etc/sysctl.conf
-echo "session required pam_limits.so" >>/etc/pam.d/common-session
-echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_sack = 1" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_rfc1337 = 1" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_fin_timeout = 15" >> /etc/sysctl.conf
+echo "net.core.optmem_max = 25165824" >> /etc/sysctl.conf
+sysctl -w "net.ipv4.tcp_max_tw_buckets=1440000"
 sysctl -p >> $logfile 2>&1
+
+echo "* soft nofile 500000" >>/etc/security/limits.conf
+echo "* hard nofile 500000" >>/etc/security/limits.conf
+echo "session required pam_limits.so" >>/etc/pam.d/common-session
 
 if [ -f /proc/user_beancounters ] || [ -d /proc/bc ] || [ -d /sys/bus/xen ] || [ -f /proc/vz/veinfo ] || [ -d /proc/vz/veinfo ]; then
   echo "Its a VPS, Nothing to do here, Continuing...."
