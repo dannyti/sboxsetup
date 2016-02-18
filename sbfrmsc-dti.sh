@@ -850,6 +850,11 @@ cd /var/www/loadavg
 chmod 777 configure
 ./configure >> $logfile 2>&1
 
+cd /tmp
+wget https://rutorrent-tadd-labels.googlecode.com/files/lbll-suite_0.8.1.tar.gz >> $logfile 2>&1
+tar zxvf lbll-suite_0.8.1.tar.gz >> $logfile 2>&1
+sudo mv lbll-suite /var/www/rutorrent/plugins >> $logfile 2>&1
+
 cd ~
 wget http://www.rarlab.com/rar/unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
 tar -xvf unrarsrc-5.3.8.tar.gz >> $logfile 2>&1
