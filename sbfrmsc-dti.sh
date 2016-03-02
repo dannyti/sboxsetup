@@ -334,7 +334,7 @@ echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
 echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
 #fi
 
-service ssh reload >> /etc/ssh/sshd_config
+service ssh reload >> $logfile 2>&1
 
 # 6.
 #remove cdrom from apt so it doesn't stop asking for it
