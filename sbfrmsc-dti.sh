@@ -872,6 +872,8 @@ cd ..
 rm -R unrar >> $logfile 2>&1
 rm unrarsrc-5.3.8.tar.gz
 
+sed -i 's/width: 380px; height: 290px/width: 380px; height: 330px/' /var/www/rutorrent/css/style.css
+
 cd ~
 wget --no-check-certificate https://bintray.com/artifact/download/hectortheone/base/pool/m/m/magic/magic.zip >> $logfile 2>&1
 unzip magic.zip >> $logfile 2>&1
