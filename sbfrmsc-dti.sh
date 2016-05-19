@@ -29,7 +29,7 @@ apt-get --yes install lsb-release
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
   OSV11=$(sed 's/\..*//' /etc/debian_version)
-  logfile="/dev/null"
+  logfile="/root/log.txt"
 #
 # Changelog
 #   Version 14.06 (By dannyti)
@@ -314,7 +314,7 @@ fi
 #set -x verbose
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
-perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
+#perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
 perl -pi -e "s/#Protocol 2/Protocol 2/g" /etc/ssh/sshd_config
 perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
@@ -357,14 +357,14 @@ echo -e "\033[0;32;148m.....\033[39m"
 # 7.
 # update and upgrade packages
 apt-get --yes install python-software-properties software-properties-common >> $logfile 2>&1
-if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV1" = "14.10" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV1" = "16.04" ] || [ "$OSV1" = "14.10" ]; then
   apt-add-repository --yes ppa:kirillshkrogalev/ffmpeg-next >> $logfile 2>&1
 fi
 apt-get --yes update >> $logfile 2>&1
 apt-get --yes upgrade >> $logfile 2>&1
 # 8.
 #install all needed packages
-apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc pkg-config python-scgi ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump >> $logfile 2>&1
+apt-get --yes install apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev curl cfv quota mktorrent dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev openvpn libssl-dev libtool libxml2-dev ncurses-base ncurses-term ntp openssl patch libc-ares-dev pkg-config pkg-config python-scgi ssl-cert subversion texinfo unzip zlib1g-dev expect flex bison debhelper binutils-gold libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libxml-libxml-perl libjson-rpc-perl libarchive-zip-perl tcpdump >> $logfile 2>&1
 if [ $? -gt 0 ]; then
   echo
   echo
@@ -374,6 +374,13 @@ if [ $? -gt 0 ]; then
   echo
   exit 1
 fi
+
+apt-get --yes install libapache2-mod-php5 php5 php5-cli php5-dev php5-curl php5-geoip php5-mcrypt php5-gd php5-xmlrpc >> $logfile 2>&1
+
+if [ "$OSV1" = "16.04" ]; then
+  apt-get --yes install php libapache2-mod-php php-mcrypt php-mysql php-xml >> $logfile 2>&1
+fi
+
 apt-get install screen >> $logfile 2>&1
 apt-get --yes install zip >> $logfile 2>&1
 
@@ -568,7 +575,7 @@ apt-get install --yes subversion >> $logfile 2>&1
 apt-get install --yes dialog >> $logfile 2>&1
 # 13.
 
-if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV11" = "8" ]; then
+if [ "$OSV1" = "14.04" ] || [ "$OSV1" = "14.10" ] || [ "$OSV1" = "15.04" ] || [ "$OSV1" = "15.10" ] || [ "$OSV1" = "16.04" ] || [ "$OSV11" = "8" ]; then
   cp /var/www/html/index.html /var/www/index.html 
   mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.ORI
   rm -f /etc/apache2/sites-available/000-default.conf
@@ -668,11 +675,11 @@ if [ $? -gt 0 ]; then
   make install >> $logfile 2>&1
 fi
 
-cd /var/www/rutorrent/js/
-git clone https://github.com/gabceb/jquery-browser-plugin.git >> $logfile 2>&1
-mv jquery-browser-plugin/dist/jquery.browser.js .
-rm -r -f jquery-browser-plugin
-sed -i '31i\<script type=\"text/javascript\" src=\"./js/jquery.browser.js\"></script> ' /var/www/rutorrent/index.html
+#cd /var/www/rutorrent/js/
+#git clone https://github.com/gabceb/jquery-browser-plugin.git >> $logfile 2>&1
+#mv jquery-browser-plugin/dist/jquery.browser.js .
+#rm -r -f jquery-browser-plugin
+#sed -i '31i\<script type=\"text/javascript\" src=\"./js/jquery.browser.js\"></script> ' /var/www/rutorrent/index.html
 
 cd /var/www/rutorrent/plugins
 git clone https://github.com/autodl-community/autodl-rutorrent.git autodl-irssi >> $logfile 2>&1
@@ -772,6 +779,8 @@ rm /var/www/rutorrent/plugins/unpack/conf.php
 # 32.2
 chown -R www-data:www-data /var/www/rutorrent
 chmod -R 755 /var/www/rutorrent
+
+apt-get --yes install gdebi >> $logfile 2>&1
 
 #32.3
 perl -pi -e "s/\\\$topDirectory\, \\\$fm/\\\$homeDirectory\, \\\$topDirectory\, \\\$fm/g" /var/www/rutorrent/plugins/filemanager/flm.class.php
@@ -891,6 +900,24 @@ make install >> $logfile 2>&1
 cd
 rm -r plowshare >> $logfile 2>&1
 
+cp  /etc/seedbox-from-scratch/nano/ini.nanorc /usr/share/nano/ini.nanorc
+cp  /etc/seedbox-from-scratch/nano/conf.nanorc /usr/share/nano/conf.nanorc
+cp  /etc/seedbox-from-scratch/nano/xorg.nanorc /usr/share/nano/xorg.nanorc
+
+# édition conf nano
+echo "
+## Config Files (.ini)
+include \"/usr/share/nano/ini.nanorc\"
+
+## Config Files (.conf)
+include \"/usr/share/nano/conf.nanorc\"
+
+## Xorg.conf
+include \"/usr/share/nano/xorg.nanorc\"">> /etc/nanorc
+
+# Additional Plugins
+cp -R /etc/seedbox-from-scratch/plugins/nfo /var/www/rutorrent/plugins/nfo
+
 export EDITOR=nano
 # 100
 cd /var/www/rutorrent/plugins
@@ -914,6 +941,10 @@ perl -pi -e "s/100/1024/g" /var/www/rutorrent/plugins/throttle/throttle.php
 #rm plimits.rar
 #cd ..
 chown -R www-data:www-data /var/www/rutorrent
+cd
+wget http://p.outlyer.net/vcs/files/vcs_1.13.2-pon.1_all.deb >> $logfile 2>&1
+gdebi -n vcs_1.13.2-pon.1_all.deb >> $logfile 2>&1
+
 echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
 
 if [ "$OSV11" = "8" ]; then
