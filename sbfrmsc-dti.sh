@@ -29,7 +29,7 @@ apt-get --yes install lsb-release
   OS1=$(lsb_release -si)
   OSV1=$(lsb_release -rs)
   OSV11=$(sed 's/\..*//' /etc/debian_version)
-  logfile="/root/log.txt"
+  logfile="/dev/null"
 #
 # Changelog
 #   Version 14.06 (By dannyti)
@@ -314,7 +314,7 @@ fi
 #set -x verbose
 # 4.
 perl -pi -e "s/Port 22/Port $NEWSSHPORT1/g" /etc/ssh/sshd_config
-#perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
+perl -pi -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
 perl -pi -e "s/#Protocol 2/Protocol 2/g" /etc/ssh/sshd_config
 perl -pi -e "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
 
