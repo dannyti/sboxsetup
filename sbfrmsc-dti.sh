@@ -744,7 +744,7 @@ echo "* hard nofile 500000" >>/etc/security/limits.conf
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
 
 if [ -f /proc/user_beancounters ] || [ -d /proc/bc ] || [ -d /sys/bus/xen ] || [ -f /proc/vz/veinfo ] || [ -d /proc/vz/veinfo ]; then
-  echo "Whoops, Its a VPS !!"
+  echo -e "\033[0;32;148m....\033[39m"
 else
   sed -i "s/defaults 1 1/defaults,noatime 0 0/" /etc/fstab
 fi
