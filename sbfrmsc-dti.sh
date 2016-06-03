@@ -852,7 +852,8 @@ fi
 sleep 1
 #Installing Movie Thumbnailer
 cd
-wget http://sourceforge.net/projects/moviethumbnail/files/movie%20thumbnailer%20linux%20binary/mtn-200808a-linux/mtn-200808a-linux.tgz/download -O mtn.tar.gz && tar xfvz mtn.tar.gz
+wget http://sourceforge.net/projects/moviethumbnail/files/movie%20thumbnailer%20linux%20binary/mtn-200808a-linux/mtn-200808a-linux.tgz/download -O mtn.tar.gz  >> $logfile 2>&1
+tar xfvz mtn.tar.gz >> $logfile 2>&1
 cp mtn-200808a-linux/mtn /usr/local/bin/
 rm -r mtn-200808a-linux/
 
