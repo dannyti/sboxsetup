@@ -850,6 +850,11 @@ if [ "$INSTALLDELUGE1" = "YES" ]; then
 fi
 
 sleep 1
+#Installing Movie Thumbnailer
+cd
+wget http://sourceforge.net/projects/moviethumbnail/files/movie%20thumbnailer%20linux%20binary/mtn-200808a-linux/mtn-200808a-linux.tgz/download -O mtn.tar.gz && tar xfvz mtn.tar.gz
+cp mtn-200808a-linux/mtn /usr/local/bin/
+rm -r mtn-200808a-linux/
 
 # 97. First user will not be jailed
 echo -e "\033[0;32;148mLeave it now, About to Finish........\033[39m"
