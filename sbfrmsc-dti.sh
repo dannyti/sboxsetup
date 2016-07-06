@@ -451,31 +451,37 @@ do
 done
 
 # 8.4
-
 if [ "$INSTALLWEBMIN1" = "YES" ]; then
-  #if webmin isup, download key
-  WEBMINDOWN=YES
-  ping -c1 -w2 www.webmin.com > /dev/null
-  if [ $? = 0 ] ; then
-    wget -t 5 http://www.webmin.com/jcameron-key.asc >> $logfile 2>&1
-    apt-key add jcameron-key.asc >> $logfile 2>&1
-    if [ $? = 0 ] ; then
-      WEBMINDOWN=NO
-    fi
-  fi
-
-  if [ "$WEBMINDOWN"="NO" ] ; then
-    #add webmin source
-    echo "" | tee -a /etc/apt/sources.list > /dev/null
-    echo "deb http://download.webmin.com/download/repository sarge contrib" | tee -a /etc/apt/sources.list > /dev/null
-    cd /tmp
-  fi
-
-  if [ "$WEBMINDOWN" = "NO" ]; then
-    apt-get --yes update >> $logfile 2>&1
-    apt-get --yes install webmin >> $logfile 2>&1
-  fi
+  echo "deb http://download.webmin.com/download/repository sarge contrib" | tee -a /etc/apt/sources.list > /dev/null
+  wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
+  apt-get update
+  apt-get install webmin
 fi
+
+#if [ "$INSTALLWEBMIN1" = "YES" ]; then
+#  #if webmin isup, download key
+#  WEBMINDOWN=YES
+#  ping -c1 -w2 www.webmin.com > /dev/null
+#  if [ $? = 0 ] ; then
+#    wget -t 5 http://www.webmin.com/jcameron-key.asc >> $logfile 2>&1
+#    apt-key add jcameron-key.asc >> $logfile 2>&1
+#    if [ $? = 0 ] ; then
+#      WEBMINDOWN=NO
+#    fi
+#  fi
+#
+#  if [ "$WEBMINDOWN"="NO" ] ; then
+#    #add webmin source
+#    echo "" | tee -a /etc/apt/sources.list > /dev/null
+#    echo "deb http://download.webmin.com/download/repository sarge contrib" | tee -a /etc/apt/sources.list > /dev/null
+#    cd /tmp
+#  fi
+#
+#  if [ "$WEBMINDOWN" = "NO" ]; then
+#    apt-get --yes update >> $logfile 2>&1
+#    apt-get --yes install webmin >> $logfile 2>&1
+#  fi
+#fi
 
 echo -e "\033[0;32;148m.........\033[39m"
 # 9.
