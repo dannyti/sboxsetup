@@ -453,9 +453,9 @@ done
 # 8.4
 if [ "$INSTALLWEBMIN1" = "YES" ]; then
   echo "deb http://download.webmin.com/download/repository sarge contrib" | tee -a /etc/apt/sources.list > /dev/null
-  wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
-  apt-get update
-  apt-get install webmin
+  wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add - >> $logfile 2>&1
+  apt-get update >> $logfile 2>&1
+  apt-get install webmin >> $logfile 2>&1
 fi
 
 #if [ "$INSTALLWEBMIN1" = "YES" ]; then
@@ -509,7 +509,7 @@ echo "Timeout 30" | tee -a /etc/apache2/apache2.conf > /dev/null
 cd /etc/apache2
 rm ports.conf
 wget --no-check-certificate https://raw.githubusercontent.com/dannyti/sboxsetup/master/ports.conf >> $logfile 2>&1
-service apache2 restart
+service apache2 restart >> $logfile 2>&1
 mkdir /etc/apache2/auth.users 
 
 echo "$IPADDRESS1" > /etc/seedbox-from-scratch/hostname.info
