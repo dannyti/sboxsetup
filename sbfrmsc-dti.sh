@@ -455,7 +455,7 @@ if [ "$INSTALLWEBMIN1" = "YES" ]; then
   echo "deb http://download.webmin.com/download/repository sarge contrib" | tee -a /etc/apt/sources.list > /dev/null
   wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add - >> $logfile 2>&1
   apt-get update >> $logfile 2>&1
-  apt-get install webmin >> $logfile 2>&1
+  apt-get install -y webmin >> $logfile 2>&1
 fi
 
 #if [ "$INSTALLWEBMIN1" = "YES" ]; then
