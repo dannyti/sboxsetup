@@ -78,7 +78,7 @@ If you don't know Linux ENOUGH:
 
 DO NOT install this script on a non OVH Host. It is doable, but you'll have to know Linux to solve some problems.
 
-DO NOT use capital letters, all your usernames should be written in lowercase. Passwords should NOT have spaces. 
+DO NOT use capital letters, all your usernames should be written in lowercase. Passwords should NOT have spaces. Do NOT use words like root or shadow.
 
 DO NOT upgrade anything in your box, ask in the thread before even thinking about it.
 
