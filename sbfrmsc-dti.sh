@@ -901,6 +901,10 @@ unzip magic.zip >> $logfile 2>&1
 mv default.sfx rarreg.key /usr/local/lib/
 rm magic.zip
 
+#Font Installation for mtn
+wget http://ftp.us.debian.org/debian/pool/main/f/fonts-liberation/fonts-liberation_1.07.4-1_all.deb >> $logfile 2>&1
+gdebi -n fonts-liberation_1.07.4-1_all.deb >> $logfile 2>&1
+
 cd /var/www
 chown -R www-data:www-data /var/www/rutorrent
 chown -R www-data:www-data /var/www/loadavg
@@ -956,6 +960,8 @@ chown -R www-data:www-data /var/www/rutorrent
 cd
 wget http://p.outlyer.net/vcs/files/vcs_1.13.2-pon.1_all.deb >> $logfile 2>&1
 gdebi -n vcs_1.13.2-pon.1_all.deb >> $logfile 2>&1
+sleep 1
+rm -f *.deb
 
 echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
 
