@@ -962,7 +962,7 @@ wget http://p.outlyer.net/vcs/files/vcs_1.13.2-pon.1_all.deb >> $logfile 2>&1
 gdebi -n vcs_1.13.2-pon.1_all.deb >> $logfile 2>&1
 sleep 1
 rm -f *.deb
-
+rm -rf cd usr
 echo -e "\033[0;32;148mFinishing Now .... .... .... ....\033[39m"
 
 if [ "$OSV11" = "8" ]; then
