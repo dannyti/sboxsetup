@@ -656,14 +656,12 @@ echo -e "\033[0;32;148mNo kidding.... Did you make coffee ?\033[39m"
 # 22.
 cd /var/www/
 rm -f -r rutorrent
-svn checkout https://github.com/Novik/ruTorrent/trunk rutorrent >> $logfile 2>&1
-#svn checkout http://rutorrent.googlecode.com/svn/trunk/plugins
-#rm -r -f rutorrent/plugins
-#mv plugins rutorrent/
+git clone https://github.com/Novik/ruTorrent rutorrent >> $logfile 2>&1
+
 
 cp /etc/seedbox-from-scratch/action.php.template /var/www/rutorrent/plugins/diskspace/action.php
 
-groupadd admin
+groupadd admin >> $logfile 2>&1
 
 echo "www-data ALL=(root) NOPASSWD: /usr/sbin/repquota" | tee -a /etc/sudoers > /dev/null
 
@@ -749,7 +747,7 @@ echo "* soft nofile 500000" >>/etc/security/limits.conf
 echo "* hard nofile 500000" >>/etc/security/limits.conf
 echo "session required pam_limits.so" >>/etc/pam.d/common-session
 
-if [ -f /proc/user_beancounters ] || [ -d /proc/bc ] || [ -d /sys/bus/xen ] || [ -f /proc/vz/veinfo ] || [ -d /proc/vz/veinfo ]; then
+if [ -f /proc/user_beancounters ] || [ -d /proc/bc ] || [ -f /proc/vz/veinfo ] || [ -d /proc/vz/veinfo ]; then
   echo -e "\033[0;32;148mLooks like this is a VPS. Moving on...\033[39m"
 else
   sed -i "s/defaults 1 1/defaults,noatime 0 0/" /etc/fstab
