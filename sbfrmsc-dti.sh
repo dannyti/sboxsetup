@@ -759,11 +759,21 @@ rm -f -R /var/www/rutorrent/plugins/fileupload >> $logfile 2>&1
 rm -f -R /var/www/rutorrent/plugins/mediastream >> $logfile 2>&1
 rm -f -R /var/www/stream >> $logfile 2>&1
 
-cd /var/www/rutorrent/plugins/
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
+#############################rutorrent.org svn went down :(
+rm -r /var/www/rutorrent/plugins/fileshare >> $logfile 2>&1
 
-cd /var/www/rutorrent/plugins/
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/filemanager >> $logfile 2>&1
+cd
+wget https://github.com/nelu/rutorrent-thirdparty-plugins.git stable >> $logfile 2>&1
+cd stable
+cp filemanager/ /var/www/rutorrent/plugins/
+cp fileshare/ /var/www/rutorrent/plugins/
+cp fileupload/ /var/www/rutorrent/plugins/
+cp mediastream/ /var/www/rutorrent/plugins/
+#cd /var/www/rutorrent/plugins/
+#svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
+
+#cd /var/www/rutorrent/plugins/
+#svn co http://svn.rutorrent.org/svn/filemanager/trunk/filemanager >> $logfile 2>&1
 
 cp /etc/seedbox-from-scratch/rutorrent.plugins.filemanager.conf.php.template /var/www/rutorrent/plugins/filemanager/conf.php
 
@@ -775,8 +785,8 @@ chown www-data: /var/www/stream/view.php
 echo "<?php \$streampath = 'http://$IPADDRESS1/stream/view.php'; ?>" | tee /var/www/rutorrent/plugins/mediastream/conf.php > /dev/null
 
 # 32.2 # FILEUPLOAD
-cd /var/www/rutorrent/plugins/
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload >> $logfile 2>&1
+#cd /var/www/rutorrent/plugins/
+#svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileupload >> $logfile 2>&1
 chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
 apt-get --yes -f install >> $logfile 2>&1
 rm /var/www/rutorrent/plugins/unpack/conf.php
@@ -806,16 +816,17 @@ rm -r /var/www/rutorrent/plugins/theme/themes/Extra
 #ln -s /etc/seedbox-from-scratch/seedboxInfo.php.template /var/www/seedboxInfo.php
 
 # 32.5
-cd /var/www/rutorrent/plugins/
-rm -r /var/www/rutorrent/plugins/fileshare >> $logfile 2>&1
+#cd /var/www/rutorrent/plugins/
+#rm -r /var/www/rutorrent/plugins/fileshare >> $logfile 2>&1
 rm -r /var/www/share >> $logfile 2>&1
-svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileshare >> $logfile 2>&1
+#svn co http://svn.rutorrent.org/svn/filemanager/trunk/fileshare >> $logfile 2>&1
 mkdir /var/www/share
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/share.php
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share/index.php
 chown -R www-data:www-data /var/www/share
 cp /etc/seedbox-from-scratch/rutorrent.plugins.fileshare.conf.php.template /var/www/rutorrent/plugins/fileshare/conf.php
 perl -pi -e "s/<servername>/$IPADDRESS1/g" /var/www/rutorrent/plugins/fileshare/conf.php
+###############################
 
 mv /etc/seedbox-from-scratch/unpack.conf.php /var/www/rutorrent/plugins/unpack/conf.php
 
