@@ -763,7 +763,7 @@ rm -f -R /var/www/stream >> $logfile 2>&1
 rm -r /var/www/rutorrent/plugins/fileshare >> $logfile 2>&1
 
 cd
-wget https://github.com/nelu/rutorrent-thirdparty-plugins.git stable >> $logfile 2>&1
+git clone https://github.com/nelu/rutorrent-thirdparty-plugins.git stable >> $logfile 2>&1
 cd stable
 cp filemanager/ /var/www/rutorrent/plugins/
 cp fileshare/ /var/www/rutorrent/plugins/
