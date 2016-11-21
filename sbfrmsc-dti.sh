@@ -765,10 +765,7 @@ rm -r /var/www/rutorrent/plugins/fileshare >> $logfile 2>&1
 cd
 git clone https://github.com/nelu/rutorrent-thirdparty-plugins.git stable >> $logfile 2>&1
 cd stable
-cp filemanager/ /var/www/rutorrent/plugins/
-cp fileshare/ /var/www/rutorrent/plugins/
-cp fileupload/ /var/www/rutorrent/plugins/
-cp mediastream/ /var/www/rutorrent/plugins/
+cp -R filemanager fileshare fileupload mediastream /var/www/rutorrent/plugins/
 #cd /var/www/rutorrent/plugins/
 #svn co http://svn.rutorrent.org/svn/filemanager/trunk/mediastream >> $logfile 2>&1
 
