@@ -56,7 +56,7 @@ Installed software
     Loadavg - Access hXXp://SERVER-IP/loadavg
     Speedtest
 
-#Main ruTorrent plugins
+# Main ruTorrent plugins
 
 autotoolscpuload, diskspace, erasedata, extratio, extsearch, feeds, filedrop, filemanager, geoip, history, logoff, mediainfo, mediastream, rss, scheduler, screenshots, theme, trafic and unpack
 Additional ruTorrent plugins
@@ -70,7 +70,7 @@ Additional ruTorrent plugins
     Logoff
     Theme: Oblivion & Agent 46
 
-#Before installation
+# Before installation
 
 You need to have a Fresh "blank" server installation. After that access your box using a SSH client, like PuTTY.
 Warnings
@@ -84,7 +84,7 @@ DO NOT upgrade anything in your box, ask in the thread before even thinking abou
 
 DO NOT try to reconfigure packages using other tutorials.
 
-##How to install ?
+## How to install ?
 
 That is the question you must ask yourself.
 You must be logged in as root to run this installation or use sudo on it.
@@ -123,7 +123,7 @@ To access Downloaded data directory on your new server; point your browser to th
 https://<Server IP or Server Name>/private/Downloads
 ```
 
-####OpenVPN
+#### OpenVPN
 To use your VPN you will need a VPN client compatible with [OpenVPN](http://openvpn.net/index.php?option=com_content&id=357), necessary files to configure your connection are in this link in your box:
 ```
 https://<Server IP or Server Name>/rutorrent/CLIENT-NAME.zip` and use it in any OpenVPN client.
