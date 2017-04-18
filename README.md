@@ -2,7 +2,7 @@
 
 By dannyti ---> https://github.com/dannyti/
 
-Donate if you can - Beer Joint Address : Bitcoin address: 1ACi4NRpfzkCNDaTgwFpCFcHoMMRCCT4wC
+Donate if you can - Beer Joint Address : Bitcoin address: 115gPhiJZLfgWuv16CH3kTRspWuQ7qjBUb
 
 ## [Wiki](https://github.com/dannyti/sboxsetup/wiki)    ||    [FAQ](https://github.com/dannyti/sboxsetup/wiki/FAQ)
 
