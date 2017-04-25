@@ -55,7 +55,7 @@ Installed software
     Plex Media Server - installPLEX
     Loadavg - Access hXXp://SERVER-IP/loadavg
     Speedtest
-    Use FQDN ; Once Lets Encrypt certs are installed ; run 'iptodomain'
+    iptodomain (Use FQDN ; Once Lets Encrypt certs are installed ; run 'iptodomain' )
 
 # Main ruTorrent plugins
 
@@ -109,6 +109,7 @@ After installing you will have access to the following commands to be used direc
     installSICKRAGE
     installPLEX  
     speedTEST
+    iptodomain
 
     While executing them, if sudo is needed, they will ask for a password.
 
