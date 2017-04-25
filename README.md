@@ -55,6 +55,7 @@ Installed software
     Plex Media Server - installPLEX
     Loadavg - Access hXXp://SERVER-IP/loadavg
     Speedtest
+    Use FQDN ; Once Lets Encrypt certs are installed ; run 'iptodomain'
 
 # Main ruTorrent plugins
 
