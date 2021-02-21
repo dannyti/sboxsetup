@@ -174,4 +174,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 --> Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-Donate if you can - Beer Joint Address : Bitcoin address: 1ACi4NRpfzkCNDaTgwFpCFcHoMMRCCT4wC
+
